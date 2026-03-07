@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lesson-interactive-concept.html</title>
+  <style>
+    :root{
+      --bg:#f5f7fa;
+      --panel:#ffffff;
+      --border:#c7d1db;
+      --text:#1f2a33;
+      --muted:#52606d;
+      --blue:#2f6ea5;
+      --blue-dark:#1f4f78;
+      --gray:#d9e2ec;
+      --gray-dark:#829ab1;
+      --success-bg:#edf7ed;
+      --success-border:#2e7d32;
+      --error-bg:#fff1f0;
+      --error-border:#b42318;
+      --focus:#111111;
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    .wrapper{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    header, main, section, nav, footer {
+      display:block;
+    }
+
+    .hero{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:24px;
+      margin-bottom:20px;
+    }
+
+    h1, h2, h3{
+      color:var(--text);
+      margin-top:0;
+    }
+
+    p, li{
+      font-size:1rem;
+    }
+
+    .intro{
+      color:var(--muted);
+      max-width:900px;
+    }
+
+    .outcomes{
+      background:#f9fbfd;
+      border-left:6px solid var(--blue);
+      padding:16px 18px;
+      margin-top:18px;
+      border-radius:8px;
+    }
+
+    .tablist{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:0 0 18px 0;
+    }
+
+    .tab-button{
+      appearance:none;
+      border:1px solid var(--gray-dark);
+      background:var(--gray);
+      color:var(--text);
+      padding:12px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:1rem;
+      font-weight:700;
+    }
+
+    .tab-button[aria-selected="true"]{
+      background:var(--blue);
+      color:#fff;
+      border-color:var(--blue-dark);
+    }
+
+    .tab-button:hover{
+      border-color:var(--blue-dark);
+    }
+
+    .tab-button:focus,
+    .quiz-option:focus,
+    .submit-quiz:focus,
+    .reset-quiz:focus {
+      outline:3px solid var(--focus);
+      outline-offset:2px;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:22px;
+      margin-bottom:20px;
+    }
+
+    .tabpanel[hidden]{
+      display:none;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fbfcfe;
+      padding:16px;
+      height:100%;
+    }
+
+    .card h3{
+      font-size:1.05rem;
+      margin-bottom:10px;
+      color:var(--blue-dark);
+    }
+
+    .definition{
+      background:#f7fafc;
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:12px 14px;
+      margin:14px 0;
+    }
+
+    .example-box{
+      background:#f8fbff;
+      border-left:5px solid var(--blue);
+      padding:14px 16px;
+      border-radius:8px;
+      margin:16px 0;
+    }
+
+    .compare-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:14px;
+    }
+
+    .compare-table th,
+    .compare-table td{
+      border:1px solid var(--border);
+      padding:12px;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    .compare-table th{
+      background:#eaf2f8;
+    }
+
+    .quiz-instructions{
+      color:var(--muted);
+      margin-bottom:16px;
+    }
+
+    .question{
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:#fcfdff;
+      padding:16px;
+      margin-bottom:16px;
+    }
+
+    .question legend{
+      font-weight:700;
+      margin-bottom:12px;
+      padding:0 4px;
+    }
+
+    .option{
+      display:block;
+      margin:8px 0;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:#fff;
+    }
+
+    .option:hover{
+      border-color:var(--blue-dark);
+      background:#f8fbff;
+    }
+
+    .option input{
+      margin-right:10px;
+    }
+
+    .feedback{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:8px;
+      display:none;
+    }
+
+    .feedback.correct{
+      display:block;
+      background:var(--success-bg);
+      border:1px solid var(--success-border);
+    }
+
+    .feedback.incorrect{
+      display:block;
+      background:var(--error-bg);
+      border:1px solid var(--error-border);
+    }
+
+    .quiz-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    button.submit-quiz,
+    button.reset-quiz{
+      appearance:none;
+      border:none;
+      border-radius:10px;
+      padding:12px 16px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .submit-quiz{
+      background:var(--blue);
+      color:#fff;
+    }
+
+    .submit-quiz:hover{
+      background:var(--blue-dark);
+    }
+
+    .reset-quiz{
+      background:#dde6ee;
+      color:var(--text);
+      border:1px solid var(--gray-dark);
+    }
+
+    .score-box{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:#f7fafc;
+      font-weight:700;
+      display:none;
+    }
+
+    .tip-list li{
+      margin-bottom:8px;
+    }
+
+    footer{
+      color:var(--muted);
+      font-size:0.95rem;
+      padding-bottom:20px;
+    }
+
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    @media (max-width:700px){
+      .wrapper{
+        padding:14px;
+      }
+
+      .hero,
+      .panel{
+        padding:16px;
+      }
+
+      .tab-button{
+        width:100%;
+        text-align:left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="hero">
+      <h1>Play-Based Learning and Cognitive Development</h1>
+      <p class="intro">
+        This mini-lesson helps future early childhood educators understand how different kinds of play support child development. You will explore the core idea behind play-based learning, compare different types of play, work through a classroom example, and check your understanding with a short quiz.
+      </p>
+
+      <section class="outcomes" aria-labelledby="outcomes-heading">
+        <h2 id="outcomes-heading">What you will learn</h2>
+        <ul>
+          <li>Define <strong>play-based learning</strong> in student-friendly terms.</li>
+          <li>Explain how different types of play support language, social-emotional, motor, and problem-solving development.</li>
+          <li>Distinguish between productive play experiences and common misunderstandings about “just playing.”</li>
+          <li>Match classroom play activities to specific learning goals for young children.</li>
+        </ul>
+      </section>
+    </header>
+
+    <main>
+      <section class="panel" aria-labelledby="lesson-sections-heading">
+        <h2 id="lesson-sections-heading">Interactive lesson sections</h2>
+
+        <nav class="tablist" aria-label="Lesson sections" role="tablist">
+          <button class="tab-button" id="tab-core" role="tab" aria-selected="true" aria-controls="panel-core" tabindex="0">1. Core Idea</button>
+          <button class="tab-button" id="tab-compare" role="tab" aria-selected="false" aria-controls="panel-compare" tabindex="-1">2. Compare / Contrast</button>
+          <button class="tab-button" id="tab-example" role="tab" aria-selected="false" aria-controls="panel-example" tabindex="-1">3. Worked Example</button>
+        </nav>
+
+        <section id="panel-core" class="tabpanel" role="tabpanel" aria-labelledby="tab-core">
+          <h2>Core Idea: Why play matters for thinking and learning</h2>
+
+          <div class="definition">
+            <p>
+              <strong>Play-based learning</strong> means children learn through active, meaningful play experiences. In this approach, play is not a break from learning. Play <em>is</em> a major way young children develop thinking skills, language, self-control, coordination, and social understanding.
+            </p>
+          </div>
+
+          <p>
+            In early childhood education, children build knowledge by exploring, pretending, moving, talking, testing ideas, and solving small problems. When educators plan rich play experiences, they help children connect curiosity with development.
+          </p>
+
+          <div class="grid">
+            <article class="card">
+              <h3>Constructive play</h3>
+              <p>Children make or build something with blocks, art materials, sand, or other objects.</p>
+              <p><strong>Supports:</strong> problem-solving, spatial thinking, planning, and fine motor skills.</p>
+            </article>
+
+            <article class="card">
+              <h3>Dramatic play</h3>
+              <p>Children pretend to be people or act out situations such as a store, home, or doctor’s office.</p>
+              <p><strong>Supports:</strong> language, empathy, self-regulation, and social understanding.</p>
+            </article>
+
+            <article class="card">
+              <h3>Physical play</h3>
+              <p>Children run, climb, dance, hop, balance, or use large-muscle movement.</p>
+              <p><strong>Supports:</strong> gross motor development, body control, attention, and confidence.</p>
+            </article>
+
+            <article class="card">
+              <h3>Games with rules</h3>
+              <p>Children follow shared directions in simple games such as matching, turn-taking, or movement games.</p>
+              <p><strong>Supports:</strong> memory, flexible thinking, cooperation, and impulse control.</p>
+            </article>
+          </div>
+
+          <div class="example-box">
+            <p>
+              <strong>Key takeaway:</strong> A good play activity can support more than one area of development at the same time. For example, block play may strengthen problem-solving, language, and social skills all in one activity.
+            </p>
+          </div>
+        </section>
+
+        <section id="panel-compare" class="tabpanel" role="tabpanel" aria-labelledby="tab-compare" hidden>
+          <h2>Compare / Contrast: Types of play and common misconceptions</h2>
+
+          <p>
+            One challenge for future educators is recognizing the learning that happens during play. Adults sometimes underestimate play because the learning is not always obvious right away.
+          </p>
+
+          <table class="compare-table">
+            <caption class="sr-only">Comparison of types of play, what children do, and what they develop</caption>
+            <thead>
+              <tr>
+                <th scope="col">Type of play</th>
+                <th scope="col">What children do</th>
+                <th scope="col">Main developmental support</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Constructive play</td>
+                <td>Build, arrange, design, stack, sort, create</td>
+                <td>Planning, reasoning, fine motor control, persistence</td>
+              </tr>
+              <tr>
+                <td>Dramatic play</td>
+                <td>Pretend, role-play, negotiate, tell stories</td>
+                <td>Language, social-emotional growth, perspective-taking</td>
+              </tr>
+              <tr>
+                <td>Physical play</td>
+                <td>Jump, climb, toss, balance, move rhythmically</td>
+                <td>Gross motor skills, coordination, self-confidence</td>
+              </tr>
+              <tr>
+                <td>Games with rules</td>
+                <td>Wait turns, follow directions, remember steps</td>
+                <td>Self-control, memory, fairness, cooperation</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid">
+            <article class="card">
+              <h3>Misconception 1: “Play is separate from academics.”</h3>
+              <p>
+                In early childhood settings, play can build the foundation for later reading, math, science, and communication. A child using blocks may compare size, count pieces, test balance, and describe ideas.
+              </p>
+            </article>
+
+            <article class="card">
+              <h3>Misconception 2: “Only teacher-led activities count as learning.”</h3>
+              <p>
+                Children also learn during guided exploration. The teacher’s role may include setting up materials, asking questions, modeling language, and observing how children think.
+              </p>
+            </article>
+
+            <article class="card">
+              <h3>Misconception 3: “All play teaches the same thing.”</h3>
+              <p>
+                Different types of play support different developmental goals. A movement game builds different skills than a pretend restaurant or a block-building challenge.
+              </p>
+            </article>
+
+            <article class="card">
+              <h3>Misconception 4: “Play has no structure.”</h3>
+              <p>
+                Strong play-based classrooms are intentionally designed. Educators choose materials, create routines, and connect play experiences to developmental outcomes.
+              </p>
+            </article>
+          </div>
+
+          <div class="definition">
+            <p>
+              <strong>Important idea:</strong> Play-based learning does not mean “anything goes.” It means children learn through purposeful play in an environment carefully supported by the educator.
+            </p>
+          </div>
+        </section>
+
+        <section id="panel-example" class="tabpanel" role="tabpanel" aria-labelledby="tab-example" hidden>
+          <h2>Worked Example: Matching play to developmental goals</h2>
+
+          <p>
+            Imagine you are planning a preschool classroom center called <strong>“Neighborhood Grocery Store.”</strong> Children have baskets, pretend food, paper signs, play money, clipboards, and empty boxes.
+          </p>
+
+          <div class="grid">
+            <article class="card">
+              <h3>What children might do</h3>
+              <ul>
+                <li>Pretend to shop and work as cashiers</li>
+                <li>Ask for items and answer questions</li>
+                <li>Sort food by type, color, or size</li>
+                <li>Take turns and solve disagreements</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>Language development</h3>
+              <p>
+                Children use new words such as price, basket, customer, receipt, and cashier. They practice asking questions and speaking in complete ideas.
+              </p>
+            </article>
+
+            <article class="card">
+              <h3>Social-emotional development</h3>
+              <p>
+                Children practice cooperation, empathy, and self-regulation. They learn to share roles, wait, and respond to others.
+              </p>
+            </article>
+
+            <article class="card">
+              <h3>Problem-solving and thinking</h3>
+              <p>
+                Children classify items, decide what belongs together, and figure out how to organize the store or solve play conflicts.
+              </p>
+            </article>
+          </div>
+
+          <div class="example-box">
+            <p><strong>How the teacher supports learning:</strong></p>
+            <ul class="tip-list">
+              <li>Models vocabulary: “You are the cashier. Can you give the customer a receipt?”</li>
+              <li>Asks open questions: “How should we organize the fruit?”</li>
+              <li>Encourages problem-solving: “Two children want the same role. What could we do?”</li>
+              <li>Observes development: notes who uses language, follows rules, or needs support taking turns.</li>
+            </ul>
+          </div>
+
+          <div class="definition">
+            <p>
+              <strong>Worked example conclusion:</strong> This activity looks like play, but it is also a rich learning experience. A strong educator can explain exactly which developmental goals are being supported and why.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel" aria-labelledby="quiz-heading">
+        <h2 id="quiz-heading">Self-check quiz</h2>
+        <p class="quiz-instructions">
+          Choose the best answer for each question. Immediate feedback will appear after you select an option. When you finish, select <strong>Check My Score</strong>.
+        </p>
+
+        <form id="quizForm">
+          <fieldset class="question">
+            <legend>1. What is the best definition of play-based learning?</legend>
+
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q1" value="a" />
+              A. Children are left alone without teacher guidance.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q1" value="b" />
+              B. Children learn through purposeful play experiences supported by the educator.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q1" value="c" />
+              C. Play is used only after academic work is complete.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q1" value="d" />
+              D. It focuses only on physical activity.
+            </label>
+
+            <div class="feedback" id="feedback-q1" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset class="question">
+            <legend>2. Which type of play most directly supports perspective-taking and social role understanding?</legend>
+
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q2" value="a" />
+              A. Dramatic play
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q2" value="b" />
+              B. Physical play
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q2" value="c" />
+              C. Independent worksheet time
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q2" value="d" />
+              D. Silent observation only
+            </label>
+
+            <div class="feedback" id="feedback-q2" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset class="question">
+            <legend>3. A block-building center most strongly supports which set of skills?</legend>
+
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q3" value="a" />
+              A. Memorizing rules only
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q3" value="b" />
+              B. Problem-solving, planning, and fine motor control
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q3" value="c" />
+              C. Listening quietly without interaction
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q3" value="d" />
+              D. Social-emotional growth only, with no thinking skills involved
+            </label>
+
+            <div class="feedback" id="feedback-q3" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset class="question">
+            <legend>4. Which statement is the most accurate?</legend>
+
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q4" value="a" />
+              A. Play-based learning means the teacher does not plan.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q4" value="b" />
+              B. All types of play support exactly the same developmental outcomes.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q4" value="c" />
+              C. Teachers can use play intentionally to support different developmental goals.
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q4" value="d" />
+              D. Play should never be connected to language or thinking skills.
+            </label>
+
+            <div class="feedback" id="feedback-q4" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset class="question">
+            <legend>5. In a pretend grocery store center, which teacher action best supports learning?</legend>
+
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q5" value="a" />
+              A. Removing all child choices so every child says the same thing
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q5" value="b" />
+              B. Avoiding all conversation so play stays “pure”
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q5" value="c" />
+              C. Asking open-ended questions and modeling useful vocabulary
+            </label>
+            <label class="option">
+              <input class="quiz-option" type="radio" name="q5" value="d" />
+              D. Turning the activity into a lecture
+            </label>
+
+            <div class="feedback" id="feedback-q5" aria-live="polite"></div>
+          </fieldset>
+
+          <div class="quiz-controls">
+            <button type="button" class="submit-quiz" id="checkScoreBtn">Check My Score</button>
+            <button type="button" class="reset-quiz" id="resetQuizBtn">Reset Quiz</button>
+          </div>
+
+          <div class="score-box" id="scoreBox" aria-live="polite"></div>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Tip for future educators: when you observe children at play, try asking yourself, “What skills are developing here?” That question helps turn play into professional observation.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+      const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+      function activateTab(tab) {
+        tabs.forEach((t) => {
+          const selected = t === tab;
+          t.setAttribute('aria-selected', selected ? 'true' : 'false');
+          t.setAttribute('tabindex', selected ? '0' : '-1');
+        });
+
+        panels.forEach((panel) => {
+          const shouldShow = panel.id === tab.getAttribute('aria-controls');
+          panel.hidden = !shouldShow;
+        });
+
+        tab.focus();
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(tab));
+
+        tab.addEventListener('keydown', (event) => {
+          let newIndex = index;
+
+          if (event.key === 'ArrowRight') {
+            newIndex = (index + 1) % tabs.length;
+            activateTab(tabs[newIndex]);
+            event.preventDefault();
+          }
+
+          if (event.key === 'ArrowLeft') {
+            newIndex = (index - 1 + tabs.length) % tabs.length;
+            activateTab(tabs[newIndex]);
+            event.preventDefault();
+          }
+
+          if (event.key === 'Home') {
+            activateTab(tabs[0]);
+            event.preventDefault();
+          }
+
+          if (event.key === 'End') {
+            activateTab(tabs[tabs.length - 1]);
+            event.preventDefault();
+          }
+        });
+      });
+
+      const answerKey = {
+        q1: {
+          correct: 'b',
+          feedback: {
+            a: 'Incorrect. In play-based learning, educators still plan, observe, and guide.',
+            b: 'Correct. Play-based learning uses purposeful play experiences supported by the educator.',
+            c: 'Incorrect. Play is not only a reward after learning; it can be a primary way children learn.',
+            d: 'Incorrect. Physical play is one part of play-based learning, but not the whole approach.'
+          }
+        },
+        q2: {
+          correct: 'a',
+          feedback: {
+            a: 'Correct. Dramatic play helps children understand roles, feelings, and other people’s perspectives.',
+            b: 'Incorrect. Physical play supports movement and coordination more directly.',
+            c: 'Incorrect. Worksheets do not usually develop perspective-taking the way role-play does.',
+            d: 'Incorrect. Observation may help learning, but it does not directly provide role-play practice.'
+          }
+        },
+        q3: {
+          correct: 'b',
+          feedback: {
+            a: 'Incorrect. Block play is more than rule-following; it involves planning and thinking.',
+            b: 'Correct. Building activities strongly support problem-solving, planning, and fine motor skills.',
+            c: 'Incorrect. Block centers are usually active and interactive, not passive.',
+            d: 'Incorrect. Block play can support social-emotional growth too, but thinking skills are central.'
+          }
+        },
+        q4: {
+          correct: 'c',
+          feedback: {
+            a: 'Incorrect. Effective play-based teaching includes intentional planning.',
+            b: 'Incorrect. Different kinds of play support different developmental areas.',
+            c: 'Correct. Teachers can intentionally design play experiences for specific goals.',
+            d: 'Incorrect. Play can strongly support both language and cognitive development.'
+          }
+        },
+        q5: {
+          correct: 'c',
+          feedback: {
+            a: 'Incorrect. Over-controlling the activity can reduce meaningful child engagement.',
+            b: 'Incorrect. Educators should support play with language and thoughtful guidance.',
+            c: 'Correct. Open-ended questions and modeled vocabulary deepen learning during play.',
+            d: 'Incorrect. A lecture would reduce the active learning that makes play powerful.'
+          }
+        }
+      };
+
+      const questionNames = Object.keys(answerKey);
+      const quizOptions = document.querySelectorAll('.quiz-option');
+      const scoreBox = document.getElementById('scoreBox');
+      const checkScoreBtn = document.getElementById('checkScoreBtn');
+      const resetQuizBtn = document.getElementById('resetQuizBtn');
+
+      function showFeedback(questionName, selectedValue) {
+        const feedbackBox = document.getElementById('feedback-' + questionName);
+        const questionData = answerKey[questionName];
+        const isCorrect = selectedValue === questionData.correct;
+
+        feedbackBox.textContent = questionData.feedback[selectedValue];
+        feedbackBox.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+      }
+
+      quizOptions.forEach((option) => {
+        option.addEventListener('change', function () {
+          showFeedback(this.name, this.value);
+        });
+      });
+
+      checkScoreBtn.addEventListener('click', function () {
+        let score = 0;
+        let answered = 0;
+
+        questionNames.forEach((questionName) => {
+          const selected = document.querySelector('input[name="' + questionName + '"]:checked');
+          if (selected) {
+            answered += 1;
+            if (selected.value === answerKey[questionName].correct) {
+              score += 1;
+            }
+            showFeedback(questionName, selected.value);
+          }
+        });
+
+        scoreBox.style.display = 'block';
+
+        if (answered < questionNames.length) {
+          scoreBox.textContent = 'You answered ' + answered + ' of ' + questionNames.length + ' questions. Current score: ' + score + ' out of ' + answered + '.';
+        } else {
+          let message = 'You scored ' + score + ' out of ' + questionNames.length + '. ';
+          if (score === 5) {
+            message += 'Excellent work. You are clearly connecting types of play with developmental goals.';
+          } else if (score >= 4) {
+            message += 'Nice job. You have a strong understanding of how play supports development.';
+          } else if (score >= 3) {
+            message += 'Good start. Review the lesson sections to strengthen your connections between play and development.';
+          } else {
+            message += 'Keep going. Revisit the core idea and worked example, then try again.';
+          }
+          scoreBox.textContent = message;
+        }
+      });
+
+      resetQuizBtn.addEventListener('click', function () {
+        document.getElementById('quizForm').reset();
+        questionNames.forEach((questionName) => {
+          const feedbackBox = document.getElementById('feedback-' + questionName);
+          feedbackBox.textContent = '';
+          feedbackBox.className = 'feedback';
+        });
+        scoreBox.style.display = 'none';
+        scoreBox.textContent = '';
+      });
+    })();
+  </script>
+</body>
+</html>
