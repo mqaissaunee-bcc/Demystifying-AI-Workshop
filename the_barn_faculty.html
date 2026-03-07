@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive HTML5 mini-lesson for The Barn by Wright Thompson" />
+  <title>The Barn by Wright Thompson — Interactive Mini-Lesson</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --panel-soft: #eaf1f8;
+      --text: #173047;
+      --muted: #46627a;
+      --line: #bfd0e0;
+      --accent: #1f5f99;
+      --accent-dark: #164a79;
+      --accent-soft: #dce9f5;
+      --success-bg: #e9f7ef;
+      --success-line: #8bc5a3;
+      --warn-bg: #fff8e6;
+      --warn-line: #e0c77d;
+      --error-bg: #fdecee;
+      --error-line: #d99aa5;
+      --shadow: 0 8px 24px rgba(18, 42, 66, 0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4fa 0%, #f8fbfe 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #000;
+      color: #fff;
+      padding: 0.75rem 1rem;
+      z-index: 1000;
+    }
+
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #dfeefa 0%, #f8fbff 60%, #d8e6f4 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin: 1rem 0 1.25rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: #173f66;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin-top: 0;
+    }
+
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+
+    .lead {
+      font-size: 1.08rem;
+      max-width: 70ch;
+      color: var(--text);
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .hero-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .hero-grid { grid-template-columns: 2fr 1fr; align-items: start; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card.soft {
+      background: var(--panel-soft);
+    }
+
+    .meta-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .meta-list li {
+      background: rgba(255,255,255,0.75);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+
+    .outcomes ol {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid var(--line);
+      font-size: 0.86rem;
+      margin: 0.1rem 0.2rem 0.1rem 0;
+    }
+
+    .tablist {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .tab-btn {
+      border: 2px solid var(--accent);
+      background: #fff;
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .tab-btn[aria-selected="true"],
+    .tab-btn:hover,
+    .tab-btn:focus-visible {
+      background: var(--accent);
+      color: #fff;
+      outline: none;
+    }
+
+    .tab-panel { display: none; margin-bottom: 1rem; }
+    .tab-panel.active { display: block; }
+
+    .accordion-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      text-align: left;
+      background: #fff;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .accordion-trigger:hover,
+    .accordion-trigger:focus-visible {
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0 1rem 1rem;
+      border-top: 1px solid var(--line);
+      background: #fcfeff;
+    }
+
+    .accordion-item.open .accordion-content { display: block; }
+
+    .timeline {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .timeline-item {
+      border-left: 5px solid #2d7cc0;
+      padding: 0.75rem 0.75rem 0.75rem 1rem;
+      background: #fff;
+      border-radius: 0 14px 14px 0;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .timeline-year {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .quote-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .quote-btn,
+    .primary-btn,
+    .secondary-btn {
+      cursor: pointer;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 2px solid var(--accent);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.95rem;
+    }
+
+    .quote-btn,
+    .secondary-btn {
+      background: #fff;
+      color: var(--accent);
+    }
+
+    .quote-btn:hover,
+    .quote-btn:focus-visible,
+    .secondary-btn:hover,
+    .secondary-btn:focus-visible {
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .primary-btn {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary-btn:hover,
+    .primary-btn:focus-visible {
+      background: var(--accent-dark);
+      outline: none;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 12px;
+      border: 1px solid #8eaac4;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    textarea:focus-visible {
+      outline: 3px solid #5d9ad3;
+      border-color: #2d7cc0;
+    }
+
+    .prompt-box {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+      padding: 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .relationship-map {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .map-center {
+      text-align: center;
+      font-weight: 700;
+      padding: 1rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 18px;
+    }
+
+    .map-node {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 0.9rem;
+    }
+
+    .map-node strong { color: var(--accent); }
+
+    .writing-prompt {
+      border-left: 5px solid var(--accent);
+      padding: 0.8rem 1rem;
+      background: #fff;
+      border-radius: 0 14px 14px 0;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 0.8rem;
+    }
+
+    .quiz-question {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1rem;
+      background: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-question fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .quiz-question legend {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .option {
+      display: block;
+      padding: 0.45rem 0;
+    }
+
+    .quiz-result {
+      margin-top: 0.6rem;
+      padding: 0.75rem;
+      border-radius: 12px;
+      display: none;
+      border: 1px solid var(--line);
+    }
+
+    .score-box {
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      margin-top: 0.75rem;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 1rem 0 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="container">
+    <header class="hero" aria-labelledby="page-title">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Interactive Common Read Mini-Lesson</div>
+          <h1 id="page-title">The Barn by Wright Thompson</h1>
+          <p class="lead">
+            This mini-lesson helps students engage with <em>The Barn: The Secret History of a Murder in Mississippi</em> by Wright Thompson through reading support,
+            reflection, historical context, discussion, and self-check activities.
+          </p>
+          <p>
+            It is designed for first- and second-year community college students across disciplines and works especially well as a common-read lesson in an LMS.
+          </p>
+        </div>
+        <aside class="card soft" aria-label="Book and course details">
+          <h2>Quick View</h2>
+          <ul class="meta-list">
+            <li><strong>Book:</strong> <em>The Barn</em></li>
+            <li><strong>Author:</strong> Wright Thompson</li>
+            <li><strong>Course / Discipline:</strong> All</li>
+            <li><strong>Use in Course:</strong> Common read</li>
+            <li><strong>Audience:</strong> First- and second-year students</li>
+          </ul>
+        </aside>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="card outcomes" aria-labelledby="outcomes-title">
+        <h2 id="outcomes-title">Approved Learning Outcomes</h2>
+        <ol>
+          <li>Summarize the book’s central argument about Emmett Till’s murder and explain how the text connects one crime to larger systems of racism, power, and historical silence.</li>
+          <li>Identify major themes such as memory, truth, justice, place, inherited history, and community responsibility.</li>
+          <li>Analyze how Wright Thompson builds meaning through research, storytelling, historical context, and personal reflection.</li>
+          <li>Evaluate the relationship between individual actions and larger social systems that contributed to injustice.</li>
+          <li>Make thoughtful connections between the book and current questions about public memory, racial violence, media, education, and civic responsibility.</li>
+          <li>Use evidence from the text to support interpretation in discussion, writing, and class activities.</li>
+        </ol>
+      </section>
+
+      <nav class="tablist" aria-label="Lesson sections" role="tablist">
+        <button class="tab-btn" id="tab-overview" role="tab" aria-selected="true" aria-controls="panel-overview" tabindex="0">Core Overview</button>
+        <button class="tab-btn" id="tab-analysis" role="tab" aria-selected="false" aria-controls="panel-analysis" tabindex="-1">Close Reading &amp; Analysis</button>
+        <button class="tab-btn" id="tab-reflection" role="tab" aria-selected="false" aria-controls="panel-reflection" tabindex="-1">Reflection &amp; Connection</button>
+        <button class="tab-btn" id="tab-discussion" role="tab" aria-selected="false" aria-controls="panel-discussion" tabindex="-1">Discussion &amp; Application</button>
+      </nav>
+
+      <section id="panel-overview" class="tab-panel active" role="tabpanel" aria-labelledby="tab-overview">
+        <div class="grid-2">
+          <article class="card">
+            <h2>Core Overview</h2>
+            <p>
+              <em>The Barn</em> is a nonfiction work that revisits the 1955 murder of Emmett Till in Mississippi. Thompson examines not only the crime itself,
+              but also the land, history, social structures, and silence that surrounded it.
+            </p>
+            <p>
+              Rather than treating the murder as an isolated event, the book asks readers to examine how communities remember, avoid, reshape, or conceal painful truths.
+            </p>
+            <div>
+              <span class="pill">History</span>
+              <span class="pill">Memory</span>
+              <span class="pill">Justice</span>
+              <span class="pill">Place</span>
+              <span class="pill">Race</span>
+              <span class="pill">Power</span>
+            </div>
+          </article>
+
+          <article class="card soft">
+            <h2>Why This Book Works as a Common Read</h2>
+            <ul>
+              <li>It connects one event to larger social and historical systems.</li>
+              <li>It supports discussion across disciplines such as history, English, sociology, criminal justice, education, media studies, and ethics.</li>
+              <li>It models how writers use evidence, narrative, and reflection together.</li>
+              <li>It encourages students to think about truth, responsibility, and public memory.</li>
+            </ul>
+          </article>
+        </div>
+
+        <article class="card" aria-labelledby="timeline-title">
+          <h2 id="timeline-title">Historical Context Timeline</h2>
+          <p>Use this timeline to ground your reading in the larger historical story surrounding the book.</p>
+          <div class="timeline" aria-label="Timeline of key events related to the book">
+            <div class="timeline-item">
+              <div class="timeline-year">1955</div>
+              <div>Emmett Till, a 14-year-old Black boy from Chicago, is kidnapped and murdered in Mississippi.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">1955</div>
+              <div>Mamie Till-Mobley insists on an open-casket funeral so the public can witness the brutality of racial violence.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">1955</div>
+              <div>An all-white jury acquits Roy Bryant and J. W. Milam, turning the case into a national symbol of injustice.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">Later decades</div>
+              <div>Writers, activists, historians, journalists, and family members continue to revisit the case and its meaning.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">Contemporary era</div>
+              <div><em>The Barn</em> explores how the legacy of the murder remains connected to land, memory, race, silence, and American identity.</div>
+            </div>
+          </div>
+        </article>
+
+        <div class="grid-2">
+          <article class="card">
+            <h2>Glossary of Key Terms</h2>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Emmett Till</button>
+              <div class="accordion-content"><p>A 14-year-old Black teenager from Chicago whose 1955 murder in Mississippi became a defining moment in U.S. civil rights history.</p></div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Wright Thompson</button>
+              <div class="accordion-content"><p>A journalist and nonfiction writer from Mississippi who investigates the case while reflecting on the region’s history and memory.</p></div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Public Memory</button>
+              <div class="accordion-content"><p>The way communities remember, teach, preserve, reinterpret, or avoid difficult historical events.</p></div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Historical Silence</button>
+              <div class="accordion-content"><p>The suppression, omission, or avoidance of facts, voices, or truths in the way history is told.</p></div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Systemic Racism</button>
+              <div class="accordion-content"><p>Racism that is embedded in institutions, customs, and social structures, not just in individual beliefs or actions.</p></div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-trigger" type="button" aria-expanded="false">Context</button>
+              <div class="accordion-content"><p>The larger background that helps explain why an event happened and why it matters.</p></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Simple Relationship Map</h2>
+            <p>This map shows how people, place, and ideas are connected in the book.</p>
+            <div class="relationship-map">
+              <div class="map-center">Central Focus: Emmett Till’s murder and its legacy</div>
+              <div class="grid-2">
+                <div class="map-node"><strong>Wright Thompson</strong><br />Investigates the case and helps readers connect personal narrative, reporting, and historical analysis.</div>
+                <div class="map-node"><strong>Mississippi Delta</strong><br />Functions as both setting and evidence, revealing the relationship among land, race, labor, and power.</div>
+                <div class="map-node"><strong>Communities &amp; Institutions</strong><br />Courts, media, local culture, and social norms affect what is remembered, denied, or protected.</div>
+                <div class="map-node"><strong>Readers Today</strong><br />Asked to consider what responsibility people have when confronting painful history in the present.</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="panel-analysis" class="tab-panel" role="tabpanel" aria-labelledby="tab-analysis">
+        <div class="grid-2">
+          <article class="card">
+            <h2>Close Reading &amp; Analysis</h2>
+            <ul>
+              <li><strong>Track repeated ideas:</strong> look for words and passages about land, memory, silence, race, truth, responsibility, and inheritance.</li>
+              <li><strong>Notice author choices:</strong> ask how Thompson combines reporting, history, storytelling, and reflection.</li>
+              <li><strong>Study perspective:</strong> consider what it means that the author writes from Mississippi and from a position shaped by proximity to the region’s history.</li>
+              <li><strong>Look at structure:</strong> notice when the text moves from a single event to broader social meaning.</li>
+              <li><strong>Ask why context matters:</strong> identify places where the book insists that one crime cannot be understood by itself.</li>
+            </ul>
+          </article>
+
+          <article class="card soft">
+            <h2>Reading Support Strategy</h2>
+            <ol>
+              <li>Pause after a difficult section and write a one-sentence summary.</li>
+              <li>Name one emotion or reaction the chapter creates.</li>
+              <li>Mark one detail or image that seems important.</li>
+              <li>Ask what larger system or theme the section points toward.</li>
+            </ol>
+          </article>
+        </div>
+
+        <article class="card">
+          <h2>Quote Explorer</h2>
+          <p>Choose a quote card to reveal commentary and a guiding question.</p>
+          <div class="quote-buttons" role="group" aria-label="Quote explorer buttons">
+            <button class="quote-btn" type="button" data-quote="0">Quote 1: Place</button>
+            <button class="quote-btn" type="button" data-quote="1">Quote 2: Silence</button>
+            <button class="quote-btn" type="button" data-quote="2">Quote 3: Memory</button>
+            <button class="quote-btn" type="button" data-quote="3">Quote 4: Systems</button>
+          </div>
+          <div id="quote-display" class="card soft" tabindex="0" aria-live="polite">
+            <h3>Selected Quote Card</h3>
+            <p><strong>Theme line:</strong> The story asks readers to see the barn not as an isolated place, but as a doorway into a much larger history.</p>
+            <p><strong>Commentary:</strong> This helps readers understand that the book is not just reconstructing one event. It is also examining what a place can reveal about the values and systems around it.</p>
+            <p><strong>Guiding question:</strong> How does turning a physical place into a symbol deepen the book’s meaning?</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Reflection Prompts</h2>
+          <div class="grid-2">
+            <div class="prompt-box"><strong>1.</strong><span>What did you know about Emmett Till before reading this book, and what new understanding has the text given you?</span></div>
+            <div class="prompt-box"><strong>2.</strong><span>How does the book connect one act of violence to larger social systems?</span></div>
+            <div class="prompt-box"><strong>3.</strong><span>What role does place play in the book, and why does it matter?</span></div>
+            <div class="prompt-box"><strong>4.</strong><span>What moments made you think about silence, denial, or avoidance?</span></div>
+            <div class="prompt-box"><strong>5.</strong><span>How does Thompson’s voice as a writer affect your understanding of the text?</span></div>
+            <div class="prompt-box"><strong>6.</strong><span>What passage, scene, or image would you bring to class discussion, and why?</span></div>
+            <div class="prompt-box"><strong>7.</strong><span>What responsibilities do readers have when engaging with painful history?</span></div>
+            <div class="prompt-box"><strong>8.</strong><span>What does this book suggest about the difference between knowing history and confronting history?</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section id="panel-reflection" class="tab-panel" role="tabpanel" aria-labelledby="tab-reflection">
+        <div class="grid-2">
+          <article class="card">
+            <h2>Before Reading</h2>
+            <label for="before-reading"><strong>Predictions / Prior Knowledge</strong></label>
+            <textarea id="before-reading" rows="6" placeholder="What do you expect this book to explore? What questions do you already have about history, justice, truth, or memory?"></textarea>
+            <div style="margin-top:0.75rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="primary-btn" type="button" data-save="before-reading">Save in Browser</button>
+              <button class="secondary-btn" type="button" data-clear="before-reading">Clear</button>
+            </div>
+            <p class="footer-note">Saved only on this device/browser.</p>
+          </article>
+
+          <article class="card soft">
+            <h2>After Reading</h2>
+            <label for="after-reading"><strong>Takeaways / New Thinking</strong></label>
+            <textarea id="after-reading" rows="6" placeholder="What stayed with you after reading? What changed in your thinking? What should classmates understand about this text?"></textarea>
+            <div style="margin-top:0.75rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button class="primary-btn" type="button" data-save="after-reading">Save in Browser</button>
+              <button class="secondary-btn" type="button" data-clear="after-reading">Clear</button>
+            </div>
+            <p class="footer-note">Saved only on this device/browser.</p>
+          </article>
+        </div>
+
+        <article class="card">
+          <h2>Reflection &amp; Connection Questions</h2>
+          <div class="grid-2">
+            <div class="prompt-box"><strong>1.</strong><span>What parts of this book feel historical, and what parts feel current or ongoing?</span></div>
+            <div class="prompt-box"><strong>2.</strong><span>How do communities decide which stories to honor publicly and which to minimize?</span></div>
+            <div class="prompt-box"><strong>3.</strong><span>What is the difference between individual prejudice and systemic injustice in the book?</span></div>
+            <div class="prompt-box"><strong>4.</strong><span>How might this text connect to your discipline, career goals, or civic responsibilities?</span></div>
+            <div class="prompt-box"><strong>5.</strong><span>How do media, education, and public institutions shape what people know about difficult history?</span></div>
+            <div class="prompt-box"><strong>6.</strong><span>What does the book teach about accountability, even when legal justice is incomplete?</span></div>
+            <div class="prompt-box"><strong>7.</strong><span>Why might some readers find this book challenging, and why is that challenge important?</span></div>
+            <div class="prompt-box"><strong>8.</strong><span>What action, question, or conversation should come after reading this text?</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Optional Low-Stakes Writing Prompts</h2>
+          <div class="writing-prompt"><strong>Prompt A:</strong> In one paragraph, explain how <em>The Barn</em> turns a specific place into a larger argument about American history.</div>
+          <div class="writing-prompt"><strong>Prompt B:</strong> Choose one theme from the book—memory, justice, silence, place, power, or responsibility—and explain how it develops.</div>
+          <div class="writing-prompt"><strong>Prompt C:</strong> Write a short response explaining what this book suggests about witnesses, communities, and institutions in either protecting truth or hiding it.</div>
+          <div class="writing-prompt"><strong>Prompt D:</strong> Connect the book to a current issue, article, memorial, public controversy, or classroom topic. What similarities or tensions do you notice?</div>
+        </article>
+      </section>
+
+      <section id="panel-discussion" class="tab-panel" role="tabpanel" aria-labelledby="tab-discussion">
+        <div class="grid-2">
+          <article class="card">
+            <h2>Discussion Questions</h2>
+            <ol>
+              <li>Why is it important that the book investigates not only the murder itself but also the world that made it possible?</li>
+              <li>How does Thompson use place and landscape as part of his argument?</li>
+              <li>What does the book suggest about the relationship between memory and power?</li>
+              <li>How does the text challenge simplified versions of history?</li>
+              <li>What role do institutions such as courts, media, and community norms play in the story?</li>
+              <li>What responsibilities do writers have when telling traumatic histories?</li>
+              <li>How can this book function differently in a history course, an English course, a sociology course, or a first-year seminar?</li>
+              <li>What should readers do with the discomfort or urgency the book creates?</li>
+            </ol>
+          </article>
+
+          <article class="card soft">
+            <h2>Discussion Support</h2>
+            <p>Sentence starters that can help students join the conversation:</p>
+            <ul>
+              <li>“One pattern I noticed in the book is…”</li>
+              <li>“A detail that changed how I understood the topic was…”</li>
+              <li>“The author seems to suggest that…”</li>
+              <li>“This part connects to today because…”</li>
+              <li>“I am still thinking about…”</li>
+            </ul>
+          </article>
+        </div>
+
+        <article class="card">
+          <h2>Self-Check Quiz</h2>
+          <p>Choose your answers, then select <strong>Check My Answers</strong> to get immediate feedback.</p>
+
+          <form id="quiz-form">
+            <div class="quiz-question">
+              <fieldset>
+                <legend>1. What is the main focus of <em>The Barn</em>?</legend>
+                <label class="option"><input type="radio" name="q1" value="a" /> A. A fictional family drama set in the rural South</label>
+                <label class="option"><input type="radio" name="q1" value="b" /> B. A nonfiction investigation into Emmett Till’s murder and its broader historical meaning</label>
+                <label class="option"><input type="radio" name="q1" value="c" /> C. A legal textbook about criminal procedure</label>
+                <label class="option"><input type="radio" name="q1" value="d" /> D. A memoir focused only on the author’s childhood</label>
+              </fieldset>
+              <div class="quiz-result" id="result-q1"></div>
+            </div>
+
+            <div class="quiz-question">
+              <fieldset>
+                <legend>2. Which theme is most central to the book?</legend>
+                <label class="option"><input type="radio" name="q2" value="a" /> A. Competition in sports</label>
+                <label class="option"><input type="radio" name="q2" value="b" /> B. Technology and innovation</label>
+                <label class="option"><input type="radio" name="q2" value="c" /> C. Memory, justice, silence, and systemic racism</label>
+                <label class="option"><input type="radio" name="q2" value="d" /> D. Travel and tourism</label>
+              </fieldset>
+              <div class="quiz-result" id="result-q2"></div>
+            </div>
+
+            <div class="quiz-question">
+              <fieldset>
+                <legend>3. How does Wright Thompson build meaning in the text?</legend>
+                <label class="option"><input type="radio" name="q3" value="a" /> A. By using only charts and statistics</label>
+                <label class="option"><input type="radio" name="q3" value="b" /> B. By combining research, storytelling, historical context, and reflection</label>
+                <label class="option"><input type="radio" name="q3" value="c" /> C. By refusing to discuss context</label>
+                <label class="option"><input type="radio" name="q3" value="d" /> D. By focusing only on current events unrelated to the case</label>
+              </fieldset>
+              <div class="quiz-result" id="result-q3"></div>
+            </div>
+
+            <div class="quiz-question">
+              <fieldset>
+                <legend>4. Why is place important in <em>The Barn</em>?</legend>
+                <label class="option"><input type="radio" name="q4" value="a" /> A. Place is only background scenery</label>
+                <label class="option"><input type="radio" name="q4" value="b" /> B. Place reveals links among land, history, culture, and power</label>
+                <label class="option"><input type="radio" name="q4" value="c" /> C. Place is included only to help with travel directions</label>
+                <label class="option"><input type="radio" name="q4" value="d" /> D. Place is irrelevant to the author’s argument</label>
+              </fieldset>
+              <div class="quiz-result" id="result-q4"></div>
+            </div>
+
+            <div class="quiz-question">
+              <fieldset>
+                <legend>5. What is one major goal of reading this book in a college course?</legend>
+                <label class="option"><input type="radio" name="q5" value="a" /> A. To memorize dates without interpretation</label>
+                <label class="option"><input type="radio" name="q5" value="b" /> B. To avoid discussing difficult issues</label>
+                <label class="option"><input type="radio" name="q5" value="c" /> C. To connect textual evidence to larger social and historical questions</label>
+                <label class="option"><input type="radio" name="q5" value="d" /> D. To replace all discussion with silent reading</label>
+              </fieldset>
+              <div class="quiz-result" id="result-q5"></div>
+            </div>
+
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+              <button class="primary-btn" type="button" id="check-quiz">Check My Answers</button>
+              <button class="secondary-btn" type="reset" id="reset-quiz">Reset Quiz</button>
+            </div>
+            <div id="quiz-score" class="score-box" aria-live="polite">Your score will appear here.</div>
+          </form>
+        </article>
+      </section>
+
+      <p class="footer-note">
+        Instructor note: this page is intentionally cross-disciplinary and can be used before class, during discussion, or as an LMS-based reading companion.
+      </p>
+    </main>
+  </div>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+    const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+    function activateTab(tab) {
+      tabs.forEach((btn) => {
+        const selected = btn === tab;
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.tabIndex = selected ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        panel.classList.toggle('active', panel.id === tab.getAttribute('aria-controls'));
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('keydown', (e) => {
+        let newIndex = index;
+        if (e.key === 'ArrowRight') newIndex = (index + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') newIndex = (index - 1 + tabs.length) % tabs.length;
+        if (newIndex !== index) {
+          tabs[newIndex].focus();
+          activateTab(tabs[newIndex]);
+        }
+      });
+    });
+
+    document.querySelectorAll('.accordion-trigger').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const isOpen = item.classList.toggle('open');
+        button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+
+    const quoteData = [
+      {
+        title: 'Quote 1: Place',
+        line: 'The barn becomes more than a location; it becomes a way to read the history around it.',
+        commentary: 'This reminds readers that setting can function as evidence. A place can reveal systems, values, and silences beyond a single event.',
+        question: 'How does the meaning of the barn change when it becomes a symbol instead of just a setting?'
+      },
+      {
+        title: 'Quote 2: Silence',
+        line: 'The book keeps asking what a community chooses not to say, and why that silence lasts.',
+        commentary: 'Silence in the text is not empty. It can protect power, hide truth, and shape public memory.',
+        question: 'Why might silence be one of the most important forces in the book?'
+      },
+      {
+        title: 'Quote 3: Memory',
+        line: 'Memory is shown as something shaped by people, institutions, and public stories.',
+        commentary: 'This helps students think about how history is preserved, argued over, and taught across generations.',
+        question: 'What is the difference between personal memory, public memory, and official history?'
+      },
+      {
+        title: 'Quote 4: Systems',
+        line: 'The story suggests that injustice does not happen in isolation; it is supported by larger structures.',
+        commentary: 'This encourages readers to look beyond individual actions and examine institutions, traditions, and social norms.',
+        question: 'How does the book help you distinguish between individual acts and systemic injustice?'
+      }
+    ];
+
+    const quoteDisplay = document.getElementById('quote-display');
+    document.querySelectorAll('[data-quote]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = quoteData[Number(button.dataset.quote)];
+        quoteDisplay.innerHTML = `
+          <h3>${item.title}</h3>
+          <p><strong>Theme line:</strong> ${item.line}</p>
+          <p><strong>Commentary:</strong> ${item.commentary}</p>
+          <p><strong>Guiding question:</strong> ${item.question}</p>
+        `;
+        quoteDisplay.focus();
+      });
+    });
+
+    const textAreas = ['before-reading', 'after-reading'];
+    textAreas.forEach((id) => {
+      const saved = localStorage.getItem(`barnLesson_${id}`);
+      if (saved) document.getElementById(id).value = saved;
+    });
+
+    document.querySelectorAll('[data-save]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.save;
+        const area = document.getElementById(id);
+        localStorage.setItem(`barnLesson_${id}`, area.value);
+        window.alert('Your response was saved in this browser.');
+      });
+    });
+
+    document.querySelectorAll('[data-clear]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.clear;
+        const area = document.getElementById(id);
+        area.value = '';
+        localStorage.removeItem(`barnLesson_${id}`);
+      });
+    });
+
+    const answerKey = {
+      q1: { correct: 'b', explanation: 'Correct answer: B. The book is a nonfiction investigation of Emmett Till’s murder and the larger historical systems around it.' },
+      q2: { correct: 'c', explanation: 'Correct answer: C. The text focuses strongly on memory, justice, silence, and systemic racism.' },
+      q3: { correct: 'b', explanation: 'Correct answer: B. Thompson combines research, storytelling, historical context, and reflection.' },
+      q4: { correct: 'b', explanation: 'Correct answer: B. Place matters because it reveals links among land, history, culture, and power.' },
+      q5: { correct: 'c', explanation: 'Correct answer: C. One major goal is connecting textual evidence to larger social and historical questions.' }
+    };
+
+    const quizForm = document.getElementById('quiz-form');
+    const quizScore = document.getElementById('quiz-score');
+
+    document.getElementById('check-quiz').addEventListener('click', () => {
+      let score = 0;
+      let answered = 0;
+
+      Object.keys(answerKey).forEach((name) => {
+        const selected = quizForm.querySelector(`input[name="${name}"]:checked`);
+        const resultBox = document.getElementById(`result-${name}`);
+        resultBox.style.display = 'block';
+
+        if (!selected) {
+          resultBox.innerHTML = '<strong>Not answered yet.</strong> Please choose an option.';
+          resultBox.style.background = 'var(--warn-bg)';
+          resultBox.style.borderColor = 'var(--warn-line)';
+          return;
+        }
+
+        answered += 1;
+        if (selected.value === answerKey[name].correct) {
+          score += 1;
+          resultBox.innerHTML = `<strong>Correct.</strong> ${answerKey[name].explanation}`;
+          resultBox.style.background = 'var(--success-bg)';
+          resultBox.style.borderColor = 'var(--success-line)';
+        } else {
+          resultBox.innerHTML = `<strong>Not quite.</strong> ${answerKey[name].explanation}`;
+          resultBox.style.background = 'var(--error-bg)';
+          resultBox.style.borderColor = 'var(--error-line)';
+        }
+      });
+
+      quizScore.textContent = `Score: ${score} out of ${Object.keys(answerKey).length}. Answered: ${answered} of ${Object.keys(answerKey).length}.`;
+    });
+
+    document.getElementById('reset-quiz').addEventListener('click', () => {
+      document.querySelectorAll('.quiz-result').forEach((box) => {
+        box.style.display = 'none';
+        box.innerHTML = '';
+      });
+      quizScore.textContent = 'Your score will appear here.';
+    });
+  </script>
+</body>
+</html>
