@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Barn — Interactive Reader's Guide | Wright Thompson</title>
+<style>
+  /* ── Design System ── */
+  :root {
+    --navy:      #1C2B3A;
+    --navy-mid:  #243447;
+    --teal:      #2A7F6F;
+    --teal-light:#3A9E8C;
+    --gold:      #C49A3A;
+    --gold-light:#E0B85A;
+    --cream:     #F7F3ED;
+    --warm-gray: #EAE5DE;
+    --mid-gray:  #9A9087;
+    --ink:       #2C2218;
+    --red-note:  #8B2020;
+    --correct:   #1A5C3A;
+    --wrong:     #7A1818;
+    --font-head: Georgia, 'Times New Roman', serif;
+    --font-body: 'Palatino Linotype', Palatino, Georgia, serif;
+    --font-ui:   'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --radius:    6px;
+    --shadow:    0 2px 8px rgba(28,43,58,0.12);
+    --shadow-md: 0 4px 16px rgba(28,43,58,0.16);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+
+  /* ── Skip Link ── */
+  .skip-link {
+    position: absolute; top: -40px; left: 0;
+    background: var(--navy); color: #fff;
+    padding: 8px 16px; z-index: 1000;
+    font-family: var(--font-ui);
+    text-decoration: none; border-radius: 0 0 4px 0;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* ── Content Note Banner ── */
+  .content-note {
+    background: #FDF3E3;
+    border-left: 4px solid var(--gold);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: #5C4A1E;
+    text-align: center;
+  }
+  .content-note strong { color: #3D2F0A; }
+
+  /* ── Header ── */
+  .site-header {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1A3A30 100%);
+    color: #fff;
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 40px,
+      rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px
+    );
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(196,154,58,0.2);
+    border: 1px solid rgba(196,154,58,0.5);
+    color: var(--gold-light);
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+  .site-header h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 0.4rem;
+  }
+  .site-header h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .site-header .byline {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.04em;
+  }
+  .header-outcomes {
+    max-width: 680px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+  }
+  .header-outcomes h2 {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+  }
+  .header-outcomes ol {
+    padding-left: 1.4rem;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.82);
+    font-family: var(--font-ui);
+    line-height: 1.6;
+  }
+  .header-outcomes li { margin-bottom: 0.35rem; }
+
+  /* ── Main Nav Tabs ── */
+  .tab-nav {
+    background: var(--navy);
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--teal);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.9rem 1.1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); }
+  .tab-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+  .tab-btn:focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: -2px;
+  }
+
+  /* ── Tab Panels ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  /* ── Section Headers ── */
+  .section-heading {
+    font-family: var(--font-head);
+    font-size: 1.7rem;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--teal);
+  }
+  .section-intro {
+    font-size: 1rem;
+    color: #4A3D30;
+    margin-bottom: 1.75rem;
+    max-width: 720px;
+    line-height: 1.75;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    font-family: var(--font-head);
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 0.6rem;
+  }
+  .card h4 {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    margin-bottom: 0.4rem;
+    margin-top: 1rem;
+  }
+  .card p { margin-bottom: 0.75rem; font-size: 0.97rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .card-teal {
+    border-left: 4px solid var(--teal);
+  }
+  .card-gold {
+    border-left: 4px solid var(--gold);
+  }
+  .card-navy {
+    border-left: 4px solid var(--navy);
+    background: #FAFAF8;
+  }
+
+  /* ── Two-column grid ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── Accent labels ── */
+  .label {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 100px;
+    margin-bottom: 0.5rem;
+  }
+  .label-teal { background: #D4EDE8; color: #1A5A4E; }
+  .label-gold { background: #F2E8CC; color: #7A5A10; }
+  .label-navy { background: #D4DCE5; color: #1C2B3A; }
+  .label-red  { background: #F0DADA; color: #6B1A1A; }
+
+  /* ── Reflection Prompts ── */
+  .prompt-list { list-style: none; }
+  .prompt-item {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem 1.1rem 1.5rem;
+    margin-bottom: 0.9rem;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .prompt-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    border-radius: var(--radius) 0 0 var(--radius);
+    background: var(--teal);
+  }
+  .prompt-item.gold-prompt::before { background: var(--gold); }
+  .prompt-num {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--mid-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.3rem;
+  }
+  .prompt-text { font-size: 0.97rem; }
+
+  /* ── Discussion Questions ── */
+  .disc-list { list-style: none; counter-reset: disc-counter; }
+  .disc-item {
+    counter-increment: disc-counter;
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem 1rem 3.5rem;
+    margin-bottom: 0.9rem;
+    position: relative;
+    box-shadow: var(--shadow);
+    font-size: 0.97rem;
+  }
+  .disc-item::before {
+    content: counter(disc-counter);
+    position: absolute;
+    left: 1rem; top: 50%;
+    transform: translateY(-50%);
+    width: 1.8rem; height: 1.8rem;
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .disc-level {
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mid-gray);
+    margin-bottom: 0.25rem;
+  }
+
+  /* ── Quote Explorer ── */
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .quote-card {
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+  }
+  .quote-card:hover, .quote-card:focus {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--gold);
+    outline: none;
+  }
+  .quote-card:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 2px; }
+  .quote-card blockquote {
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 0.6rem;
+  }
+  .quote-card .tap-hint {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    color: var(--gold-light);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .quote-expanded {
+    display: none;
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-top: 0.75rem;
+    box-shadow: var(--shadow);
+  }
+  .quote-expanded.open { display: block; animation: fadeIn 0.2s ease; }
+  .quote-expanded .commentary { font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .quote-expanded .q-prompts {
+    border-top: 1px solid var(--warm-gray);
+    padding-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #3A2E20;
+  }
+  .quote-expanded .q-prompts p { margin-bottom: 0.5rem; }
+
+  /* ── Timeline ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.65rem; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--teal), var(--navy));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 0.75rem;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.9rem;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--teal);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .timeline-trigger {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ink);
+    transition: background 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .timeline-trigger:hover { background: var(--warm-gray); }
+  .timeline-trigger:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .timeline-date {
+    font-weight: 700;
+    color: var(--teal);
+    min-width: 4rem;
+    font-size: 0.82rem;
+  }
+  .timeline-title { flex: 1; padding: 0 0.75rem; }
+  .timeline-chevron { color: var(--mid-gray); font-size: 0.8rem; transition: transform 0.2s; }
+  .timeline-trigger[aria-expanded="true"] .timeline-chevron { transform: rotate(90deg); }
+  .timeline-detail {
+    display: none;
+    background: #FAFAF8;
+    border: 1px solid #DDD6CC;
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .timeline-detail.open { display: block; animation: fadeIn 0.2s ease; }
+  .timeline-detail p { margin-bottom: 0.5rem; }
+  .timeline-detail .t-question {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--warm-gray);
+    font-style: italic;
+    color: #3A3020;
+    font-size: 0.88rem;
+  }
+
+  /* ── Glossary ── */
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .gloss-item {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    box-shadow: var(--shadow);
+  }
+  .gloss-term {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 0.3rem;
+  }
+  .gloss-def { font-size: 0.88rem; color: #3A3020; margin-bottom: 0.5rem; }
+  .gloss-why {
+    font-size: 0.8rem;
+    background: #F2E8CC;
+    color: #6B4A10;
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+  }
+  .gloss-why strong { font-weight: 700; }
+
+  /* ── Before/After Reading ── */
+  .before-after-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 640px) { .before-after-grid { grid-template-columns: 1fr; } }
+  .ba-panel {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .ba-panel h3 {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid;
+  }
+  .ba-before h3 { color: var(--navy); border-color: var(--navy); }
+  .ba-after h3  { color: var(--teal); border-color: var(--teal); }
+  .ba-prompt {
+    font-size: 0.9rem;
+    color: #3A3020;
+    margin-bottom: 0.75rem;
+  }
+  .ba-textarea {
+    width: 100%;
+    min-height: 90px;
+    border: 1px solid #C8C0B4;
+    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    resize: vertical;
+    background: var(--cream);
+    transition: border-color 0.2s;
+  }
+  .ba-textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,127,111,0.15); }
+
+  /* ── Quiz ── */
+  .quiz-intro {
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  .quiz-intro strong { color: var(--gold-light); }
+  .quiz-question {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .quiz-q-num {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mid-gray);
+    margin-bottom: 0.4rem;
+  }
+  .quiz-q-text {
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: var(--font-head);
+    color: var(--navy);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .quiz-options { list-style: none; }
+  .quiz-option {
+    margin-bottom: 0.5rem;
+  }
+  .quiz-option button {
+    width: 100%;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border: 2px solid #C8C0B4;
+    border-radius: 4px;
+    background: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.93rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 1.5;
+  }
+  .quiz-option button:hover:not(:disabled) { border-color: var(--teal); background: #EDF6F4; }
+  .quiz-option button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .quiz-option button.correct  { border-color: var(--correct); background: #D4EDD9; color: var(--correct); font-weight: 600; }
+  .quiz-option button.wrong    { border-color: var(--wrong); background: #F0D4D4; color: var(--wrong); }
+  .quiz-option button.reveal   { border-color: var(--correct); background: #EAF5EA; }
+  .quiz-feedback {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: var(--font-ui);
+    line-height: 1.6;
+  }
+  .quiz-feedback.show { display: block; animation: fadeIn 0.2s ease; }
+  .quiz-feedback.fb-correct { background: #D4EDD9; border-left: 4px solid var(--correct); color: var(--correct); }
+  .quiz-feedback.fb-wrong   { background: #F0D4D4; border-left: 4px solid var(--wrong); color: var(--wrong); }
+  .quiz-score {
+    display: none;
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .quiz-score.show { display: block; animation: fadeIn 0.3s ease; }
+  .score-num {
+    font-family: var(--font-head);
+    font-size: 3rem;
+    color: var(--gold-light);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .score-msg { font-family: var(--font-ui); font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+  .quiz-reset-btn {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .quiz-reset-btn:hover { background: var(--gold-light); }
+
+  /* ── Relationship Map ── */
+  .rel-map {
+    background: #fff;
+    border: 1px solid #DDD6CC;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .rel-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+  }
+  .rel-node {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+    min-width: 120px;
+    text-align: center;
+  }
+  .rel-node:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+  .rel-node.teal-node { background: var(--teal); }
+  .rel-node.gold-node { background: var(--gold); color: var(--navy); }
+  .rel-node:hover, .rel-node.active { border-color: var(--gold-light); }
+  .rel-arrow {
+    font-size: 1.2rem;
+    color: var(--mid-gray);
+    padding-top: 0.35rem;
+    flex-shrink: 0;
+  }
+  .rel-desc {
+    display: none;
+    background: #FAFAF8;
+    border: 1px solid #DDD6CC;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+  .rel-desc.open { display: block; animation: fadeIn 0.2s ease; }
+
+  /* ── Writing Prompt ── */
+  .writing-prompt {
+    background: linear-gradient(135deg, #F0EBE0, #E8E0D4);
+    border: 1px solid #C8BFB0;
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .writing-prompt h4 {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+  .writing-prompt p { font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .writing-prompt textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid #C8BFB0;
+    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.7);
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .writing-prompt textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(42,127,111,0.15); }
+
+  /* ── Print hint / footer ── */
+  .page-footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 1.25rem;
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  .page-footer strong { color: var(--gold-light); }
+
+  /* ── Utility ── */
+  strong { font-weight: 700; }
+  em { font-style: italic; }
+  a { color: var(--teal); text-decoration: underline; }
+  ul.plain { list-style: none; }
+  ul.bulleted { padding-left: 1.4rem; }
+  ul.bulleted li { margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+  @media (max-width: 520px) {
+    .tab-btn { font-size: 0.75rem; padding: 0.75rem 0.65rem; }
+    .container { padding: 1.25rem 1rem 2.5rem; }
+    .quote-grid { grid-template-columns: 1fr; }
+    .glossary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="content-note" role="note">
+  <strong>Content Note:</strong> This guide contains discussion of racial violence, lynching, and murder. These topics are central to the book and to American history. All content is handled with care and is appropriate for college-level study.
+</div>
+
+<header class="site-header">
+  <div class="header-badge">Common Read · Interactive Reader's Guide</div>
+  <h1><em>The Barn</em></h1>
+  <p class="byline">by Wright Thompson &nbsp;·&nbsp; Published 2024, Penguin Press</p>
+  <div class="header-outcomes" role="complementary" aria-label="Learning outcomes">
+    <h2>What You Will Practice in This Guide</h2>
+    <ol>
+      <li>Summarize and contextualize Emmett Till's murder within U.S. civil rights history.</li>
+      <li>Analyze how narrative nonfiction works as a genre and argument.</li>
+      <li>Identify and explain the book's major themes: silence, systemic racism, memory, and justice.</li>
+      <li>Connect the book to current conversations about racial equity and civic responsibility.</li>
+      <li>Practice critical reading strategies: annotating, tracking arguments, evaluating evidence.</li>
+      <li>Reflect on how your own identity and background shapes how you read this text.</li>
+    </ol>
+  </div>
+</header>
+
+<nav class="tab-nav" role="tablist" aria-label="Main sections">
+  <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="panel-overview"    id="tab-overview">📖 Overview</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-analysis"   id="tab-analysis">🔍 Close Reading</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-reflection" id="tab-reflection">💬 Reflection</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-discussion" id="tab-discussion">🗣 Discussion</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-quotes"     id="tab-quotes">✍ Quotes</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-timeline"   id="tab-timeline">📅 Timeline</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-glossary"   id="tab-glossary">📚 Glossary</button>
+  <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="panel-quiz"       id="tab-quiz">✅ Self-Check</button>
+</nav>
+
+<main id="main-content">
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 1: OVERVIEW
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+<div class="container">
+  <h2 class="section-heading">Core Overview</h2>
+  <p class="section-intro">Start here before or early in your reading. This section introduces the book, the author, the historical moment, and the major ideas you'll encounter. You don't need to have finished the book to explore this section.</p>
+
+  <div class="card card-navy">
+    <h3>About the Book</h3>
+    <p><em>The Barn: The Secret History of a Murder in Mississippi</em> (2024) is a work of <strong>narrative nonfiction</strong> — a genre that uses the techniques of storytelling (scene-setting, character development, narrative tension) to report true events. Wright Thompson investigates the 1955 murder of <strong>Emmett Till</strong>, a 14-year-old Black boy from Chicago who was abducted, tortured, and killed while visiting relatives in the Mississippi Delta.</p>
+    <p>Thompson reveals new details about where the crime took place — a barn outside Drew, Mississippi — and who was involved. He situates the murder within a vast web of history: slavery, sharecropping, the cotton economy, white supremacy, and the systematic suppression of truth that followed the crime. This is not just a book about one event; it is a book about how history works, and how silence shapes what we know.</p>
+    <p>The book was named one of <em>TIME</em>'s 100 Must-Read Books of 2024 and received starred reviews from <em>Kirkus</em> and <em>Booklist</em>.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-teal">
+      <h3>About the Author</h3>
+      <p><strong>Wright Thompson</strong> is a senior writer at ESPN and a long-form journalist known for deeply reported, literary profiles. He grew up in the Mississippi Delta — just 23 miles from the barn where Emmett Till was murdered. That proximity, and the fact that he didn't learn the details of the crime until he left the state for college, is itself one of the book's central arguments: silence about racial violence is deliberate and regional.</p>
+      <p>His earlier books include <em>The Cost of These Dreams</em> (collected journalism) and <em>Pappyland</em> (about the bourbon industry and family). <em>The Barn</em> is his most ambitious and personal work to date.</p>
+    </div>
+    <div class="card card-gold">
+      <h3>Genre: Narrative Nonfiction</h3>
+      <p><strong>Narrative nonfiction</strong> (sometimes called "literary journalism" or "creative nonfiction") reports true events using storytelling techniques. Authors like Thompson use scene-setting, dialogue, character portraits, and a narrative arc — but every detail must be documented and accurate.</p>
+      <p>As you read, notice: How does Thompson build suspense? Whose perspective do we follow? When does he insert his own voice? These are craft choices with purpose — they affect what we understand and how we feel about what we learn.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Historical Context: What You Need to Know</h3>
+    <h4>Jim Crow Laws (1877–1965)</h4>
+    <p>"Jim Crow" refers to state and local laws across the American South that legally enforced racial segregation — separating Black and white Americans in schools, transportation, restaurants, voting booths, and everyday life. These laws enforced a racial hierarchy backed by law and by violence.</p>
+    <h4>The Mississippi Delta</h4>
+    <p>The Delta is a flat, fertile region in northwestern Mississippi shaped by centuries of cotton farming. The wealth of that region was built on enslaved labor, and after the Civil War, on <strong>sharecropping</strong> — a system that kept Black families trapped in cycles of debt and economic dependence on white landowners. By 1955, the Delta was a place of extreme racial inequality.</p>
+    <h4>Brown v. Board of Education (1954)</h4>
+    <p>One year before Till's murder, the Supreme Court ruled that segregated public schools were unconstitutional. White supremacists in the South saw this ruling as an existential threat — and racial terror increased in the aftermath. Till's murder was part of this backlash.</p>
+    <h4>The Great Migration</h4>
+    <p>Between roughly 1910 and 1970, millions of Black Americans left the South for Northern and Midwestern cities — escaping racial violence and seeking economic opportunity. Emmett Till's family had made this journey from Mississippi to Chicago. His murder happened during a summer visit "down South."</p>
+  </div>
+
+  <div class="card card-teal">
+    <h3>Major Themes at a Glance</h3>
+    <ul class="bulleted">
+      <li><strong>Silence and Suppression:</strong> The cover-up of Till's murder began immediately and continues in some ways today. Thompson argues that silence about racial violence is not passive — it is a choice made by individuals, institutions, and communities.</li>
+      <li><strong>Power, Land, and Property:</strong> Thompson traces how control of land in the Delta determined who had power, who was vulnerable, and what crimes could be committed without consequence.</li>
+      <li><strong>Memory and Justice:</strong> What does justice look like decades after a crime? Who gets to decide what is remembered, and what is forgotten?</li>
+      <li><strong>Individual Courage:</strong> The book honors witnesses like Willie Reed and activists like Mamie Till-Mobley who risked their safety to tell the truth.</li>
+      <li><strong>The Author's Positionality:</strong> Thompson is a white man from Mississippi writing about anti-Black violence. He is transparent about what this means — what he could see, and what he couldn't.</li>
+    </ul>
+  </div>
+
+  <!-- Before/After Reading -->
+  <h3 style="font-family:var(--font-head);font-size:1.25rem;color:var(--navy);margin:1.75rem 0 0.75rem;">Before &amp; After Reading Reflections</h3>
+  <p style="margin-bottom:1rem;font-size:0.95rem;color:#4A3D30;">Use the boxes below to record your thoughts <em>before</em> you begin reading, then return to the right column <em>after</em> you finish. You can type directly in these boxes (your notes are saved in this browser session only).</p>
+  <div class="before-after-grid">
+    <div class="ba-panel ba-before">
+      <h3>Before You Read</h3>
+      <p class="ba-prompt">What do you already know about Emmett Till? What do you expect this book to be about? What questions do you have?</p>
+      <textarea class="ba-textarea" aria-label="Before reading reflection" placeholder="Write your thoughts here..."></textarea>
+    </div>
+    <div class="ba-panel ba-after">
+      <h3>After You Read</h3>
+      <p class="ba-prompt">How did the book change or expand what you thought you knew? What surprised you most? What questions do you still have?</p>
+      <textarea class="ba-textarea" aria-label="After reading reflection" placeholder="Return here after reading..."></textarea>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /panel-overview -->
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 2: CLOSE READING & ANALYSIS
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-analysis" role="tabpanel" aria-labelledby="tab-analysis">
+<div class="container">
+  <h2 class="section-heading">Close Reading &amp; Analysis</h2>
+  <p class="section-intro">Close reading means paying careful attention to <em>how</em> a text is written, not just <em>what</em> it says. In this section, you'll practice reading strategies and analyze the craft and argument of <em>The Barn</em>.</p>
+
+  <div class="card card-navy">
+    <h3>What Is Thompson Arguing?</h3>
+    <p>A key skill in reading nonfiction is identifying the author's <strong>central argument</strong> — the main claim they are making and the evidence they use to support it. Thompson's central argument is not simply that "the murder of Emmett Till was horrific." That is a fact. His argument is more specific:</p>
+    <p><strong>The full truth of Till's murder — where it happened, who was involved, and why it was covered up — has been deliberately suppressed. Understanding that suppression is essential to understanding America.</strong></p>
+    <p>As you read, track: What evidence does Thompson provide? What sources does he use (court records, oral histories, family accounts, geography)? Where does he acknowledge uncertainty? Where does he make interpretive leaps, and does he signal them clearly?</p>
+  </div>
+
+  <div class="card card-teal">
+    <h3>Key Literary and Journalistic Concepts</h3>
+    <h4>Point of View</h4>
+    <p>Thompson writes in <strong>third person</strong> for most of the historical narrative, but also inserts his own <strong>first-person</strong> perspective — his memories, his shame, his family's connection to the Delta. Ask yourself: Why does he do this? What does the author's presence add to, or complicate, the story?</p>
+    <h4>Primary vs. Secondary Sources</h4>
+    <p>A <strong>primary source</strong> is firsthand evidence: a court transcript, an interview with a witness, a photograph taken at the time. A <strong>secondary source</strong> interprets primary sources: a historian's analysis, a news article written years later. Thompson draws on both. Notice how he signals which kind of evidence he's using.</p>
+    <h4>Narrative Structure</h4>
+    <p>The book does not move in simple chronological order. Thompson weaves between deep history (medieval Europe, Indigenous Mississippi, the slave trade), the events of 1955, and the present-day effort to memorialize the barn. This <strong>non-linear structure</strong> makes an argument: the past is not over. It lives inside the present.</p>
+    <h4>The "Blast Radius" Metaphor</h4>
+    <p>Thompson uses the phrase <em>blast radius of shame</em> to describe how the murder's consequences spread outward — through families, communities, generations, and the landscape itself. A <strong>metaphor</strong> is a comparison that illuminates an idea. What does "blast radius" suggest about the nature and scale of the crime's effects?</p>
+  </div>
+
+  <h3 style="font-family:var(--font-head);font-size:1.25rem;color:var(--navy);margin:1.75rem 0 0.75rem;">Guided Close-Reading Prompts</h3>
+
+  <ul class="prompt-list" aria-label="Close reading prompts">
+    <li class="prompt-item">
+      <div class="prompt-num">Annotation Practice</div>
+      <p class="prompt-text">Choose one passage from the book where Thompson shifts from historical reporting to personal voice (he uses "I" or describes his own feelings). Underline or mark it. Then write: <em>Why do you think he included himself here? What does it add?</em></p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Tracking the Argument</div>
+      <p class="prompt-text">Thompson writes that the cover-up of Till's murder "began at once, and it is ongoing." Find at least two specific examples in the book where he supports this claim. What types of evidence does he use (testimony, records, physical evidence)?</p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Source Evaluation</div>
+      <p class="prompt-text">Identify one moment in the book where Thompson seems certain about a fact, and one moment where he expresses uncertainty or acknowledges gaps in the record. What language does he use to signal the difference? Why does that honesty matter in journalism?</p>
+    </li>
+    <li class="prompt-item gold-prompt">
+      <div class="prompt-num">Structure &amp; Argument</div>
+      <p class="prompt-text">Thompson opens the book by zooming out — far back in history, to pre-colonial Mississippi, to Europe, to the origins of the cotton economy. Why might he begin so far from 1955? What is he arguing by showing the long historical roots of the crime?</p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Character Analysis</div>
+      <p class="prompt-text">Mamie Till-Mobley made the decision to have an open-casket funeral for her son. Thompson gives significant attention to this choice. In your own words, explain what she hoped to accomplish — and evaluate whether Thompson treats her as a full, complex person or primarily as a symbol.</p>
+    </li>
+    <li class="prompt-item gold-prompt">
+      <div class="prompt-num">Positionality Reflection</div>
+      <p class="prompt-text">Thompson is a white man from Mississippi writing about the murder of a Black child by white men. He acknowledges this openly. How does his background shape what he can and cannot access — in terms of sources, trust from communities, and perspective? Is there a tension in a white Southerner writing this story? Explain your thinking.</p>
+    </li>
+  </ul>
+
+  <div class="card">
+    <h3>Concept Map: Forces Behind the Crime</h3>
+    <p style="font-size:0.9rem;color:#4A3D30;margin-bottom:1rem;">Thompson argues that Till's murder was not the act of a few "bad men" — it was made possible by interlocking historical forces. Click each node to learn more.</p>
+    <div class="rel-map" id="rel-map">
+
+      <div class="rel-row">
+        <button class="rel-node gold-node" onclick="toggleRel('rel-cotton')" aria-expanded="false">Cotton Economy</button>
+        <span class="rel-arrow" aria-hidden="true">→</span>
+        <button class="rel-node" onclick="toggleRel('rel-sharecrop')" aria-expanded="false">Sharecropping System</button>
+        <span class="rel-arrow" aria-hidden="true">→</span>
+        <button class="rel-node teal-node" onclick="toggleRel('rel-poverty')" aria-expanded="false">White Economic Anxiety</button>
+      </div>
+      <div id="rel-cotton"    class="rel-desc"><strong>Cotton Economy:</strong> The Delta's entire social order was built on cotton farming — first through enslaved labor, then sharecropping. Control of land and cotton meant control of people. Thompson traces this back centuries to show how deeply economic exploitation was woven into the region.</div>
+      <div id="rel-sharecrop" class="rel-desc"><strong>Sharecropping System:</strong> After slavery ended, sharecropping kept Black families legally "free" but economically bound. Farmers worked white-owned land in exchange for a "share" of the crop — but the accounting was controlled by the landowner, perpetuating debt and dependency. The Milam and Bryant families were poor white sharecroppers who enforced racial hierarchy partly because it was one of the few ways they had status.</div>
+      <div id="rel-poverty"   class="rel-desc"><strong>White Economic Anxiety:</strong> By 1955, the cotton economy was failing — machines were replacing labor. The Milams and Bryants were economically desperate. Thompson argues that racial violence often intensifies when poor white men fear losing what little power they have. Emmett Till — a confident Black teenager from Chicago — threatened the racial hierarchy they depended on psychologically.</div>
+
+      <div class="rel-row" style="margin-top:0.75rem;">
+        <button class="rel-node" onclick="toggleRel('rel-jimcrow')" aria-expanded="false">Jim Crow Law</button>
+        <span class="rel-arrow" aria-hidden="true">→</span>
+        <button class="rel-node teal-node" onclick="toggleRel('rel-impunity')" aria-expanded="false">Guaranteed Impunity</button>
+        <span class="rel-arrow" aria-hidden="true">→</span>
+        <button class="rel-node gold-node" onclick="toggleRel('rel-silence')" aria-expanded="false">Community Silence</button>
+      </div>
+      <div id="rel-jimcrow"  class="rel-desc"><strong>Jim Crow Laws:</strong> Legal segregation meant Black Mississippians could not serve on juries, could rarely testify against white men, and faced terror if they challenged the racial order. The law did not protect them — it protected their killers.</div>
+      <div id="rel-impunity" class="rel-desc"><strong>Guaranteed Impunity:</strong> Roy Bryant and J.W. Milam were acquitted by an all-white jury in just over an hour. They later gave a partial "confession" to a journalist — knowing they could not be tried again for the same crime (double jeopardy). The legal system's failure to punish them was not a malfunction; it was the system working as designed for that time and place.</div>
+      <div id="rel-silence"  class="rel-desc"><strong>Community Silence:</strong> Witnesses like Willie Reed left Mississippi out of fear. Local newspapers and officials downplayed or buried the story. White communities chose not to name what happened — because doing so would have required confronting what their community had done and permitted. Thompson's book names what silence protected.</div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 3: REFLECTION & CONNECTION
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-reflection" role="tabpanel" aria-labelledby="tab-reflection">
+<div class="container">
+  <h2 class="section-heading">Reflection &amp; Connection</h2>
+  <p class="section-intro">These prompts ask you to connect the book to your own life, your community, and the world. There are no "right" answers — what matters is that you think carefully and honestly. You can use the text boxes to write responses privately, or use these prompts for journaling and discussion board posts.</p>
+
+  <div class="card card-gold" style="margin-bottom:1.5rem;">
+    <h3>A Note on This Kind of Reading</h3>
+    <p>Reading books about racial violence can bring up strong emotions — discomfort, anger, grief, or even resistance. These responses are part of critical reading, not obstacles to it. Notice what you feel as you read, and ask yourself: <em>Why am I feeling this? What in the text produced this response? What does my reaction tell me about what I already believed?</em></p>
+    <p>You are not required to have experienced racism to engage with this book thoughtfully — but you are invited to be honest about where you're starting from.</p>
+  </div>
+
+  <h3 style="font-family:var(--font-head);font-size:1.2rem;color:var(--navy);margin-bottom:1rem;">Quick-Write Prompts <span class="label label-teal">Personal Connection</span></h3>
+  <ul class="prompt-list">
+    <li class="prompt-item">
+      <div class="prompt-num">Prompt 1 · Before &amp; After</div>
+      <p class="prompt-text">What did you know about Emmett Till before reading this book? Where did that knowledge come from — school, family, media? How does what you learned in the book compare to what you already knew? What does the gap (if there is one) tell you?</p>
+    </li>
+    <li class="prompt-item gold-prompt">
+      <div class="prompt-num">Prompt 2 · Silence in Your Community</div>
+      <p class="prompt-text">Thompson argues that silence about racial violence is not passive — it is an active choice. Think about your own community, city, or family. Is there a history that is rarely talked about? Why might that be? What might change if it were named openly?</p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Prompt 3 · Mamie Till-Mobley's Choice</div>
+      <p class="prompt-text">Mamie Till-Mobley chose to have an open casket for her son, saying: <em>"Let the world see what I've seen."</em> Imagine you are a young person who saw Emmett's funeral photograph in 1955. What might you have thought or felt? How might that image have changed what you believed was possible or real in America?</p>
+    </li>
+  </ul>
+
+  <h3 style="font-family:var(--font-head);font-size:1.2rem;color:var(--navy);margin:1.75rem 0 1rem;">Deeper Reflection Prompts <span class="label label-navy">Critical &amp; Civic</span></h3>
+  <ul class="prompt-list">
+    <li class="prompt-item">
+      <div class="prompt-num">Prompt 4 · Memory and Monuments</div>
+      <p class="prompt-text">Patrick Weems and others are working to preserve the barn as a historic site — a place where future generations can learn what happened there. Do you think physical places can teach history? Think of an example (a battlefield, a museum, a neighborhood) where a place carries memory. What are the risks and benefits of memorializing sites of violence?</p>
+    </li>
+    <li class="prompt-item gold-prompt">
+      <div class="prompt-num">Prompt 5 · Justice, Delayed</div>
+      <p class="prompt-text">Bryant and Milam were never convicted. Decades later, the Department of Justice reopened the case. Willie Reed, who had witnessed the crime as a teenager, returned to testify 50 years later. What does this story tell you about what justice means, and whether it has an expiration date? Do you believe justice was ever achieved in this case? Why or why not?</p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Prompt 6 · Positionality (Your Own)</div>
+      <p class="prompt-text">Thompson reflects on his identity as a white Mississippian writing this story. Think about your own identity — your race, ethnicity, where you grew up, your family history. How might your background shape how you read <em>The Barn</em>? What perspectives might you bring that others don't, and what might you find harder to see?</p>
+    </li>
+    <li class="prompt-item gold-prompt">
+      <div class="prompt-num">Prompt 7 · Metacognitive Check</div>
+      <p class="prompt-text">Think about how you read this book. Did you slow down at any point? Skip ahead? Feel impatient or overwhelmed? What reading strategies helped you — annotating, rereading, pausing to look something up? What would you do differently if you read it again?</p>
+    </li>
+    <li class="prompt-item">
+      <div class="prompt-num">Prompt 8 · Then and Now</div>
+      <p class="prompt-text">Thompson's book ends with cautious hope — people working to preserve the barn, to keep the truth alive. But he also notes that forces exist to suppress this history. What connections do you see between the events of 1955 and debates happening in America today about how we teach history, commemorate the past, or define justice?</p>
+    </li>
+  </ul>
+
+  <div class="writing-prompt">
+    <h4>✏️ Optional Short Writing Prompt — Discussion Board Post</h4>
+    <p>In one paragraph, respond to the following: <strong>Thompson writes that "hate grows stronger and more resistant when it's pushed underground."</strong> Do you agree with this claim? Use at least one example — from the book, from history, or from current events — to support your answer. Aim for 100–150 words.</p>
+    <textarea placeholder="Draft your response here (optional — this does not submit anywhere)..." aria-label="Optional writing response"></textarea>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 4: DISCUSSION & APPLICATION
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-discussion" role="tabpanel" aria-labelledby="tab-discussion">
+<div class="container">
+  <h2 class="section-heading">Discussion &amp; Application</h2>
+  <p class="section-intro">These questions are designed for small-group or whole-class discussion. They move from <strong>comprehension</strong> (understanding what the book says) to <strong>analysis</strong> (examining how and why) to <strong>evaluation and synthesis</strong> (forming and defending your own views). Your instructor may assign specific questions or let you choose.</p>
+
+  <div class="card card-navy" style="margin-bottom:1.5rem;">
+    <h3>How to Use These Questions</h3>
+    <p>Good discussion isn't about having the "right" answer — it's about using evidence from the text, listening to others, and refining your thinking. Before you speak, ask yourself: <em>What in the book supports what I'm saying? Am I stating a fact, an interpretation, or an opinion?</em></p>
+    <p>Strong participants <strong>build on</strong> what others say ("I want to add to what Maria said…"), <strong>push back respectfully</strong> ("I see it differently because…"), and <strong>ask follow-up questions</strong> ("What do you mean by…?").</p>
+  </div>
+
+  <h3 style="font-family:var(--font-head);font-size:1.15rem;color:var(--navy);margin-bottom:0.75rem;">Level 1: Comprehension &amp; Context</h3>
+  <ul class="disc-list" aria-label="Comprehension discussion questions">
+    <li class="disc-item">
+      <div class="disc-level">Comprehension</div>
+      Who was Emmett Till, and what were the circumstances of his murder in 1955? What facts does Thompson reveal that were previously unknown or obscured?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Comprehension</div>
+      What is "the barn," and why does Thompson argue that its location and ownership matter so much to understanding the crime and its cover-up?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Context</div>
+      Thompson traces the history of the Mississippi Delta far back — through Native American history, colonization, and the slave trade. Why does he begin so far back? What is he trying to show about the relationship between past and present?
+    </li>
+  </ul>
+
+  <h3 style="font-family:var(--font-head);font-size:1.15rem;color:var(--navy);margin:1.5rem 0 0.75rem;">Level 2: Analysis &amp; Interpretation</h3>
+  <ul class="disc-list" aria-label="Analysis discussion questions" style="counter-reset: disc-counter 3;">
+    <li class="disc-item">
+      <div class="disc-level">Analysis</div>
+      Thompson argues that the suppression of truth about Till's murder was not an accident — it was systematic and intentional. What evidence does he provide? Who benefited from the silence, and who paid the cost?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Analysis</div>
+      The book portrays witnesses like Willie Reed as courageous people who risked everything to tell the truth. It also shows the consequences they faced. What does this reveal about the relationship between truth-telling, safety, and power?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Analysis</div>
+      Thompson is a white man from Mississippi writing this book. In what ways does his background give him access or credibility? In what ways might it limit him? Do you think his position as an "insider" strengthens or complicates the book's argument?
+    </li>
+  </ul>
+
+  <h3 style="font-family:var(--font-head);font-size:1.15rem;color:var(--navy);margin:1.5rem 0 0.75rem;">Level 3: Evaluation, Synthesis &amp; Application</h3>
+  <ul class="disc-list" aria-label="Evaluation discussion questions" style="counter-reset: disc-counter 6;">
+    <li class="disc-item">
+      <div class="disc-level">Evaluation</div>
+      Thompson ends the book with cautious hope — focused on the people working to memorialize the barn and keep the truth alive. Some readers find this ending too optimistic; others find it necessary. What do you think? Is hope earned in this book, or does it feel forced?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Synthesis</div>
+      In 2024, several states passed laws restricting how teachers can discuss race, racism, and American history in schools. How does <em>The Barn</em> speak to these debates? What would Thompson say about efforts to limit this kind of historical reckoning?
+    </li>
+    <li class="disc-item">
+      <div class="disc-level">Creative Application</div>
+      If you were designing a museum exhibit about Emmett Till and the barn, what three artifacts, images, or stories would you center — and why? What experience would you want visitors to walk away with?
+    </li>
+  </ul>
+
+  <div class="writing-prompt">
+    <h4>✏️ Optional Writing Assignment: Analytical Paragraph</h4>
+    <p>Choose one of the discussion questions above and respond in a well-organized paragraph of 150–200 words. Begin with a clear claim, support it with at least one specific piece of evidence from the book, and end with a sentence explaining why this matters. Use this box to draft your response.</p>
+    <textarea placeholder="Draft here (optional — this does not submit)..." aria-label="Analytical paragraph draft"></textarea>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 5: QUOTE EXPLORER
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quotes" role="tabpanel" aria-labelledby="tab-quotes">
+<div class="container">
+  <h2 class="section-heading">Quote Explorer</h2>
+  <p class="section-intro">Click or tap any quote to reveal commentary and reflective questions. These passages represent key moments of argument, emotion, and insight in <em>The Barn</em>. Use them for annotation practice, discussion preparation, or writing support.</p>
+
+  <div class="quote-grid">
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q1')" aria-expanded="false" aria-controls="q1">
+        <blockquote>"The cover-up began at once, and it is ongoing."</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q1">
+        <p class="commentary">This is one of Thompson's most powerful claims. He is not just saying that people lied in 1955 — he is saying that the suppression of truth about Till's murder has continued for nearly 70 years, in what people choose to remember, what communities acknowledge, and what the historical record reflects. It is a statement about how injustice sustains itself.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>What evidence does Thompson provide to support this claim?</strong> Find at least two examples — one from 1955 and one from a later decade.</p>
+          <p>🔍 <strong>What does it mean for a cover-up to be "ongoing"?</strong> Who is responsible for maintaining it? Who is responsible for ending it?</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q2')" aria-expanded="false" aria-controls="q2">
+        <blockquote>"Hate grows stronger and more resistant when it's pushed underground."</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q2">
+        <p class="commentary">Thompson is making an argument here about suppression — the idea that refusing to name or confront racial hatred does not make it go away. It pushes it out of public view, where it cannot be challenged or healed. This is also an argument against historical silence: naming what happened is not just about the past. It is a form of prevention.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>Do you agree with this claim?</strong> Can you think of an example — historical or current — where suppressing a problem made it worse?</p>
+          <p>🔍 <strong>What would it look like to "bring it above ground"?</strong> In the context of this book, what would honest reckoning require from communities, institutions, or individuals?</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q3')" aria-expanded="false" aria-controls="q3">
+        <blockquote>"No, let the world see what I've seen." — Mamie Till-Mobley</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q3">
+        <p class="commentary">Mamie Till-Mobley said this when asked whether to make her son's body more "presentable" for the funeral. She refused. Her decision to hold an open-casket funeral — and allow Jet magazine to publish photographs — is widely credited with igniting national attention to the civil rights cause. It was an act of grief transformed into testimony.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>Why was it significant that Mamie made this decision herself?</strong> What power does a mother have to control how her child's story is told?</p>
+          <p>🔍 <strong>Thompson spends significant time on this decision.</strong> What does he seem to think it represents? Do you agree with his interpretation?</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q4')" aria-expanded="false" aria-controls="q4">
+        <blockquote>"Ultimately this is a story about property, and money, and power, and white supremacy. It implicates all of us."</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q4">
+        <p class="commentary">This sentence — from the book's promotional materials, but central to Thompson's argument — reframes what the book is about. It is not just a crime story. It is a story about economic systems, racial hierarchy, and collective responsibility. The phrase "implicates all of us" is deliberately unsettling. Thompson is not letting anyone — including himself, or the reader — stand outside the story.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>What does it mean to be "implicated" in something you didn't personally do?</strong> How does systemic injustice work differently from individual wrongdoing?</p>
+          <p>🔍 <strong>Does this claim apply equally to all readers?</strong> Or does it mean something different depending on who you are and where you come from?</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q5')" aria-expanded="false" aria-controls="q5">
+        <blockquote>"I had to leave the state for college before I learned the first thing about it."</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q5">
+        <p class="commentary">Thompson says this about his own education in Mississippi — he grew up 23 miles from the barn where Till was murdered and was never taught about it. This is not ignorance — it is manufactured ignorance. Communities, schools, and families chose what to teach and what to omit. This is itself evidence for his argument about suppression.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>What did you learn about Emmett Till in school?</strong> What was left out? What does your own educational experience reveal about what your community chose to teach or not teach?</p>
+          <p>🔍 <strong>Is there a difference between "not knowing" and "being kept from knowing"?</strong> What are the implications of each for responsibility?</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="quote-card" onclick="toggleQuote('q6')" aria-expanded="false" aria-controls="q6">
+        <blockquote>"Criticism and truth-telling are acts of love, grounded in the belief that we humans can affect positive change."</blockquote>
+        <p class="tap-hint">Click to explore ↓</p>
+      </button>
+      <div class="quote-expanded" id="q6">
+        <p class="commentary">This observation, from a friend and colleague of Thompson's, describes the spirit behind the book. Thompson is writing critically about the place where he grew up — not to condemn it, but because he believes it can be better. This is a different model of patriotism or community loyalty: love expressed through honest confrontation, not comfortable silence.</p>
+        <div class="q-prompts">
+          <p>🔍 <strong>Do you agree that criticism can be an act of love?</strong> Think of a time when someone who cared about you told you a hard truth. What was that like to receive?</p>
+          <p>🔍 <strong>How does this framing apply to Thompson's project?</strong> Is he attacking Mississippi — or trying to help it heal?</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /quote-grid -->
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 6: TIMELINE
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+<div class="container">
+  <h2 class="section-heading">Historical Timeline</h2>
+  <p class="section-intro">Thompson's book spans centuries — from the Indigenous history of the Delta to the present-day effort to memorialize the barn. Click any event to expand its significance and connect it to the book's themes.</p>
+
+  <div class="timeline" aria-label="Historical timeline of key events">
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl1')" aria-expanded="false" aria-controls="tl1">
+        <span class="timeline-date">Pre-1800s</span>
+        <span class="timeline-title">Indigenous Mississippi &amp; Early Colonization</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl1">
+        <p>Thompson begins his history of the Mississippi Delta with the Walford Site — an Indigenous agricultural community near the spot where Till would later be murdered. He draws parallels between that early monoculture economy (controlling land and labor for a single crop) and the cotton plantation system that followed. The Delta has been shaped by exploitation of land and people for over a thousand years.</p>
+        <p class="t-question">❓ Why does Thompson begin so far back in time? What does he want readers to understand about the relationship between place, economics, and racial violence?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl2')" aria-expanded="false" aria-controls="tl2">
+        <span class="timeline-date">1865</span>
+        <span class="timeline-title">End of Slavery; Beginning of Jim Crow</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl2">
+        <p>After the Civil War, the 13th Amendment abolished slavery — but new systems quickly replaced it. Sharecropping, convict leasing, and Jim Crow laws kept Black Southerners economically and legally subordinated. In the Mississippi Delta, the same families that had owned enslaved people continued to control land, labor, and local politics. Freedom was nominal; the power structures of slavery persisted in new forms.</p>
+        <p class="t-question">❓ What is the difference between legal freedom and actual freedom? How does Thompson show that the end of slavery did not end racial oppression?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl3')" aria-expanded="false" aria-controls="tl3">
+        <span class="timeline-date">1910–1970</span>
+        <span class="timeline-title">The Great Migration</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl3">
+        <p>Over six million Black Americans left the South for Northern cities during this period — escaping racial terror, poverty, and legal discrimination in search of jobs and safety. Emmett Till's mother, Mamie Till-Mobley, was part of this migration from Mississippi to Chicago. Emmett grew up in Chicago — which is why he was unfamiliar with the deadly racial codes of the Mississippi Delta when he visited in 1955.</p>
+        <p class="t-question">❓ How does Emmett Till's Chicago upbringing matter to the story? How does his unfamiliarity with Southern racial "rules" factor into what happened?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl4')" aria-expanded="false" aria-controls="tl4">
+        <span class="timeline-date">May 1954</span>
+        <span class="timeline-title">Brown v. Board of Education</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl4">
+        <p>The Supreme Court unanimously ruled that racial segregation in public schools was unconstitutional. For Black Americans, this was a landmark victory. For white supremacists in the South, it was a threat — proof that the racial order could be legally challenged and dismantled. The backlash was swift and violent. Thompson frames Till's murder as part of this post-Brown terror campaign.</p>
+        <p class="t-question">❓ How does context change the meaning of a historical event? What does knowing about Brown v. Board add to your understanding of why Emmett Till was murdered when he was?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl5')" aria-expanded="false" aria-controls="tl5">
+        <span class="timeline-date">Aug. 28, 1955</span>
+        <span class="timeline-title">Emmett Till Is Abducted and Murdered</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl5">
+        <p>Roy Bryant and J.W. Milam, half-brothers, abducted 14-year-old Emmett Till from his great-uncle Moses Wright's home in the middle of the night. They took him to a barn outside Drew, Mississippi, where — Thompson reveals — at least eight people participated in a four-hour torture and murder. Till's body was dumped in the Tallahatchie River with a cotton gin fan tied around his neck. A fisherman discovered the body three days later.</p>
+        <p class="t-question">❓ The book reveals there were more perpetrators than the two men charged. What does that tell you about how this crime was committed — and how it was covered up?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl6')" aria-expanded="false" aria-controls="tl6">
+        <span class="timeline-date">Sept. 1955</span>
+        <span class="timeline-title">The Trial &amp; Acquittal</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl6">
+        <p>Bryant and Milam were tried for murder. An all-white, all-male jury deliberated for just 67 minutes before acquitting them. Moses Wright, Till's great-uncle, was one of the few Black witnesses who testified — a courageous act in that environment. After the trial, protected by double jeopardy (they could not be retried), Bryant and Milam gave a partial confession to journalist William Bradford Huie — but it was misleading about where the murder took place.</p>
+        <p class="t-question">❓ A quick jury verdict is not always a sign of a fair trial. What does a 67-minute acquittal, in this context, tell you about the justice system in 1955 Mississippi?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl7')" aria-expanded="false" aria-controls="tl7">
+        <span class="timeline-date">Sept. 1955</span>
+        <span class="timeline-title">Mamie Till-Mobley's Open Casket</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl7">
+        <p>Mamie Till-Mobley insisted that her son's mutilated body be shown publicly at his funeral in Chicago. She allowed Jet magazine to publish photographs. An estimated 100,000 people attended the viewing. The images shocked the nation — and the world — and are widely credited with galvanizing support for the civil rights movement. Rosa Parks later said she thought of Emmett Till when she refused to give up her seat on the bus.</p>
+        <p class="t-question">❓ Visual evidence — photographs, video — has historically played a powerful role in civil rights movements. Why might seeing something, rather than just reading about it, change people's responses?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl8')" aria-expanded="false" aria-controls="tl8">
+        <span class="timeline-date">2004–2007</span>
+        <span class="timeline-title">The DOJ Reopens the Case</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl8">
+        <p>Nearly 50 years after the murder, the Department of Justice reopened the investigation. Willie Reed — who had witnessed the pickup truck approach the barn in 1955 as an 18-year-old and heard Till's screams — returned from Chicago to speak again. The investigation ultimately could not result in new charges (Bryant and Milam were dead; double jeopardy had protected them). But new witnesses came forward and new details emerged about the barn's location.</p>
+        <p class="t-question">❓ Does reopening a case matter if no one can be prosecuted? What are the other purposes of historical investigation — beyond punishment?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl9')" aria-expanded="false" aria-controls="tl9">
+        <span class="timeline-date">2022</span>
+        <span class="timeline-title">Emmett Till Antilynching Act Signed</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl9">
+        <p>In March 2022, President Biden signed the Emmett Till Antilynching Act, making lynching a federal hate crime — nearly 100 years after the first such bill was introduced in Congress and consistently blocked. The act is largely symbolic for historical cases, but it marks a formal national acknowledgment of racial terror and its victims.</p>
+        <p class="t-question">❓ Why did it take over 100 years to pass this legislation? What does that timeline reveal about how political will and racial justice have intersected in American history?</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <button class="timeline-trigger" onclick="toggleTimeline('tl10')" aria-expanded="false" aria-controls="tl10">
+        <span class="timeline-date">2024</span>
+        <span class="timeline-title"><em>The Barn</em> Published</span>
+        <span class="timeline-chevron" aria-hidden="true">▶</span>
+      </button>
+      <div class="timeline-detail" id="tl10">
+        <p>Wright Thompson publishes <em>The Barn: The Secret History of a Murder in Mississippi</em>. Using court records, oral histories, family archives, and geographic research, he maps the exact location of the barn — Township 22 North, Range 4 West, Section 2, West Half — and names individuals and forces previously unacknowledged in the official record. The book reopens conversation about what we owe the past, and who controls historical memory.</p>
+        <p class="t-question">❓ What does it mean for a journalist — rather than a historian or a court — to be the one who establishes new facts about a historical crime? What are the responsibilities and risks of that role?</p>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 7: GLOSSARY
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-glossary" role="tabpanel" aria-labelledby="tab-glossary">
+<div class="container">
+  <h2 class="section-heading">Glossary &amp; Key Figures</h2>
+  <p class="section-intro">Use this section to look up key terms and people as you read. Each entry includes a plain-language definition and a note on why it matters for understanding the book.</p>
+
+  <h3 style="font-family:var(--font-head);font-size:1.15rem;color:var(--navy);margin-bottom:1rem;">Key Terms &amp; Concepts</h3>
+  <div class="glossary-grid">
+
+    <div class="gloss-item">
+      <div class="gloss-term">Narrative Nonfiction</div>
+      <div class="gloss-def">True writing that uses storytelling techniques — scenes, characters, tension, voice — to report real events. Every fact must be documented, but the writing reads like a story.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Understanding this genre helps you see how Thompson's choices — what to describe, whose voice to center — are arguments, not just decoration.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Jim Crow Laws</div>
+      <div class="gloss-def">State and local laws (roughly 1877–1965) that legally enforced racial segregation in the American South, requiring separate facilities for Black and white people and limiting Black voting, education, and legal rights.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Jim Crow created the legal environment that made Till's murder possible and his killers' acquittal inevitable.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Sharecropping</div>
+      <div class="gloss-def">A farming system where tenants work land owned by someone else in exchange for a share of the crop. The landowner controlled the accounting, trapping Black farmers in cycles of debt.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Thompson shows how sharecropping created the economic desperation and racial hierarchy that shaped both Till's killers and his family.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">White Supremacy</div>
+      <div class="gloss-def">The belief that white people are superior to people of other races, used to justify racial hierarchy, segregation, and violence. Thompson uses this term not to describe only extremists, but the systemic ideology built into law and social life in the Jim Crow South.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Understanding this as a system — not just individual hatred — is central to Thompson's argument.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Double Jeopardy</div>
+      <div class="gloss-def">A legal protection in the U.S. Constitution (5th Amendment) that prevents a person from being tried twice for the same crime. Once acquitted, Bryant and Milam could not be retried for Till's murder — even after they confessed.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> This legal protection, designed to prevent government overreach, was exploited to protect murderers. It illustrates how systems built for one purpose can be weaponized.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Primary Source</div>
+      <div class="gloss-def">Firsthand evidence created at or near the time of an event: court transcripts, letters, photographs, eyewitness accounts, official records.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Thompson's credibility as a journalist rests on his primary sources. Identifying them helps you evaluate his claims.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Secondary Source</div>
+      <div class="gloss-def">Materials that interpret or analyze primary sources — history books, documentaries, scholarly articles written after the fact.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Distinguishing primary from secondary sources is a key critical reading skill. It helps you understand how Thompson builds his argument.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Positionality</div>
+      <div class="gloss-def">The way a person's identity — race, gender, class, geography, life experience — shapes how they see, interpret, and are received in the world.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Thompson is explicit about his positionality as a white Mississippian. Recognizing positionality (including your own as a reader) is essential for critical thinking.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">The Lost Cause</div>
+      <div class="gloss-def">A revisionist historical myth portraying the Confederacy as noble, the Civil War as being about "states' rights" rather than slavery, and Southern racial violence as justified. Thompson explicitly writes for readers "everywhere the poison of the Lost Cause has spread."</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> The Lost Cause narrative is one of the mechanisms by which the truth about racial violence was suppressed and reframed.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">The Great Migration</div>
+      <div class="gloss-def">The movement of approximately six million Black Americans from the rural South to Northern and Midwestern cities between 1910 and 1970, escaping racial terror and seeking economic opportunity.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Till's family was part of this migration. His Chicago upbringing made him unfamiliar with Mississippi's racial codes — a fact his killers exploited.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Lynching</div>
+      <div class="gloss-def">Extrajudicial killing — murder carried out by a mob or group, often by hanging, outside of any legal process. Used systematically as racial terror against Black Americans in the South. Till's murder is considered a lynching.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> Naming Till's murder as a lynching is a political and historical act — it connects it to a pattern of racial terror, not an isolated crime.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Emmett Till Antilynching Act (2022)</div>
+      <div class="gloss-def">Federal legislation signed by President Biden making lynching a federal hate crime. Congress had considered similar bills for over 100 years before passage.</div>
+      <div class="gloss-why"><strong>Why it matters:</strong> The 100-year delay illustrates how political resistance to acknowledging racial violence has functioned at the highest levels of government.</div>
+    </div>
+
+  </div>
+
+  <h3 style="font-family:var(--font-head);font-size:1.15rem;color:var(--navy);margin:2rem 0 1rem;">Key Figures</h3>
+  <div class="glossary-grid">
+
+    <div class="gloss-item">
+      <div class="gloss-term">Emmett Till (1941–1955)</div>
+      <div class="gloss-def">A 14-year-old Black boy from Chicago visiting relatives in the Mississippi Delta. His murder and the acquittal of his killers catalyzed the civil rights movement.</div>
+      <div class="gloss-why"><strong>In the book:</strong> Thompson works to restore Till's full humanity — not just as a symbol, but as a specific child with a personality, a family, and a life cut short.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Mamie Till-Mobley (1921–2003)</div>
+      <div class="gloss-def">Emmett Till's mother. She insisted on an open-casket funeral and allowed photographs to be published, transforming her son's death into a national awakening. She spent the rest of her life advocating for justice.</div>
+      <div class="gloss-why"><strong>In the book:</strong> A central moral figure — a woman who converted grief into testimony and action.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Roy Bryant &amp; J.W. Milam</div>
+      <div class="gloss-def">Half-brothers who abducted and murdered Emmett Till. They were acquitted in 1955 and later gave a partial confession to a journalist. Thompson reveals their false account obscured who else was involved and where the murder took place.</div>
+      <div class="gloss-why"><strong>In the book:</strong> Thompson depicts them not as monstrous anomalies but as products of their economic and social environment — which does not excuse them, but explains how such men are made.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Moses Wright</div>
+      <div class="gloss-def">Emmett Till's great-uncle, in whose home Till was staying. He bravely testified at the trial — identifying the men who took his nephew — and then fled Mississippi for his own safety.</div>
+      <div class="gloss-why"><strong>In the book:</strong> His courage to testify in a hostile courtroom is one of the book's most moving moments of individual moral action.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Willie Reed (1937–2023)</div>
+      <div class="gloss-def">An 18-year-old Black sharecropper who witnessed the truck approach the barn in 1955 and heard Till's screams. He testified at trial, then fled to Chicago. He returned to speak when the DOJ reopened the case in the 2000s.</div>
+      <div class="gloss-why"><strong>In the book:</strong> A symbol of both the cost of bearing witness and the importance of doing so anyway.</div>
+    </div>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Patrick Weems</div>
+      <div class="gloss-def">Director of the Emmett Till Interpretive Center in Sumner, Mississippi. He is working to preserve the barn and other sites associated with Till's story as historic monuments.</div>
+      <div class="gloss-why"><strong>In the book:</strong> Represents the ongoing effort to make the truth permanent — to convert suppressed history into public memory.</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 8: SELF-CHECK QUIZ
+══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+<div class="container">
+  <h2 class="section-heading">Self-Check Quiz</h2>
+  <p class="section-intro">This quiz tests your understanding of key events, concepts, and themes from <em>The Barn</em>. Select an answer for each question — you'll receive immediate feedback. This is for your own learning, not graded.</p>
+
+  <div class="quiz-intro">
+    <strong>How to use this quiz:</strong> Read each question carefully. Select the answer you believe is correct. After selecting, you'll see whether you were right and a brief explanation connecting back to the book. If you get something wrong, use the feedback to go back and review that section.
+  </div>
+
+  <div id="quiz-container">
+
+    <!-- Q1 -->
+    <div class="quiz-question" id="qq1">
+      <div class="quiz-q-num">Question 1 of 6</div>
+      <div class="quiz-q-text">What is Thompson's central argument about Till's murder?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq1','wrong')" aria-label="Option A">A. It was an isolated act of violence committed by two unstable individuals.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq1','correct')" aria-label="Option B">B. The full truth was deliberately suppressed, and understanding that suppression is essential to understanding America.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq1','wrong')" aria-label="Option C">C. The murder could have been prevented if Till's mother had warned him about Southern customs.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq1','wrong')" aria-label="Option D">D. The case is fully resolved and justice was ultimately achieved through the 2022 antilynching law.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq1" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-question" id="qq2">
+      <div class="quiz-q-num">Question 2 of 6</div>
+      <div class="quiz-q-text">Why were Roy Bryant and J.W. Milam able to give a partial "confession" to a journalist after their acquittal without fear of further prosecution?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq2','wrong')" aria-label="Option A">A. The statute of limitations on murder had already expired.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq2','wrong')" aria-label="Option B">B. The confession was ruled inadmissible because it was given to a journalist, not law enforcement.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq2','correct')" aria-label="Option C">C. The Fifth Amendment's double jeopardy protection meant they could not be tried again for the same crime.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq2','wrong')" aria-label="Option D">D. Mississippi did not have a law against murder at the time of their confession.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq2" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-question" id="qq3">
+      <div class="quiz-q-num">Question 3 of 6</div>
+      <div class="quiz-q-text">What did Mamie Till-Mobley mean when she said, "Let the world see what I've seen"?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq3','wrong')" aria-label="Option A">A. She wanted to share her fond memories of Emmett so the public would remember him as he lived.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq3','correct')" aria-label="Option B">B. She insisted on an open-casket funeral so that the brutality of her son's murder would be visible to the public and could not be denied or minimized.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq3','wrong')" aria-label="Option C">C. She was asking witnesses to come forward to testify at trial.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq3','wrong')" aria-label="Option D">D. She wanted journalists to investigate conditions in the Mississippi Delta more broadly.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq3" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-question" id="qq4">
+      <div class="quiz-q-num">Question 4 of 6</div>
+      <div class="quiz-q-text">Which of the following best describes "narrative nonfiction" as a genre?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq4','wrong')" aria-label="Option A">A. Fiction that is loosely based on real events but changed for dramatic effect.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq4','wrong')" aria-label="Option B">B. Academic writing that presents historical facts without personal voice or storytelling techniques.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq4','correct')" aria-label="Option C">C. True writing that uses storytelling techniques — scene-setting, character, narrative structure — while every fact remains documented and accurate.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq4','wrong')" aria-label="Option D">D. A genre that prioritizes emotional impact over factual accuracy.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq4" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-question" id="qq5">
+      <div class="quiz-q-num">Question 5 of 6</div>
+      <div class="quiz-q-text">Thompson traces the history of the Mississippi Delta back to pre-colonial times and the origins of the cotton economy. What is his purpose in doing this?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq5','wrong')" aria-label="Option A">A. To argue that the Delta is a uniquely beautiful landscape that has been damaged by racial conflict.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq5','wrong')" aria-label="Option B">B. To show that Emmett Till's murder was inevitable and that nothing could have prevented it.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq5','correct')" aria-label="Option C">C. To demonstrate that Till's murder was made possible by centuries of economic exploitation and racial hierarchy, not just individual hatred.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq5','wrong')" aria-label="Option D">D. To establish his own credibility as a Mississippi native before making claims about the crime.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq5" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-question" id="qq6">
+      <div class="quiz-q-num">Question 6 of 6</div>
+      <div class="quiz-q-text">Thompson grew up 23 miles from the barn where Till was murdered but didn't learn about the crime until he left Mississippi for college. What does this reveal, according to his argument?</div>
+      <ul class="quiz-options" role="list">
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq6','wrong')" aria-label="Option A">A. The public school curriculum in Mississippi was simply incomplete due to limited resources.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq6','correct')" aria-label="Option B">B. The suppression of knowledge about racial violence was deliberate — a choice made by communities, schools, and families to protect a false historical narrative.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq6','wrong')" aria-label="Option C">C. Thompson was not paying attention in school and should have sought out this information on his own.</button></li>
+        <li class="quiz-option"><button onclick="checkAnswer(this,'qq6','wrong')" aria-label="Option D">D. Historical events take decades to be incorporated into school curricula, and there is nothing unusual about this gap.</button></li>
+      </ul>
+      <div class="quiz-feedback" id="fb-qq6" role="alert" aria-live="polite"></div>
+    </div>
+
+  </div><!-- /quiz-container -->
+
+  <div class="quiz-score" id="quiz-score" aria-live="polite">
+    <span class="score-num" id="score-display"></span>
+    <p class="score-msg" id="score-msg"></p>
+    <br>
+    <button class="quiz-reset-btn" onclick="resetQuiz()">Retake Quiz</button>
+  </div>
+
+</div>
+</div>
+
+</main><!-- /main -->
+
+<footer class="page-footer">
+  <p><strong>The Barn: The Secret History of a Murder in Mississippi</strong> by Wright Thompson</p>
+  <p>Interactive Reader's Guide &nbsp;·&nbsp; Brookdale Community College Common Read</p>
+  <p>Designed for WCAG 2.1 AA accessibility &nbsp;·&nbsp; All content for educational use</p>
+</footer>
+
+<script>
+// ── Tab Navigation ──
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabPanels = document.querySelectorAll('.tab-panel');
+
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('aria-controls');
+    tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    tabPanels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
+    document.getElementById(target).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  btn.addEventListener('keydown', e => {
+    const idx = Array.from(tabBtns).indexOf(btn);
+    if (e.key === 'ArrowRight') { e.preventDefault(); tabBtns[(idx+1) % tabBtns.length].focus(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); tabBtns[(idx-1+tabBtns.length) % tabBtns.length].focus(); }
+  });
+});
+
+// ── Quote Explorer ──
+function toggleQuote(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  const isOpen = el.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.quote-expanded').forEach(q => q.classList.remove('open'));
+  document.querySelectorAll('.quote-card').forEach(b => b.setAttribute('aria-expanded','false'));
+  if (!isOpen) {
+    el.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+// ── Timeline ──
+function toggleTimeline(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.timeline-detail').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.timeline-trigger').forEach(b => b.setAttribute('aria-expanded','false'));
+  if (!isOpen) {
+    el.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+// ── Relationship Map ──
+function toggleRel(id) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.rel-desc').forEach(d => d.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ── Quiz ──
+const quizAnswers = {
+  qq1: { correct: 'B', explanation: '<strong>Correct!</strong> Thompson\'s argument goes far beyond the crime itself. He contends that deliberate, ongoing suppression of the full truth — who was involved, where it happened, why it was covered up — is central to understanding racial injustice in America.' },
+  qq2: { correct: 'C', explanation: '<strong>Correct!</strong> The Fifth Amendment\'s double jeopardy clause prevented Bryant and Milam from being retried for Till\'s murder after their acquittal. Knowing they were legally protected, they gave a partial confession — but it was misleading about key details, which Thompson works to correct.' },
+  qq3: { correct: 'B', explanation: '<strong>Correct!</strong> Mamie Till-Mobley insisted on an open casket so that the world could see exactly what had been done to her son. Her decision — and the photographs published in <em>Jet</em> magazine — shocked the nation and helped galvanize the civil rights movement.' },
+  qq4: { correct: 'C', explanation: '<strong>Correct!</strong> Narrative nonfiction combines the rigor of journalism (every fact documented) with the techniques of storytelling (scene-setting, character, narrative arc). Thompson\'s choices about structure, voice, and focus are as meaningful as the facts he presents.' },
+  qq5: { correct: 'C', explanation: '<strong>Correct!</strong> By tracing the Delta\'s history back centuries, Thompson argues that Till\'s murder was not a random act — it was made possible by an entire economic and social system built on racial exploitation. Understanding the roots helps us understand how such crimes happen.' },
+  qq6: { correct: 'B', explanation: '<strong>Correct!</strong> Thompson\'s own educational gap is evidence for his central argument. He was not simply "uninformed" — he was kept uninformed. Communities, schools, and families made deliberate choices to suppress knowledge of racial violence, and this suppression was itself an act of protection for a false historical narrative.' }
+};
+
+const wrongExplanations = {
+  qq1: 'Not quite. Thompson explicitly argues against the "bad apple" interpretation. He situates the murder within a vast, centuries-long economic and racial system. Review the Core Overview and Analysis sections.',
+  qq2: 'Not quite. The key legal concept here is double jeopardy — a constitutional protection that prevented Bryant and Milam from being retried after their acquittal. Review the glossary entry on double jeopardy.',
+  qq3: 'Not quite. Mamie Till-Mobley\'s decision was about making the violence done to her son visible and undeniable. Her quote, "Let the world see what I\'ve seen," refers to the condition of his body — not memories or testimony.',
+  qq4: 'Not quite. Narrative nonfiction is not fiction, and it\'s not dry academic writing either. It is a genre that uses storytelling techniques while maintaining factual accuracy. Review the glossary entry.',
+  qq5: 'Not quite. Thompson\'s long historical perspective is meant to explain systemic causes, not to suggest inevitability or remove responsibility from specific individuals and communities. Review the Analysis section.',
+  qq6: 'Not quite. Thompson makes clear that his lack of knowledge was not simply a curriculum gap or personal oversight — it was a product of deliberate community choices to not discuss racial violence. Review the Quote Explorer and Overview sections.'
+};
+
+let answeredCount = 0;
+let correctCount = 0;
+const totalQuestions = 6;
+
+function checkAnswer(btn, questionId, result) {
+  const question = document.getElementById(questionId);
+  if (question.dataset.answered === 'true') return;
+  question.dataset.answered = 'true';
+
+  const allButtons = question.querySelectorAll('.quiz-option button');
+  allButtons.forEach(b => { b.disabled = true; });
+
+  const feedback = document.getElementById('fb-' + questionId);
+
+  if (result === 'correct') {
+    btn.classList.add('correct');
+    feedback.className = 'quiz-feedback fb-correct show';
+    feedback.innerHTML = '✅ ' + quizAnswers[questionId].explanation;
+    correctCount++;
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct answer
+    const correctLetter = quizAnswers[questionId].correct;
+    allButtons.forEach(b => {
+      const letter = b.getAttribute('aria-label').replace('Option ','');
+      if (letter === correctLetter) b.classList.add('reveal');
+    });
+    feedback.className = 'quiz-feedback fb-wrong show';
+    feedback.innerHTML = '❌ ' + wrongExplanations[questionId];
+  }
+
+  answeredCount++;
+  if (answeredCount === totalQuestions) showScore();
+}
+
+function showScore() {
+  const scoreEl = document.getElementById('quiz-score');
+  const numEl = document.getElementById('score-display');
+  const msgEl = document.getElementById('score-msg');
+  numEl.textContent = correctCount + ' / ' + totalQuestions;
+  let msg = '';
+  if (correctCount === totalQuestions) msg = 'Excellent! You have a strong command of the book\'s key ideas and concepts. Consider revisiting the Quote Explorer for deeper analysis.';
+  else if (correctCount >= 4) msg = 'Good work! You understand most of the key themes. Review the feedback on your missed questions and revisit those sections of the guide.';
+  else if (correctCount >= 2) msg = 'You\'re building your understanding. Reread the Core Overview and Analysis sections, then retake the quiz.';
+  else msg = 'This material takes time to absorb. Start with the Core Overview tab, then try the quiz again. Don\'t hesitate to ask your instructor for help.';
+  msgEl.textContent = msg;
+  scoreEl.classList.add('show');
+  scoreEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz() {
+  answeredCount = 0;
+  correctCount = 0;
+  document.querySelectorAll('.quiz-question').forEach(q => {
+    q.dataset.answered = 'false';
+    q.querySelectorAll('.quiz-option button').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('correct','wrong','reveal');
+    });
+    q.querySelectorAll('.quiz-feedback').forEach(f => f.className = 'quiz-feedback');
+  });
+  document.getElementById('quiz-score').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
