@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When AI Shows Up to Class: Academic Integrity in the Age of AI</title>
+<style>
+/* ===== RESET & VARIABLES ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:        #003366;
+  --navy-dark:   #001a33;
+  --teal:        #006666;
+  --teal-light:  #009999;
+  --teal-pale:   #e0f0f0;
+  --gold:        #cc9900;
+  --gold-light:  #ffcc00;
+  --white:       #ffffff;
+  --off-white:   #f4f8f8;
+  --gray-light:  #d0d8d8;
+  --gray-mid:    #666666;
+  --gray-dark:   #333333;
+  --red:         #cc3333;
+  --red-pale:    #fdecea;
+  --green:       #2e7d52;
+  --green-pale:  #e6f4ec;
+  --amber:       #8a5c00;
+  --amber-pale:  #fff3cd;
+  --focus-ring:  #ffcc00;
+
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body:    Verdana, Geneva, Tahoma, sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  --radius: 8px;
+  --max-w: 860px;
+}
+
+/* ===== ACCESSIBILITY ===== */
+*:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 var(--radius) var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  z-index: 9999;
+  text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* ===== BASE ===== */
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--gray-dark);
+  background: var(--off-white);
+}
+
+/* ===== LAYOUT ===== */
+.page-wrapper {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: var(--space-2xl) var(--space-xl);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: var(--teal);
+  opacity: 0.18;
+  border-radius: 50%;
+}
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: var(--space-sm);
+  font-weight: bold;
+}
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  line-height: 1.3;
+  margin-bottom: var(--space-md);
+}
+.hero-sub {
+  font-size: 1rem;
+  color: #c8dce8;
+  max-width: 640px;
+  margin-bottom: var(--space-lg);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: 0.82rem;
+  color: #a8c4d8;
+}
+.hero-meta span::before { content: '▸ '; color: var(--gold-light); }
+
+/* ===== SECTION CARDS ===== */
+.lesson-section {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  border: 1px solid var(--gray-light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.section-label {
+  display: inline-block;
+  background: var(--teal);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0.2rem 0.7rem;
+  border-radius: 4px;
+  margin-bottom: var(--space-sm);
+}
+
+.lesson-section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--navy);
+  margin-bottom: var(--space-md);
+  line-height: 1.35;
+}
+
+.lesson-section p { margin-bottom: var(--space-md); }
+.lesson-section p:last-child { margin-bottom: 0; }
+
+/* ===== CALLOUT BOX ===== */
+.callout {
+  background: var(--teal-pale);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-md) 0;
+  font-size: 0.95rem;
+}
+.callout strong { color: var(--navy); }
+
+.callout-amber {
+  background: var(--amber-pale);
+  border-left-color: var(--gold);
+}
+.callout-amber strong { color: var(--amber); }
+
+/* ===== KEY IDEAS TABS ===== */
+.tabs-container { margin-top: var(--space-md); }
+
+.tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  border-bottom: 2px solid var(--gray-light);
+  padding-bottom: var(--space-sm);
+  list-style: none;
+}
+
+.tab-btn {
+  background: var(--off-white);
+  border: 2px solid var(--gray-light);
+  color: var(--gray-dark);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: bold;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.tab-btn:hover {
+  background: var(--teal-pale);
+  border-color: var(--teal-light);
+  color: var(--teal);
+}
+.tab-btn[aria-selected="true"] {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.tab-btn .tab-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  background: var(--teal-light);
+  color: var(--white);
+  font-size: 0.72rem;
+  border-radius: 50%;
+  font-weight: bold;
+}
+.tab-btn[aria-selected="true"] .tab-num { background: var(--gold-light); color: var(--navy-dark); }
+
+.tab-panel { display: none; animation: fadeIn 0.2s ease; }
+.tab-panel.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.tab-panel h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--navy);
+  margin-bottom: var(--space-md);
+}
+
+/* ===== GUIDED QUESTIONS ===== */
+.guided-questions {
+  background: var(--off-white);
+  border-radius: var(--radius);
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-md);
+}
+.guided-questions h4 {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--teal);
+  font-weight: bold;
+  margin-bottom: var(--space-sm);
+}
+.guided-questions ol {
+  padding-left: 1.3rem;
+  font-size: 0.95rem;
+}
+.guided-questions li { margin-bottom: var(--space-sm); }
+
+/* ===== SCENARIO ACTIVITY ===== */
+.scenario-box {
+  background: var(--navy-dark);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: var(--space-lg) var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+.scenario-box p { color: #c8dce8; margin-bottom: var(--space-sm); }
+.scenario-box strong { color: var(--gold-light); }
+.scenario-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--gold-light);
+  margin-bottom: var(--space-sm);
+}
+
+.scenario-choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.choice-btn {
+  background: transparent;
+  border: 2px solid #4a6e8a;
+  color: #c8dce8;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  line-height: 1.5;
+}
+.choice-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--teal-light);
+  color: var(--white);
+}
+.choice-btn:disabled { cursor: default; }
+.choice-btn.correct  { background: #1a4a2e; border-color: #5db87a; color: #b8f0c8; }
+.choice-btn.partial  { background: #4a3800; border-color: #cc9900; color: #ffd84d; }
+.choice-btn.wrong    { background: #4a1a1a; border-color: #cc4444; color: #ffb0b0; }
+
+.feedback-box {
+  margin-top: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  display: none;
+}
+.feedback-box.show { display: block; animation: fadeIn 0.2s ease; }
+.feedback-box.correct-fb  { background: var(--green-pale); color: #1a4a2e; border-left: 4px solid var(--green); }
+.feedback-box.partial-fb  { background: var(--amber-pale); color: var(--amber); border-left: 4px solid var(--gold); }
+.feedback-box.wrong-fb    { background: var(--red-pale);   color: #7a1a1a; border-left: 4px solid var(--red); }
+.feedback-box p { margin-bottom: var(--space-sm); }
+.feedback-box p:last-child { margin-bottom: 0; }
+
+.reset-btn {
+  background: var(--teal);
+  color: var(--white);
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: bold;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-top: var(--space-md);
+  transition: background 0.15s;
+  display: none;
+}
+.reset-btn.show { display: inline-block; }
+.reset-btn:hover { background: var(--teal-light); }
+
+/* ===== SELF-CHECK QUIZ ===== */
+.quiz-question {
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  background: var(--off-white);
+}
+.quiz-question p.q-text {
+  font-weight: bold;
+  color: var(--navy);
+  margin-bottom: var(--space-md);
+  font-size: 0.97rem;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  list-style: none;
+}
+.quiz-options li { display: flex; }
+
+.quiz-option-btn {
+  width: 100%;
+  text-align: left;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  color: var(--gray-dark);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+  line-height: 1.5;
+}
+.quiz-option-btn:hover:not(:disabled) {
+  background: var(--teal-pale);
+  border-color: var(--teal-light);
+}
+.quiz-option-btn:disabled { cursor: default; }
+.quiz-option-btn.q-correct { background: var(--green-pale); border-color: var(--green); color: #1a4a2e; font-weight: bold; }
+.quiz-option-btn.q-wrong   { background: var(--red-pale);   border-color: var(--red);   color: #7a1a1a; }
+.quiz-option-btn.q-reveal  { background: #e8f8ef; border-color: var(--green); }
+
+.q-feedback {
+  margin-top: var(--space-sm);
+  font-size: 0.88rem;
+  display: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius);
+}
+.q-feedback.show { display: block; }
+.q-feedback.qf-correct { background: var(--green-pale); color: #1a4a2e; }
+.q-feedback.qf-wrong   { background: var(--red-pale);   color: #7a1a1a; }
+
+.quiz-score-box {
+  background: var(--navy);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: var(--space-lg) var(--space-xl);
+  text-align: center;
+  margin-top: var(--space-lg);
+  display: none;
+}
+.quiz-score-box.show { display: block; animation: fadeIn 0.3s ease; }
+.score-num {
+  font-family: var(--font-heading);
+  font-size: 2.8rem;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.score-msg { color: #c8dce8; font-size: 0.95rem; margin-top: 0.3rem; }
+
+/* ===== REFLECTION SECTION ===== */
+.reflection-prompts {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-md) 0;
+}
+.reflection-prompts li {
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-sm);
+  background: var(--off-white);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.96rem;
+}
+.reflection-note {
+  font-size: 0.88rem;
+  color: var(--gray-mid);
+  font-style: italic;
+  margin-top: var(--space-md);
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-area {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  font-size: 0.82rem;
+  color: var(--gray-mid);
+}
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--gray-light);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ===== ARTICLE LINK BADGE ===== */
+.article-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--teal-pale);
+  border: 1px solid var(--teal-light);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-size: 0.84rem;
+  color: var(--teal);
+  font-weight: bold;
+  margin-top: var(--space-md);
+  text-decoration: none;
+}
+.article-badge:hover { background: var(--teal); color: var(--white); }
+.article-badge::before { content: '📰'; }
+
+/* ===== FOOTER ===== */
+.page-footer {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  font-size: 0.82rem;
+  color: var(--gray-mid);
+  border-top: 1px solid var(--gray-light);
+  line-height: 1.8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .lesson-section { padding: var(--space-lg) var(--space-md); }
+  .hero { padding: var(--space-lg) var(--space-md); }
+  .tab-btn { font-size: 0.8rem; padding: 0.45rem 0.8rem; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  .tab-panel { display: block !important; }
+  .choice-btn, .quiz-option-btn { border: 1px solid #999; }
+}
+</style>
+</head>
+<body>
+
+<!-- Skip to main content (accessibility) -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ===== HEADER ===== -->
+<div class="page-wrapper">
+
+  <!-- Progress indicator -->
+  <div class="progress-area" role="progressbar" aria-label="Lesson progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+    <span id="progressLabel">Start →</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span id="progressPct">0%</span>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" role="banner">
+    <div class="hero-eyebrow">Education &amp; AI — Mini Lesson</div>
+    <h1>When AI Shows Up to Class:<br>Academic Integrity in the Age of AI</h1>
+    <p class="hero-sub">
+      A biology professor's real-world study revealed something surprising: even students
+      sitting in a physical classroom can use AI and other digital tools to earn points
+      without doing the learning. What does that mean for you — and for your education?
+    </p>
+    <div class="hero-meta">
+      <span>Based on a March 2026 <em>Inside Higher Ed</em> article</span>
+      <span>Estimated time: 20–25 minutes</span>
+      <span>Education &amp; AI course</span>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main id="main-content">
+
+    <!-- ── SECTION 1: INTRODUCTION ── -->
+    <section class="lesson-section" aria-labelledby="intro-heading">
+      <div class="section-label" aria-hidden="true">Introduction</div>
+      <h2 id="intro-heading">Why This Article Matters to You</h2>
+
+      <p>
+        You probably know that AI tools like ChatGPT exist. You may have used them —
+        or wondered whether other students are using them. A March 2026 article in
+        <em>Inside Higher Ed</em>, a higher-education news site, reports on a study
+        that found AI cheating isn't just a problem in online classes. It's happening
+        in face-to-face classrooms too.
+      </p>
+      <p>
+        This matters for this course because we're exploring how AI is reshaping
+        teaching and learning. Understanding <em>how</em> and <em>why</em> students
+        use AI to bypass learning — and what educators are trying to do about it —
+        is essential context for any conversation about AI in education.
+      </p>
+
+      <div class="callout callout-amber">
+        <strong>Key term — Academic Integrity:</strong> Doing your own work honestly
+        and following your school's rules about what kinds of help are allowed.
+        When students use AI or other tools to earn credit for work they didn't do,
+        that violates academic integrity.
+      </div>
+
+      <a href="https://www.insidehighered.com/news/students/academics/2026/03/05/person-classes-arent-safe-ai-cheating-boom"
+         target="_blank" rel="noopener noreferrer" class="article-badge"
+         aria-label="Read the original article at Inside Higher Ed (opens in new tab)">
+        Read the original article at Inside Higher Ed (opens in new tab)
+      </a>
+    </section>
+
+    <!-- ── SECTION 2: ARTICLE SUMMARY ── -->
+    <section class="lesson-section" aria-labelledby="summary-heading">
+      <div class="section-label" aria-hidden="true">Article Summary</div>
+      <h2 id="summary-heading">What the Research Found</h2>
+
+      <p>
+        A biology professor at Arizona State University (ASU) grew concerned when she
+        noticed that many students in her large in-person class weren't actually showing
+        up — yet were still collecting participation points. They were logging in
+        remotely with <strong>digital clickers</strong> (devices or apps students use
+        to answer in-class questions) and sometimes even answering for absent classmates.
+      </p>
+      <p>
+        Curious about how widespread the problem was, she analyzed the structure of
+        21 biology courses. Her preliminary findings: on average, about
+        <strong>45% of the points</strong> in those courses could be earned dishonestly
+        using available digital tools — including AI chatbots that can instantly answer
+        pre-class reading questions.
+      </p>
+      <p>
+        Students told her researcher team that cheating felt almost unavoidable:
+        exhausted from work or other obligations, knowing that AI could produce an
+        answer in seconds, and worried about falling behind classmates who might
+        already be cheating, many felt they had little choice.
+      </p>
+      <p>
+        Her conclusion: instructors can no longer assume their classrooms are protected
+        from AI-assisted cheating just because students are physically present.
+        Redesigning how we measure learning — not just adding more detection tools —
+        may be the necessary response.
+      </p>
+    </section>
+
+    <!-- ── SECTION 3: KEY IDEAS (TABS) ── -->
+    <section class="lesson-section" aria-labelledby="ideas-heading">
+      <div class="section-label" aria-hidden="true">Key Ideas</div>
+      <h2 id="ideas-heading">Three Ideas to Explore</h2>
+      <p>Select each tab to read about a key idea from the article, then work through
+         the guided questions to connect it to our course.</p>
+
+      <div class="tabs-container">
+        <!-- Tab list -->
+        <ul class="tab-list" role="tablist" aria-label="Key ideas">
+          <li role="presentation">
+            <button class="tab-btn" role="tab" id="tab1" aria-selected="true"
+                    aria-controls="panel1" onclick="selectTab(1)">
+              <span class="tab-num" aria-hidden="true">1</span>
+              <span>Presence vs. Learning</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="tab-btn" role="tab" id="tab2" aria-selected="false"
+                    aria-controls="panel2" onclick="selectTab(2)">
+              <span class="tab-num" aria-hidden="true">2</span>
+              <span>The Temptation Factor</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button class="tab-btn" role="tab" id="tab3" aria-selected="false"
+                    aria-controls="panel3" onclick="selectTab(3)">
+              <span class="tab-num" aria-hidden="true">3</span>
+              <span>Rethinking Assessment</span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Panel 1 -->
+        <div class="tab-panel active" role="tabpanel" id="panel1" aria-labelledby="tab1">
+          <h3>Idea 1: Being Present Doesn't Mean You're Learning</h3>
+          <p>
+            For years, many instructors have awarded points for participation — showing
+            up, clicking in, answering pre-class questions. The idea was to reward
+            <strong>active learning</strong>: students engaging with material before
+            and during class rather than just sitting through a lecture.
+          </p>
+          <p>
+            The ASU research reveals a gap: <em>earning participation credit</em> and
+            <em>actually learning</em> are no longer the same thing. A student can
+            earn a perfect participation score while never setting foot in the room
+            and never genuinely thinking about the material. Digital tools — from
+            clicker workarounds to AI chatbots — make it possible to simulate
+            engagement without real engagement.
+          </p>
+          <div class="callout">
+            <strong>Active learning</strong> means doing things that help your brain
+            actually process and remember information — asking questions, discussing
+            ideas, solving problems. It's the opposite of passively sitting and
+            listening. Participation points were designed to reward active learning.
+          </div>
+          <div class="guided-questions">
+            <h4>Guided Questions — think or write your responses:</h4>
+            <ol>
+              <li>What is the difference between <em>performing</em> participation
+                  (clicking an answer) and <em>actually participating</em> in learning?
+                  Give an example from your own experience.</li>
+              <li>Why do you think instructors created participation-based grading in
+                  the first place? What problem were they trying to solve?</li>
+              <li>If a student earns full participation credit but doesn't learn anything,
+                  who — if anyone — is harmed? Explain your reasoning.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="tab-panel" role="tabpanel" id="panel2" aria-labelledby="tab2" hidden>
+          <h3>Idea 2: Understanding Why Students Cheat Isn't the Same as Excusing It</h3>
+          <p>
+            The professor in this study was careful to avoid simply blaming students.
+            She pointed out that many students are balancing work, family, and school
+            simultaneously. When it's nearly midnight, an assignment is due, and a
+            chatbot can generate an answer in two seconds, the temptation can feel
+            overwhelming.
+          </p>
+          <p>
+            She also identified a troubling dynamic: if some students are using AI to
+            complete assignments faster and score higher, honest students may feel
+            <strong>pressured to cheat</strong> just to stay competitive. This is
+            sometimes called a "race to the bottom" — dishonest behavior spreads
+            because honest behavior seems to put you at a disadvantage.
+          </p>
+          <div class="callout callout-amber">
+            <strong>Important distinction:</strong> Understanding <em>why</em>
+            cheating happens — stress, competition, easy access to tools — doesn't
+            mean cheating is acceptable. It means we need to think about the
+            conditions that make cheating more likely, and whether any of those
+            conditions can be changed.
+          </div>
+          <div class="guided-questions">
+            <h4>Guided Questions — think or write your responses:</h4>
+            <ol>
+              <li>The professor said, "It's easy to blame students." What does she
+                  mean, and do you think blaming is the right response? Why or why not?</li>
+              <li>Have you ever felt pressure to take a shortcut on an assignment
+                  because you were exhausted or overwhelmed? (You don't have to share
+                  details — just consider: how did that pressure feel?)</li>
+              <li>How might a community college student's situation — working jobs,
+                  caring for family, being the first in their family in college — add
+                  to the pressure described in this article?</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Panel 3 -->
+        <div class="tab-panel" role="tabpanel" id="panel3" aria-labelledby="tab3" hidden>
+          <h3>Idea 3: The Solution Isn't Just "More Detection" — It's Better Design</h3>
+          <p>
+            The professor's main recommendation wasn't to install more AI-detection
+            software or give every student an honor pledge to sign. Instead, she
+            argued that <strong>instructors need to redesign how they measure learning</strong>
+            — creating assignments and assessments that are harder to fake because
+            they require real, in-the-moment thinking.
+          </p>
+          <p>
+            Examples she mentioned include in-person, pencil-and-paper exams and
+            physically verifying that students are present and engaged — not just
+            checking a digital log. This is more work for instructors, but she
+            argued it's necessary if participation grades are going to mean anything.
+          </p>
+          <div class="callout">
+            <strong>Assessment design</strong> refers to how instructors choose to
+            measure whether students have learned. A well-designed assessment makes
+            it hard to earn credit without actually learning — not because it's a
+            "gotcha," but because the task itself <em>requires</em> genuine thinking.
+          </div>
+          <div class="guided-questions">
+            <h4>Guided Questions — think or write your responses:</h4>
+            <ol>
+              <li>What kinds of assignments are <em>hardest</em> to complete dishonestly
+                  using AI? What do those assignments have in common?</li>
+              <li>The professor suggested that moving to "all high-stakes exams in person"
+                  might be one solution. What are the advantages <em>and</em> disadvantages
+                  of that approach for students like you?</li>
+              <li>From what you've learned in this course about AI, what new types of
+                  assessments might actually require students to demonstrate real
+                  understanding in an AI-present world?</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /tabs-container -->
+    </section>
+
+    <!-- ── SECTION 4: SCENARIO ACTIVITY ── -->
+    <section class="lesson-section" aria-labelledby="scenario-heading">
+      <div class="section-label" aria-hidden="true">Decision Scenario</div>
+      <h2 id="scenario-heading">What Would You Do?</h2>
+      <p>Read the scenario below, then choose the response that best reflects
+         thoughtful, ethical reasoning. You'll receive feedback on your choice.</p>
+
+      <!-- SCENARIO -->
+      <div class="scenario-box" id="scenarioContainer">
+        <div class="scenario-label">The Situation</div>
+        <p>
+          <strong>It's 11:45 p.m.</strong> You have a 10-question pre-class reading
+          quiz due at midnight for your 8 a.m. biology course. You finished a long
+          shift at work an hour ago. You skimmed the chapter but aren't confident
+          in your answers.
+        </p>
+        <p>
+          You know that your classmate in a group chat already submitted and got 9/10
+          — and you suspect they used ChatGPT. You have the chatbot open in another tab.
+        </p>
+        <p>
+          <strong>What do you do?</strong>
+        </p>
+
+        <div class="scenario-choices" role="group" aria-label="Choose your response">
+          <button class="choice-btn" onclick="chooseScenario('A')" id="choiceA">
+            A. Use ChatGPT for all 10 questions. You need the points and everyone else
+               is probably doing it anyway.
+          </button>
+          <button class="choice-btn" onclick="chooseScenario('B')" id="choiceB">
+            B. Use ChatGPT to check your answers on the questions you already attempted,
+               but write your final answers in your own words.
+          </button>
+          <button class="choice-btn" onclick="chooseScenario('C')" id="choiceC">
+            C. Submit your own best answers even if some are wrong, then review the
+               material before class to fill in your gaps.
+          </button>
+          <button class="choice-btn" onclick="chooseScenario('D')" id="choiceD">
+            D. Skip the quiz entirely — the learning matters more than points you
+               can't earn honestly tonight.
+          </button>
+        </div>
+
+        <div class="feedback-box" id="scenarioFeedback"></div>
+        <button class="reset-btn" id="scenarioReset" onclick="resetScenario()"
+                aria-label="Try a different choice">Try another choice</button>
+      </div>
+
+      <div class="callout">
+        <strong>Note:</strong> There isn't always one perfect answer in real-life
+        situations. The point of this activity is to <em>think through</em> the
+        trade-offs — not just find the "right" answer. Your course's academic
+        integrity policy should always be your first guide.
+      </div>
+    </section>
+
+    <!-- ── SECTION 5: SELF-CHECK QUIZ ── -->
+    <section class="lesson-section" aria-labelledby="quiz-heading">
+      <div class="section-label" aria-hidden="true">Self-Check</div>
+      <h2 id="quiz-heading">Check Your Understanding</h2>
+      <p>Answer the four questions below. Click an option to see immediate feedback.
+         These are not graded — they're here to help you check what you've learned.</p>
+
+      <!-- Q1 -->
+      <div class="quiz-question" id="qq1">
+        <p class="q-text">1. The ASU professor found that approximately what percentage
+           of course points in the biology classes she studied could be earned dishonestly
+           using digital tools?</p>
+        <ul class="quiz-options" role="list">
+          <li><button class="quiz-option-btn" onclick="answerQuiz(1,'A')" data-q="1" data-opt="A">A. About 10%</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(1,'B')" data-q="1" data-opt="B">B. About 45%</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(1,'C')" data-q="1" data-opt="C">C. About 70%</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(1,'D')" data-q="1" data-opt="D">D. About 5%</button></li>
+        </ul>
+        <div class="q-feedback" id="qf1"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-question" id="qq2">
+        <p class="q-text">2. True or False: AI-assisted cheating is only a problem
+           in online courses — in-person (face-to-face) classes are safe from it.</p>
+        <ul class="quiz-options" role="list">
+          <li><button class="quiz-option-btn" onclick="answerQuiz(2,'A')" data-q="2" data-opt="A">A. True</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(2,'B')" data-q="2" data-opt="B">B. False</button></li>
+        </ul>
+        <div class="q-feedback" id="qf2"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="quiz-question" id="qq3">
+        <p class="q-text">3. According to the article, which of the following best
+           describes the professor's main recommendation to address the problem?</p>
+        <ul class="quiz-options" role="list">
+          <li><button class="quiz-option-btn" onclick="answerQuiz(3,'A')" data-q="3" data-opt="A">A. Ban all AI tools from campus networks</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(3,'B')" data-q="3" data-opt="B">B. Require students to sign daily honor pledges</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(3,'C')" data-q="3" data-opt="C">C. Redesign how learning is assessed — make earning credit require real engagement</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(3,'D')" data-q="3" data-opt="D">D. Move all courses fully online to better monitor students</button></li>
+        </ul>
+        <div class="q-feedback" id="qf3"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-question" id="qq4">
+        <p class="q-text">4. The professor said cheating felt "too tempting" for many
+           students partly because of competitive pressure. What did she mean?</p>
+        <ul class="quiz-options" role="list">
+          <li><button class="quiz-option-btn" onclick="answerQuiz(4,'A')" data-q="4" data-opt="A">A. Students compete for scholarship money that rewards high grades</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(4,'B')" data-q="4" data-opt="B">B. If some students are cheating and getting higher scores, honest students may feel they must cheat just to keep up</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(4,'C')" data-q="4" data-opt="C">C. Students compete for the best seats in the classroom</button></li>
+          <li><button class="quiz-option-btn" onclick="answerQuiz(4,'D')" data-q="4" data-opt="D">D. Professors grade on a curve, so one student's success hurts others</button></li>
+        </ul>
+        <div class="q-feedback" id="qf4"></div>
+      </div>
+
+      <!-- Score display -->
+      <div class="quiz-score-box" id="quizScoreBox" aria-live="polite">
+        <div class="score-num" id="scoreNum">—</div>
+        <div>out of 4 correct</div>
+        <div class="score-msg" id="scoreMsg"></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 6: REFLECTION ── -->
+    <section class="lesson-section" aria-labelledby="reflection-heading">
+      <div class="section-label" aria-hidden="true">Reflection</div>
+      <h2 id="reflection-heading">Reflect &amp; Respond</h2>
+      <p>
+        Choose <strong>one</strong> of the prompts below for your discussion board post
+        or short written response. Aim for 150–250 words.
+      </p>
+
+      <ul class="reflection-prompts" aria-label="Reflection prompt options">
+        <li>
+          <strong>Prompt 1 — Your role as a student:</strong>
+          The article describes students who feel pressured to cheat because of
+          exhaustion, competition, and easy AI access. Reflect on a time you faced
+          pressure to take a shortcut in your studies. How did you handle it —
+          and looking back, what would you do differently (or the same) now?
+        </li>
+        <li>
+          <strong>Prompt 2 — The instructor's perspective:</strong>
+          Imagine you are a course instructor. Based on what you learned in this lesson,
+          design one assignment or activity that you believe would be genuinely
+          difficult to complete dishonestly using AI — and explain why it resists
+          AI shortcuts. What makes real learning visible in your design?
+        </li>
+        <li>
+          <strong>Prompt 3 — The bigger picture:</strong>
+          The article focuses on cheating, but underneath it is a bigger question:
+          What is the <em>purpose</em> of grades? If a student earns an A but learned
+          very little, does the grade mean anything? Does it matter — to them, to
+          employers, to society? Make an argument and support it with at least one
+          specific example.
+        </li>
+      </ul>
+
+      <p class="reflection-note">
+        Note: Your instructor will let you know which prompt to respond to, or
+        whether you may choose freely. This lesson does not track or submit your
+        writing — use your course's discussion board or assignment submission area.
+      </p>
+    </section>
+
+  </main><!-- /main -->
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="page-footer" role="contentinfo">
+    <p>Demystifying AI — Faculty Workshop Series | Brookdale Community College</p>
+    <p>Based on: Palmer, K. (2026, March 5). <em>In-Person Classes Aren't Safe From the AI Cheating Boom.</em> <em>Inside Higher Ed.</em></p>
+    <p>Lesson designed for WCAG 2.1 AA accessibility.</p>
+  </footer>
+
+</div><!-- /page-wrapper -->
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+/* ─── PROGRESS TRACKING ─── */
+const TOTAL_SECTIONS = 4; // tabs open, scenario done, quiz done, reflection visible
+let progress = { tabOpened: false, scenarioDone: false, quizDone: false };
+
+function updateProgress() {
+  let count = 1; // intro is always done
+  if (progress.tabOpened)   count++;
+  if (progress.scenarioDone) count++;
+  if (progress.quizDone)     count++;
+  const pct = Math.round((count / TOTAL_SECTIONS) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  const bar = document.getElementById('progressBar');
+  bar.setAttribute('aria-valuenow', pct);
+  const labels = ['Start →','Reading…','Exploring…','Almost there!','Complete!'];
+  document.getElementById('progressLabel').textContent = labels[count] || 'Complete!';
+}
+updateProgress();
+
+
+/* ─── TABS ─── */
+function selectTab(n) {
+  for (let i = 1; i <= 3; i++) {
+    const btn = document.getElementById('tab' + i);
+    const panel = document.getElementById('panel' + i);
+    if (i === n) {
+      btn.setAttribute('aria-selected', 'true');
+      panel.classList.add('active');
+      panel.removeAttribute('hidden');
+    } else {
+      btn.setAttribute('aria-selected', 'false');
+      panel.classList.remove('active');
+      panel.setAttribute('hidden', '');
+    }
+  }
+  progress.tabOpened = true;
+  updateProgress();
+}
+
+// Keyboard arrow-key navigation for tabs
+document.querySelectorAll('.tab-btn').forEach((btn, idx, all) => {
+  btn.addEventListener('keydown', (e) => {
+    let target = null;
+    if (e.key === 'ArrowRight') target = all[(idx + 1) % all.length];
+    if (e.key === 'ArrowLeft')  target = all[(idx + all.length - 1) % all.length];
+    if (target) { target.focus(); target.click(); }
+  });
+});
+
+
+/* ─── SCENARIO ─── */
+const scenarioFeedback = {
+  A: {
+    type: 'wrong',
+    html: `<p><strong>This choice has real risks.</strong> Using AI to complete all
+           questions is academic dishonesty at most colleges and violates the academic
+           integrity policies you agreed to when you enrolled. Beyond the risk of
+           consequences, you also miss the learning the assignment was designed
+           to build — which may come back to hurt you on an exam you can't shortcut.</p>
+           <p>The professor in the article understood <em>why</em> this is tempting,
+           but also said: "We can't be just giving away points for cheating."</p>`
+  },
+  B: {
+    type: 'partial',
+    html: `<p><strong>This is a gray area that depends heavily on your course policy.</strong>
+           Some instructors explicitly allow using AI as a reference tool; others
+           do not. Before deciding, you'd need to check your syllabus and ask your
+           instructor. If it's not permitted, even "checking" your answers with AI
+           can cross the line — especially if the AI's response shapes what you write.</p>
+           <p>The key question is: whose thinking is reflected in the final answer?</p>`
+  },
+  C: {
+    type: 'correct',
+    html: `<p><strong>This is the approach most aligned with your own learning and
+           academic integrity.</strong> Submitting imperfect answers honestly means
+           your score reflects your actual understanding — which is exactly what the
+           assignment is meant to measure. Reviewing the material before class
+           means you'll actually get something out of attending.</p>
+           <p>It also means your grade represents something real: instructors
+           make decisions (like who's prepared for harder coursework) based on
+           grades. A grade that reflects real learning helps everyone.</p>`
+  },
+  D: {
+    type: 'partial',
+    html: `<p><strong>This shows integrity, but skipping carries its own costs.</strong>
+           Missing the grade entirely could hurt your standing in the course, and it
+           doesn't solve the underlying pressure you're experiencing. A better option
+           might be to email your instructor before the deadline explaining the situation —
+           many instructors will work with students facing genuine hardship.</p>
+           <p>It's also worth checking whether your school has emergency resources
+           (food pantry, emergency funds, tutoring) that could reduce the pressure
+           causing you to make these choices in the first place.</p>`
+  }
+};
+
+function chooseScenario(choice) {
+  const fb = scenarioFeedback[choice];
+  const box = document.getElementById('scenarioFeedback');
+  const reset = document.getElementById('scenarioReset');
+
+  // Disable all buttons
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = true;
+    b.classList.remove('correct','partial','wrong');
+  });
+
+  // Highlight chosen
+  document.getElementById('choice' + choice).classList.add(
+    fb.type === 'correct' ? 'correct' : fb.type === 'partial' ? 'partial' : 'wrong'
+  );
+
+  // Show feedback
+  box.innerHTML = fb.html;
+  box.className = 'feedback-box show ' +
+    (fb.type === 'correct' ? 'correct-fb' : fb.type === 'partial' ? 'partial-fb' : 'wrong-fb');
+  box.setAttribute('aria-live', 'polite');
+  box.focus();
+
+  reset.classList.add('show');
+  progress.scenarioDone = true;
+  updateProgress();
+}
+
+function resetScenario() {
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','partial','wrong');
+  });
+  const box = document.getElementById('scenarioFeedback');
+  box.className = 'feedback-box';
+  box.innerHTML = '';
+  document.getElementById('scenarioReset').classList.remove('show');
+}
+
+
+/* ─── QUIZ ─── */
+const answers = { 1: 'B', 2: 'B', 3: 'C', 4: 'B' };
+const explanations = {
+  1: {
+    B: 'Correct! The preliminary analysis found that about 45% of course points could be earned dishonestly using digital tools.',
+    wrong: 'Not quite. The article reported approximately 45% of course points were vulnerable — much higher than many people expect.'
+  },
+  2: {
+    B: 'Correct! That\'s the central finding: the professor showed that in-person classes are just as vulnerable to AI-assisted cheating as online ones.',
+    A: 'Actually, this is false — and disproving it is the main point of the article. In-person classes are not safe from digital cheating tools.'
+  },
+  3: {
+    C: 'Correct! Her core argument was that instructors need to redesign assessments so that earning credit genuinely requires learning — not just add more detection.',
+    wrong: 'That\'s not what she recommended. Her focus was on assessment design: building assignments that can\'t easily be faked, rather than trying to catch cheating after the fact.'
+  },
+  4: {
+    B: 'Correct! She described a "race to the bottom": if some students cheat and earn higher scores, honest students feel they must cheat too just to stay competitive.',
+    wrong: 'The competitive pressure she described was specifically about score equity — if cheating students outperform honest ones, honest students feel disadvantaged.'
+  }
+};
+
+let quizAnswered = {};
+let correctCount = 0;
+
+function answerQuiz(qNum, opt) {
+  if (quizAnswered[qNum]) return;
+  quizAnswered[qNum] = true;
+
+  const isCorrect = opt === answers[qNum];
+  if (isCorrect) correctCount++;
+
+  // Style all buttons for this question
+  document.querySelectorAll(`[data-q="${qNum}"]`).forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.opt === answers[qNum]) btn.classList.add('q-reveal');
+  });
+
+  const chosen = document.querySelector(`[data-q="${qNum}"][data-opt="${opt}"]`);
+  chosen.classList.add(isCorrect ? 'q-correct' : 'q-wrong');
+
+  // Feedback
+  const fb = document.getElementById('qf' + qNum);
+  const expGroup = explanations[qNum];
+  const msg = expGroup[opt] || expGroup['wrong'] || expGroup['A'];
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + msg;
+  fb.className = 'q-feedback show ' + (isCorrect ? 'qf-correct' : 'qf-wrong');
+  fb.setAttribute('aria-live', 'polite');
+
+  // Show score once all answered
+  if (Object.keys(quizAnswered).length === 4) {
+    const scoreBox = document.getElementById('quizScoreBox');
+    document.getElementById('scoreNum').textContent = correctCount;
+    const msgs = ['Keep reviewing the article — re-read the summary section.',
+                  'Good start! Review the tabs for the questions you missed.',
+                  'Nice work! You understood most of the key ideas.',
+                  'Strong work! You\'ve got a solid grasp of the article\'s main points.',
+                  'Excellent! You understood all the core ideas in this lesson.'];
+    document.getElementById('scoreMsg').textContent = msgs[correctCount];
+    scoreBox.classList.add('show');
+    scoreBox.focus();
+    progress.quizDone = true;
+    updateProgress();
+  }
+}
+</script>
+</body>
+</html>
