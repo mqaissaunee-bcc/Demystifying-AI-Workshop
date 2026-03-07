@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI & Your Financial Aid: What Students Need to Know</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  /* ─── Design tokens ─── */
+  :root {
+    --navy:   #0d2340;
+    --teal:   #0e7a6e;
+    --teal-lt:#12a898;
+    --gold:   #e8a030;
+    --gold-lt:#f5c96a;
+    --cream:  #faf7f2;
+    --ink:    #1a1a2e;
+    --muted:  #5a6272;
+    --border: #d4d0c8;
+    --white:  #ffffff;
+    --focus:  #e8a030;
+    --correct-bg: #d4edda;
+    --correct-txt:#155724;
+    --wrong-bg:   #f8d7da;
+    --wrong-txt:  #721c24;
+    --neutral-bg: #e8f4f8;
+    --neutral-txt:#0c5460;
+    --radius: 10px;
+    --shadow: 0 4px 24px rgba(13,35,64,.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--cream);
+    min-height: 100vh;
+  }
+
+  /* ─── Skip link ─── */
+  .skip-link {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+    padding: .5rem 1rem;
+    border-radius: 0 0 6px 0;
+    text-decoration: none;
+    transition: top .2s;
+    z-index: 999;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* ─── Header / Hero ─── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 3.5rem 1.5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 20% 50%, rgba(14,122,110,.35) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 80% 30%, rgba(232,160,48,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(232,160,48,.18);
+    border: 1px solid rgba(232,160,48,.55);
+    color: var(--gold-lt);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: .35rem .9rem;
+    border-radius: 50px;
+    margin-bottom: 1.2rem;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.2;
+    max-width: 720px;
+    margin: 0 auto .9rem;
+  }
+  header h1 em { color: var(--gold-lt); font-style: italic; }
+  .header-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,.8);
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: .82rem;
+    color: rgba(255,255,255,.6);
+  }
+  .header-meta span::before { content: '◆ '; color: var(--gold); }
+
+  /* ─── Layout ─── */
+  main { max-width: 820px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  section { margin-bottom: 2.8rem; }
+
+  /* ─── Section labels ─── */
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .55rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 22px; height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    color: var(--navy);
+    margin-bottom: .75rem;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: .5rem;
+  }
+
+  p { margin-bottom: .85rem; color: #2a2a3e; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ─── Article summary card ─── */
+  .article-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    box-shadow: var(--shadow);
+  }
+  .article-card .source-tag {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .2rem .65rem;
+    border-radius: 4px;
+    margin-bottom: .9rem;
+  }
+  .article-card a {
+    color: var(--teal);
+    font-weight: 500;
+    font-size: .88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-top: .85rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-lt);
+    transition: color .15s;
+  }
+  .article-card a:hover, .article-card a:focus { color: var(--navy); }
+  .article-card a:focus { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 3px; }
+
+  /* ─── Key Ideas accordion ─── */
+  .ideas-grid { display: flex; flex-direction: column; gap: 1rem; }
+
+  .idea-item {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    transition: box-shadow .2s;
+  }
+  .idea-item.open { box-shadow: var(--shadow); border-color: var(--teal); }
+
+  .idea-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 1.15rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--navy);
+    transition: background .15s;
+  }
+  .idea-trigger:hover { background: #f0f6f5; }
+  .idea-trigger:focus {
+    outline: 3px solid var(--focus);
+    outline-offset: -3px;
+    border-radius: var(--radius);
+  }
+
+  .idea-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--white);
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .idea-item.open .idea-num { background: var(--navy); }
+
+  .idea-arrow {
+    margin-left: auto;
+    font-size: 1.1rem;
+    transition: transform .25s;
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+  .idea-item.open .idea-arrow { transform: rotate(180deg); }
+
+  .idea-body {
+    display: none;
+    padding: 0 1.4rem 1.4rem 1.4rem;
+    border-top: 1px solid var(--border);
+  }
+  .idea-body.visible { display: block; }
+  .idea-body p { font-size: .97rem; margin-top: .85rem; }
+
+  .questions-block {
+    margin-top: 1.2rem;
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+    border-left: 3px solid var(--gold);
+  }
+  .questions-block h4 {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .65rem;
+  }
+  .questions-block ol { padding-left: 1.3rem; }
+  .questions-block li {
+    font-size: .93rem;
+    color: var(--ink);
+    margin-bottom: .55rem;
+    line-height: 1.55;
+  }
+  .questions-block li:last-child { margin-bottom: 0; }
+
+  /* ─── Vocab pill ─── */
+  .vocab {
+    display: inline;
+    background: rgba(14,122,110,.1);
+    color: var(--teal);
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 0 .3em;
+    cursor: help;
+    text-decoration: underline dotted;
+    text-decoration-color: var(--teal);
+  }
+
+  /* ─── Self-check ─── */
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .quiz-q {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.3rem 1.4rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .quiz-q p.question-text {
+    font-weight: 600;
+    font-size: .98rem;
+    margin-bottom: 1rem;
+    color: var(--navy);
+  }
+  .quiz-q p.question-text .q-num {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 50%;
+    width: 24px; height: 24px;
+    text-align: center;
+    line-height: 24px;
+    font-size: .8rem;
+    margin-right: .5rem;
+  }
+
+  .options { display: flex; flex-direction: column; gap: .5rem; }
+
+  .option-btn {
+    width: 100%;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: .7rem 1rem;
+    text-align: left;
+    font-family: inherit;
+    font-size: .93rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) { background: #e8f4f3; border-color: var(--teal-lt); }
+  .option-btn:focus {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct { background: var(--correct-bg); border-color: #28a745; color: var(--correct-txt); font-weight: 600; }
+  .option-btn.wrong   { background: var(--wrong-bg);   border-color: #dc3545; color: var(--wrong-txt); }
+  .option-btn.missed  { background: var(--correct-bg); border-color: #28a745; color: var(--correct-txt); opacity:.75; }
+
+  .feedback-msg {
+    margin-top: .75rem;
+    padding: .7rem 1rem;
+    border-radius: 7px;
+    font-size: .9rem;
+    font-weight: 500;
+    display: none;
+  }
+  .feedback-msg.show { display: block; }
+  .feedback-msg.correct { background: var(--correct-bg); color: var(--correct-txt); }
+  .feedback-msg.wrong   { background: var(--wrong-bg);   color: var(--wrong-txt); }
+
+  /* ─── Scenario ─── */
+  .scenario-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.6rem;
+    box-shadow: var(--shadow);
+  }
+  .scenario-card .scenario-label {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .5rem;
+  }
+  .scenario-situation {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+    border-left: 3px solid var(--navy);
+  }
+  .scenario-choices { display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+  .scenario-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: .9rem 1.2rem;
+    font-family: inherit;
+    font-size: .93rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.5;
+    transition: background .15s, transform .1s;
+  }
+  .scenario-btn:hover:not(:disabled) { background: var(--teal); }
+  .scenario-btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .scenario-btn:disabled { opacity: .6; cursor: default; }
+  .scenario-btn.chosen { background: var(--teal); }
+  .scenario-btn.not-chosen { background: #8898aa; }
+
+  .scenario-feedback {
+    margin-top: 1.1rem;
+    padding: 1rem 1.1rem;
+    border-radius: 8px;
+    font-size: .93rem;
+    display: none;
+  }
+  .scenario-feedback.show { display: block; }
+  .scenario-feedback.good { background: var(--correct-bg); color: var(--correct-txt); }
+  .scenario-feedback.okay { background: var(--neutral-bg); color: var(--neutral-txt); }
+
+  .reset-btn {
+    margin-top: .9rem;
+    background: none;
+    border: 1.5px solid var(--teal);
+    color: var(--teal);
+    border-radius: 7px;
+    padding: .5rem 1.1rem;
+    font-family: inherit;
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+  .reset-btn:hover { background: var(--teal); color: var(--white); }
+  .reset-btn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  /* ─── Reflection ─── */
+  .reflection-card {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .reflection-card .section-eyebrow { color: var(--gold-lt); }
+  .reflection-card .section-eyebrow::before { background: var(--gold-lt); }
+  .reflection-card h2 { color: var(--white); margin-bottom: 1rem; }
+  .reflection-card p { color: rgba(255,255,255,.85); font-size: .97rem; }
+  .reflection-prompt {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    padding: 1.2rem 1.3rem;
+    margin-top: 1.2rem;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--white);
+  }
+  .reflection-note {
+    margin-top: 1rem;
+    font-size: .83rem;
+    color: rgba(255,255,255,.6);
+  }
+
+  /* ─── Progress tracker ─── */
+  .progress-bar-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    height: 8px;
+    margin-top: 1.1rem;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-lt));
+    border-radius: 50px;
+    transition: width .5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-top: .35rem;
+    text-align: right;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    padding: 1.4rem;
+    font-size: .8rem;
+    line-height: 1.8;
+  }
+  footer a { color: var(--gold-lt); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer a:focus { outline: 2px solid var(--focus); border-radius: 2px; }
+
+  /* ─── Score summary ─── */
+  #score-summary {
+    display: none;
+    background: var(--white);
+    border: 1.5px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-top: 1.2rem;
+    box-shadow: var(--shadow);
+  }
+  #score-summary h3 { color: var(--teal); }
+  #score-summary p { margin-top: .5rem; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 540px) {
+    header { padding: 2.5rem 1rem 2rem; }
+    main   { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header role="banner">
+  <div class="header-badge" aria-label="News lesson">News-Based Lesson</div>
+  <h1>AI &amp; Your Financial Aid:<br><em>What Students Need to Know</em></h1>
+  <p class="header-sub">A current-events mini-lesson for higher education students — exploring how artificial intelligence is changing the way the government manages student aid.</p>
+  <div class="header-meta" aria-label="Lesson details">
+    <span>Higher Education</span>
+    <span>March 2026</span>
+    <span>~20 minutes</span>
+  </div>
+</header>
+
+<!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+<main id="main">
+
+  <!-- ── 0. Progress tracker ── -->
+  <section aria-label="Lesson progress">
+    <div class="progress-bar-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson completion">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <p class="progress-label" id="progressLabel" aria-live="polite">0 of 4 sections complete</p>
+  </section>
+
+  <!-- ── 1. Why This Matters ── -->
+  <section id="intro" aria-labelledby="intro-heading">
+    <p class="section-eyebrow" aria-hidden="true">Why This Matters</p>
+    <h2 id="intro-heading">A Headline That Affects You Directly</h2>
+    <p>In early March 2026, a legal group that works to protect students' rights announced it was investigating whether the federal government is using artificial intelligence (<span class="vocab" title="Artificial Intelligence (AI): computer systems designed to perform tasks that normally require human thinking, like answering questions or making decisions">AI</span>) to manage student financial aid — possibly without proper safeguards or oversight.</p>
+    <p>This matters to <em>you</em> because federal student aid — things like Pell Grants and federal student loans — helps millions of community college students afford college. If AI is making decisions about your financial aid, you deserve to know how it works, whether it's accurate, and who is responsible when it makes a mistake.</p>
+  </section>
+
+  <!-- ── 2. Article Summary ── -->
+  <section id="summary" aria-labelledby="summary-heading">
+    <p class="section-eyebrow" aria-hidden="true">Article Summary</p>
+    <h2 id="summary-heading">What the News Article Says</h2>
+    <div class="article-card" role="region" aria-label="Article summary">
+      <span class="source-tag" aria-label="Source">Inside Higher Ed — March 6, 2026</span>
+      <p>A student advocacy organization called <strong>Student Defense</strong> announced it is investigating how the Trump administration is using AI to run federal student aid programs. The group is worried that AI tools are being used without proper training for staff or protections for student data privacy.</p>
+      <p>The federal government sent a memo in early 2025 telling all agencies to "speed up" their use of AI. In response, Student Defense filed <strong>12 public records requests</strong> — formal asks for government documents — to find out what AI is doing in areas like: answering student questions and complaints, creating rules for loan forgiveness and repayment plans, and processing veterans' education benefits.</p>
+      <p>The group's president said, "The American people deserve to know what's being outsourced to AI tools, whether they can rely on the information they're getting from the government, and whether their data is being protected."</p>
+      <a href="https://www.insidehighered.com/news/quick-takes/2026/03/06/advocacy-group-raises-concern-about-ai-federal-student-aid" target="_blank" rel="noopener noreferrer" aria-label="Read the full article at Inside Higher Ed (opens in new tab)">Read the full article at Inside Higher Ed ↗</a>
+    </div>
+  </section>
+
+  <!-- ── 3. Key Ideas Accordion ── -->
+  <section id="key-ideas" aria-labelledby="ideas-heading">
+    <p class="section-eyebrow" aria-hidden="true">Explore the Ideas</p>
+    <h2 id="ideas-heading">3 Key Ideas to Understand</h2>
+    <p>Select each idea below to read a short explanation and guided questions to consider.</p>
+
+    <div class="ideas-grid" role="list">
+
+      <!-- Idea 1 -->
+      <div class="idea-item" role="listitem">
+        <button class="idea-trigger" aria-expanded="false" aria-controls="idea-body-1" id="idea-btn-1">
+          <span class="idea-num" aria-hidden="true">1</span>
+          <span>AI Is Now Part of Government Decision-Making</span>
+          <span class="idea-arrow" aria-hidden="true">▼</span>
+        </button>
+        <div class="idea-body" id="idea-body-1" role="region" aria-labelledby="idea-btn-1">
+          <p>Governments have traditionally used human employees to process aid applications, answer student questions, and write regulations (rules about how programs work). Now, AI systems — programs that can analyze large amounts of information and generate responses — are being used to do some of that work.</p>
+          <p>A 2025 White House memo told every federal agency to accelerate the use of AI. This means the <span class="vocab" title="Federal Student Aid (FSA): the U.S. Department of Education office that manages grants, loans, and work-study funds for college students">Federal Student Aid</span> office may be using AI to respond to student complaints, draft new regulations for programs like <span class="vocab" title="Public Service Loan Forgiveness (PSLF): a federal program that cancels remaining student loan debt for people working in government or nonprofit jobs after 10 years of payments">Public Service Loan Forgiveness</span>, or process veterans' benefits — without the public fully knowing about it.</p>
+          <div class="questions-block">
+            <h4>💬 Guided Questions</h4>
+            <ol>
+              <li>If you called your financial aid office and received a response written by an AI instead of a person, would you know the difference? Does it matter who — or what — answered you?</li>
+              <li>What are one or two benefits of using AI to handle student aid questions? What could go wrong?</li>
+              <li>Should the government be required to tell students when AI is making decisions about their financial aid? Why or why not?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Idea 2 -->
+      <div class="idea-item" role="listitem">
+        <button class="idea-trigger" aria-expanded="false" aria-controls="idea-body-2" id="idea-btn-2">
+          <span class="idea-num" aria-hidden="true">2</span>
+          <span>Student Data Privacy Is at Risk</span>
+          <span class="idea-arrow" aria-hidden="true">▼</span>
+        </button>
+        <div class="idea-body" id="idea-body-2" role="region" aria-labelledby="idea-btn-2">
+          <p>When you apply for federal student aid using the <span class="vocab" title="FAFSA: Free Application for Federal Student Aid — the form students fill out to apply for grants, loans, and work-study from the federal government">FAFSA</span>, you give the government very sensitive information: your Social Security Number, your family's income and tax records, and details about your household. This data is meant to be protected by federal privacy laws.</p>
+          <p>Student Defense is concerned that when the government uses AI tools built by private technology companies, that sensitive data could be shared with those companies — possibly without the legal protections students are promised. If those companies do not follow federal privacy laws, students could be harmed by data breaches or misuse of their personal information.</p>
+          <div class="questions-block">
+            <h4>💬 Guided Questions</h4>
+            <ol>
+              <li>What kinds of personal information does your FAFSA include? List as many as you can think of. Why could that information be dangerous in the wrong hands?</li>
+              <li>Do you think students should be asked for their consent (permission) before their data is used by AI systems? How might that work in practice?</li>
+              <li>Who should be responsible if an AI system mishandles a student's private data — the government, the tech company, or both?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Idea 3 -->
+      <div class="idea-item" role="listitem">
+        <button class="idea-trigger" aria-expanded="false" aria-controls="idea-body-3" id="idea-btn-3">
+          <span class="idea-num" aria-hidden="true">3</span>
+          <span>Oversight and Accountability Matter</span>
+          <span class="idea-arrow" aria-hidden="true">▼</span>
+        </button>
+        <div class="idea-body" id="idea-body-3" role="region" aria-labelledby="idea-btn-3">
+          <p><span class="vocab" title="Oversight: the act of watching over a process or organization to make sure it is working correctly and following the rules">Oversight</span> means having systems in place to check that a program is working correctly and fairly. <span class="vocab" title="Accountability: the idea that individuals or organizations should be responsible for their actions and answerable to the public">Accountability</span> means someone is responsible when things go wrong.</p>
+          <p>Student Defense is using <span class="vocab" title="FOIA (Freedom of Information Act): a U.S. law that gives citizens the right to request records from federal government agencies">FOIA requests</span> (Freedom of Information Act requests) to force the government to release documents about its AI use. They are also working with members of Congress and plan to open a tip line so government employees can report problems. Their argument is that when AI systems make consequential decisions — like whether your loan is forgiven or how your complaint is resolved — there must be transparency (openness), trained staff, and ways to appeal or correct errors.</p>
+          <div class="questions-block">
+            <h4>💬 Guided Questions</h4>
+            <ol>
+              <li>Can you think of a situation where an AI error in the financial aid process could seriously affect a student's life? What would the student's options be?</li>
+              <li>FOIA requests are a tool for government transparency. Can you name any other ways citizens can hold the government accountable?</li>
+              <li>If you were designing an AI system to handle student aid, what rules or safeguards would you build in to protect students?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.ideas-grid -->
+  </section>
+
+  <!-- ── 4. Self-Check ── -->
+  <section id="self-check" aria-labelledby="quiz-heading">
+    <p class="section-eyebrow" aria-hidden="true">Test Yourself</p>
+    <h2 id="quiz-heading">Quick Self-Check</h2>
+    <p>Choose the best answer for each question. You'll get immediate feedback. There's no grade — this is just to help you check your understanding.</p>
+
+    <div class="quiz-container" id="quizContainer">
+
+      <!-- Q1 -->
+      <div class="quiz-q" id="q1">
+        <p class="question-text"><span class="q-num" aria-hidden="true">1</span>What is the main concern Student Defense has about AI being used in federal student aid?</p>
+        <div class="options" role="group" aria-label="Question 1 options">
+          <button class="option-btn" data-q="1" data-val="a" onclick="handleAnswer(this,1,'a')">A. AI is too expensive for the government to use.</button>
+          <button class="option-btn" data-q="1" data-val="b" onclick="handleAnswer(this,1,'b')">B. AI might be used without proper oversight or protections for student data privacy.</button>
+          <button class="option-btn" data-q="1" data-val="c" onclick="handleAnswer(this,1,'c')">C. AI cannot read financial aid forms correctly.</button>
+          <button class="option-btn" data-q="1" data-val="d" onclick="handleAnswer(this,1,'d')">D. AI will eliminate all financial aid programs.</button>
+        </div>
+        <div class="feedback-msg" id="feedback-1" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-q" id="q2">
+        <p class="question-text"><span class="q-num" aria-hidden="true">2</span>What is a FOIA (Freedom of Information Act) request?</p>
+        <div class="options" role="group" aria-label="Question 2 options">
+          <button class="option-btn" data-q="2" data-val="a" onclick="handleAnswer(this,2,'a')">A. A form students fill out to apply for financial aid.</button>
+          <button class="option-btn" data-q="2" data-val="b" onclick="handleAnswer(this,2,'b')">B. A complaint filed with a student's college.</button>
+          <button class="option-btn" data-q="2" data-val="c" onclick="handleAnswer(this,2,'c')">C. A formal request for government documents that the law requires agencies to share.</button>
+          <button class="option-btn" data-q="2" data-val="d" onclick="handleAnswer(this,2,'d')">D. A legal lawsuit filed in court.</button>
+        </div>
+        <div class="feedback-msg" id="feedback-2" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Q3 T/F -->
+      <div class="quiz-q" id="q3">
+        <p class="question-text"><span class="q-num" aria-hidden="true">3</span>True or False: The White House encouraged all federal agencies to slow down their use of AI in 2025 until better safeguards were in place.</p>
+        <div class="options" role="group" aria-label="Question 3 options">
+          <button class="option-btn" data-q="3" data-val="a" onclick="handleAnswer(this,3,'a')">True</button>
+          <button class="option-btn" data-q="3" data-val="b" onclick="handleAnswer(this,3,'b')">False — the White House urged agencies to <em>speed up</em> AI use.</button>
+        </div>
+        <div class="feedback-msg" id="feedback-3" role="alert" aria-live="polite"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-q" id="q4">
+        <p class="question-text"><span class="q-num" aria-hidden="true">4</span>Why does it matter if private tech companies receive student FAFSA data when the government uses their AI tools?</p>
+        <div class="options" role="group" aria-label="Question 4 options">
+          <button class="option-btn" data-q="4" data-val="a" onclick="handleAnswer(this,4,'a')">A. Private companies can use or expose sensitive personal information, and they may not follow federal privacy laws.</button>
+          <button class="option-btn" data-q="4" data-val="b" onclick="handleAnswer(this,4,'b')">B. Private companies charge students extra fees for using their AI.</button>
+          <button class="option-btn" data-q="4" data-val="c" onclick="handleAnswer(this,4,'c')">C. Students' credit scores would automatically change.</button>
+          <button class="option-btn" data-q="4" data-val="d" onclick="handleAnswer(this,4,'d')">D. It does not matter, because companies are required to delete all data immediately.</button>
+        </div>
+        <div class="feedback-msg" id="feedback-4" role="alert" aria-live="polite"></div>
+      </div>
+
+    </div><!-- /.quiz-container -->
+
+    <div id="score-summary" role="region" aria-label="Quiz results" aria-live="polite">
+      <h3>Your Self-Check Results</h3>
+      <p id="score-text"></p>
+      <p id="score-message"></p>
+    </div>
+  </section>
+
+  <!-- ── 5. Decision Scenario ── -->
+  <section id="scenario" aria-labelledby="scenario-heading">
+    <p class="section-eyebrow" aria-hidden="true">Apply What You Know</p>
+    <h2 id="scenario-heading">Decision Scenario</h2>
+    <p>Read the situation below, then choose what you would do. There may be more than one reasonable answer — you'll receive feedback on your choice.</p>
+
+    <div class="scenario-card">
+      <p class="scenario-label" aria-label="Scenario">The Situation</p>
+      <h3>Marissa's Financial Aid Complaint</h3>
+      <div class="scenario-situation" role="note">
+        <p>Marissa is a first-year student at a community college. She submitted a complaint to the U.S. Department of Education about an error in her loan repayment plan. Three days later, she receives a response. The response is thorough but feels oddly generic — it doesn't reference any details from her specific complaint. She wonders if it was written by an AI.</p>
+        <p><strong>Marissa wants to know: was her complaint actually reviewed by a person?</strong></p>
+      </div>
+
+      <p style="font-size:.93rem; margin-bottom:.5rem;"><strong>What should Marissa do?</strong> Choose the best response:</p>
+      <div class="scenario-choices" id="scenarioChoices" role="group" aria-label="Scenario answer options">
+        <button class="scenario-btn" onclick="handleScenario(this,'a')">
+          A. Just accept the response and move on, since it would be too hard to find out if AI was involved.
+        </button>
+        <button class="scenario-btn" onclick="handleScenario(this,'b')">
+          B. Follow up in writing, ask specifically whether her complaint was reviewed by a human, and request any documents related to how AI is used in the complaint process.
+        </button>
+        <button class="scenario-btn" onclick="handleScenario(this,'c')">
+          C. Contact a student advocacy organization like Student Defense, which investigates exactly these kinds of situations.
+        </button>
+        <button class="scenario-btn" onclick="handleScenario(this,'d')">
+          D. Post about it on social media and hope someone from the government sees it.
+        </button>
+      </div>
+      <div class="scenario-feedback" id="scenarioFeedback" role="alert" aria-live="polite"></div>
+      <button class="reset-btn" id="scenarioReset" onclick="resetScenario()" aria-label="Try the scenario again">↺ Try Again</button>
+    </div>
+  </section>
+
+  <!-- ── 6. Reflection ── -->
+  <section id="reflection" aria-labelledby="reflection-heading">
+    <div class="reflection-card">
+      <p class="section-eyebrow" aria-hidden="true">Final Reflection</p>
+      <h2 id="reflection-heading">Your Turn to Think Critically</h2>
+      <p>Use this prompt to write a short paragraph for your class discussion board, or bring it to your next class session.</p>
+      <blockquote class="reflection-prompt">
+        "Based on what you've learned in this lesson, do you think students should have the right to know when AI — rather than a human — is handling their financial aid information or complaints? What would responsible use of AI in this context look like? Use at least one specific idea from the article or lesson in your response."
+      </blockquote>
+      <p class="reflection-note">💡 Tip: You can refer to key terms from this lesson — such as <em>oversight</em>, <em>data privacy</em>, <em>accountability</em>, and <em>FOIA</em> — to strengthen your response.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer role="contentinfo">
+  <p>Lesson based on: <a href="https://www.insidehighered.com/news/quick-takes/2026/03/06/advocacy-group-raises-concern-about-ai-federal-student-aid" target="_blank" rel="noopener noreferrer">Inside Higher Ed — "Legal Advocacy Group Raises Concern About AI Use in Federal Student Aid" (March 6, 2026)</a></p>
+  <p>Designed for use in Higher Education courses · WCAG 2.1 AA accessible</p>
+  <p>For instructional use. Not affiliated with Inside Higher Ed or Student Defense.</p>
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+  "use strict";
+
+  /* ─── Correct answers ─── */
+  const ANSWERS = { 1: 'b', 2: 'c', 3: 'b', 4: 'a' };
+  const FEEDBACK = {
+    1: {
+      b: "✓ Correct! Student Defense's core concern is that AI is being used without proper safeguards or oversight, and that student data may not be properly protected.",
+      wrong: "Not quite. Review Key Idea 1 — Student Defense's concern is about oversight and data privacy, not cost or technical limitations."
+    },
+    2: {
+      c: "✓ Correct! A FOIA request is a formal, legal way to ask a government agency for documents it may not have made public. Student Defense filed 12 of these.",
+      wrong: "Not quite. FOIA stands for Freedom of Information Act. It's a law that lets the public request government documents — not a student aid form or lawsuit."
+    },
+    3: {
+      b: "✓ Correct! The 2025 memo from the White House budget office actually told agencies to accelerate (speed up) their use of AI.",
+      wrong: "Incorrect. Re-read the article summary — the White House urged agencies to speed up AI use, not slow it down. That's exactly why Student Defense launched its investigation."
+    },
+    4: {
+      a: "✓ Correct! FAFSA data includes sensitive personal and financial information. If private companies receive that data and don't follow federal privacy laws, students' information could be misused or exposed.",
+      wrong: "Not quite. The real concern is data privacy and legal compliance. If tech companies receive sensitive student data, they may not be bound by the same federal privacy laws that protect students."
+    }
+  };
+
+  let answeredQuestions = new Set();
+  let sectionsCompleted = new Set();
+
+  /* ─── Handle quiz answer ─── */
+  function handleAnswer(btn, qNum, val) {
+    const correct = ANSWERS[qNum];
+    const feedbackEl = document.getElementById('feedback-' + qNum);
+    const allBtns = btn.closest('.options').querySelectorAll('.option-btn');
+
+    // Disable all buttons
+    allBtns.forEach(b => {
+      b.disabled = true;
+      if (b.dataset.val === correct) b.classList.add('correct');
+    });
+
+    if (val === correct) {
+      btn.classList.add('correct');
+      feedbackEl.textContent = FEEDBACK[qNum][correct];
+      feedbackEl.className = 'feedback-msg show correct';
+    } else {
+      btn.classList.add('wrong');
+      feedbackEl.textContent = FEEDBACK[qNum].wrong;
+      feedbackEl.className = 'feedback-msg show wrong';
+    }
+
+    answeredQuestions.add(qNum);
+
+    // Show score when all 4 answered
+    if (answeredQuestions.size === 4) {
+      showScore();
+      markComplete('self-check');
+    }
+  }
+
+  /* ─── Show score summary ─── */
+  function showScore() {
+    const correct = ANSWERS;
+    let score = 0;
+    [1,2,3,4].forEach(q => {
+      const chosen = document.querySelector(`.option-btn[data-q="${q}"].correct`);
+      if (chosen && chosen.dataset.val === correct[q]) score++;
+    });
+
+    const summaryEl = document.getElementById('score-summary');
+    const scoreText = document.getElementById('score-text');
+    const scoreMsg  = document.getElementById('score-message');
+
+    scoreText.textContent = `You got ${score} out of 4 correct.`;
+    if (score === 4)      scoreMsg.textContent = "Excellent work! You have a strong grasp of the key ideas.";
+    else if (score >= 2)  scoreMsg.textContent = "Good effort! Review the ideas above to strengthen your understanding.";
+    else                  scoreMsg.textContent = "This topic is new — go back and re-read the Key Ideas section before continuing.";
+
+    summaryEl.style.display = 'block';
+    summaryEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  /* ─── Scenario handler ─── */
+  const SCENARIO_FB = {
+    a: { cls: 'okay', msg: "This choice is understandable, but it's worth knowing that you do have options. Advocacy groups like Student Defense exist specifically to help students in situations like Marissa's. You have the right to ask whether AI is being used in your case." },
+    b: { cls: 'good', msg: "✓ Great choice! Following up in writing creates a paper trail and directly asks for transparency. Marissa can also file a FOIA request herself for records about AI use in the complaint process." },
+    c: { cls: 'good', msg: "✓ Excellent! Student Defense is specifically investigating AI use in federal student aid. Reaching out to an advocacy group is a smart, effective way for students to exercise their rights — especially when dealing with a complex government process." },
+    d: { cls: 'okay', msg: "Social media can raise awareness, but it's unlikely to result in a direct resolution. More formal channels — like a written follow-up or contacting an advocacy group — are more likely to produce a concrete outcome." }
+  };
+
+  function handleScenario(btn, choice) {
+    const allBtns = document.querySelectorAll('#scenarioChoices .scenario-btn');
+    allBtns.forEach(b => {
+      b.disabled = true;
+      b.classList.add('not-chosen');
+    });
+    btn.classList.remove('not-chosen');
+    btn.classList.add('chosen');
+
+    const fb = SCENARIO_FB[choice];
+    const fbEl = document.getElementById('scenarioFeedback');
+    fbEl.textContent = fb.msg;
+    fbEl.className = `scenario-feedback show ${fb.cls}`;
+
+    document.getElementById('scenarioReset').classList.add('show');
+    markComplete('scenario');
+  }
+
+  function resetScenario() {
+    const allBtns = document.querySelectorAll('#scenarioChoices .scenario-btn');
+    allBtns.forEach(b => {
+      b.disabled = false;
+      b.classList.remove('chosen','not-chosen');
+    });
+    const fbEl = document.getElementById('scenarioFeedback');
+    fbEl.textContent = '';
+    fbEl.className = 'scenario-feedback';
+    document.getElementById('scenarioReset').classList.remove('show');
+  }
+
+  /* ─── Accordion ─── */
+  document.querySelectorAll('.idea-trigger').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const item   = this.closest('.idea-item');
+      const body   = item.querySelector('.idea-body');
+      const isOpen = item.classList.contains('open');
+
+      if (isOpen) {
+        item.classList.remove('open');
+        body.classList.remove('visible');
+        this.setAttribute('aria-expanded', 'false');
+      } else {
+        item.classList.add('open');
+        body.classList.add('visible');
+        this.setAttribute('aria-expanded', 'true');
+        markComplete('key-ideas');
+      }
+    });
+
+    /* Keyboard: Enter and Space already handled by button, but also support arrows for list navigation */
+    btn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  /* ─── Progress tracking ─── */
+  // Sections: intro (auto), summary (auto), key-ideas, self-check, scenario, reflection (auto on scroll)
+  const TOTAL_SECTIONS = 4; // key-ideas, self-check, scenario + intro/summary counted as 1
+  let sectionsDone = 0;
+
+  function markComplete(sectionId) {
+    if (sectionsCompleted.has(sectionId)) return;
+    sectionsCompleted.add(sectionId);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = Math.min(100, Math.round((sectionsCompleted.size / TOTAL_SECTIONS) * 100));
+    const fill  = document.getElementById('progressFill');
+    const label = document.getElementById('progressLabel');
+    fill.style.width = pct + '%';
+    fill.closest('[role=progressbar]').setAttribute('aria-valuenow', pct);
+    label.textContent = `${sectionsCompleted.size} of ${TOTAL_SECTIONS} sections complete`;
+  }
+
+  /* Intersection observer to auto-mark intro/summary as complete */
+  const autoSections = ['intro', 'summary', 'reflection'];
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        markComplete(e.target.id);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  autoSections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  /* Mark key-ideas section complete when all 3 accordions are opened */
+  document.querySelectorAll('.idea-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const opened = document.querySelectorAll('.idea-item.open').length;
+      if (opened >= 3) markComplete('key-ideas');
+    });
+  });
+</script>
+
+</body>
+</html>
