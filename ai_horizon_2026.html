@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Horizon 2026 | Faculty Professional Development</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== Reset & Base ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f4f7fc;
+            color: #183856;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: #183856;
+            line-height: 1.2;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button { font-family: Verdana, sans-serif; cursor: pointer; border: none; background: none; }
+        ul { list-style: none; }
+
+        /* ===== Accessibility ===== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #C8102E;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-weight: bold;
+            z-index: 2000;
+            border-radius: 0 0 8px 0;
+        }
+        .skip-link:focus { top: 0; }
+
+        a:focus, button:focus {
+            outline: 3px solid #C8102E;
+            outline-offset: 2px;
+        }
+
+        .visually-hidden {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        }
+
+        /* ===== Layout ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== Navigation ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid #d8e0ec;
+            z-index: 100;
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: #0039A6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 57, 166, 0.25);
+        }
+
+        .nav-title {
+            font-family: Georgia, serif;
+            font-weight: bold;
+            font-size: 20px;
+            color: #183856;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-title-accent {
+            color: #C8102E;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            font-weight: bold;
+            color: #4a5a73;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: #0039A6; }
+
+        .nav-cta {
+            background: #0039A6;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 57, 166, 0.3);
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: #183856;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { gap: 14px; }
+            .nav-link:not(.nav-cta) { display: none; }
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            background:
+                radial-gradient(circle at top right, rgba(200, 16, 46, 0.35), transparent 50%),
+                radial-gradient(circle at bottom left, rgba(45, 95, 199, 0.5), transparent 50%),
+                linear-gradient(135deg, #0039A6, #183856);
+            color: #ffffff;
+            padding: 130px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .pulse-dot {
+            position: relative;
+            width: 8px;
+            height: 8px;
+        }
+        .pulse-dot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #C8102E;
+            border-radius: 50%;
+            animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #ff4b6e;
+            border-radius: 50%;
+        }
+
+        @keyframes ping {
+            75%, 100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-accent {
+            color: #ff8fa3;
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: #d6e0f3;
+            margin-bottom: 36px;
+            max-width: 32rem;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-family: Verdana, sans-serif;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #0039A6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary:hover {
+            background: #f4f7fc;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-mockup {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-mockup {
+                display: block;
+                position: relative;
+            }
+        }
+
+        .hero-mockup-glow {
+            position: absolute;
+            inset: -16px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(40px);
+            border-radius: 9999px;
+        }
+
+        .hero-mockup-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 32px;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .mockup-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mockup-bar {
+            height: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            margin-bottom: 14px;
+        }
+        .mockup-bar.short { width: 50%; background: rgba(255, 255, 255, 0.12); }
+        .mockup-bar.med { width: 75%; }
+
+        .mockup-quote {
+            height: 96px;
+            background: rgba(200, 16, 46, 0.18);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #ffd6df;
+            text-align: center;
+            padding: 0 16px;
+            font-size: 14px;
+        }
+
+        .mockup-pills {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .mockup-pills span {
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .mockup-pills span.highlight {
+            background: rgba(200, 16, 46, 0.4);
+        }
+
+        /* ===== Section ===== */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-eyebrow {
+            font-size: 12px;
+            font-weight: bold;
+            color: #C8102E;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: bold;
+            color: #183856;
+            margin-bottom: 16px;
+        }
+
+        .section-lead {
+            color: #4a5a73;
+            font-size: 16px;
+            max-width: 42rem;
+            line-height: 1.6;
+        }
+
+        .section-header-block {
+            margin-bottom: 56px;
+        }
+
+        .section-header-block.center {
+            text-align: center;
+        }
+
+        .section-header-block.center .section-lead {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== Card Grid ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        @media (min-width: 768px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .card-grid.three { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 57, 166, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 57, 166, 0.12), 0 8px 10px -6px rgba(0, 57, 166, 0.08);
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .card-icon.navy {
+            background: #e0ecff;
+            color: #0039A6;
+        }
+
+        .card-icon.red {
+            background: #fce0e6;
+            color: #C8102E;
+        }
+
+        .card-icon.deep {
+            background: #d6e0f3;
+            color: #183856;
+        }
+
+        .card h4 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #183856;
+        }
+
+        .card p {
+            color: #4a5a73;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+
+        .card-source {
+            display: block;
+            margin-top: 14px;
+            font-size: 11px;
+            color: #6b7a90;
+            font-style: italic;
+        }
+
+        /* ===== Literacy Section (dark) ===== */
+        .literacy-section {
+            background: linear-gradient(135deg, #183856, #0a1c30);
+            color: #ffffff;
+            border-radius: 36px;
+            margin: 0 16px 80px;
+            overflow: hidden;
+            padding: 80px 24px;
+        }
+
+        .literacy-section h3, .literacy-section h4, .literacy-section h2 {
+            color: #ffffff;
+        }
+
+        .literacy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 56px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1024px) {
+            .literacy-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .literacy-section .section-eyebrow {
+            color: #ff8fa3;
+        }
+
+        .literacy-section .section-lead {
+            color: #b0c0d8;
+            margin-bottom: 36px;
+        }
+
+        .lit-tabs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 480px) {
+            .lit-tabs { grid-template-columns: 1fr 1fr; }
+        }
+
+        .lit-tab {
+            padding: 24px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            text-align: left;
+            color: #ffffff;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-family: Verdana, sans-serif;
+        }
+
+        .lit-tab i {
+            font-size: 20px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .lit-tab .tab-name {
+            font-weight: bold;
+            font-size: 15px;
+            font-family: Georgia, serif;
+        }
+
+        .lit-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .lit-tab.active-tab {
+            background: #C8102E;
+            color: #ffffff;
+            box-shadow: 0 8px 16px rgba(200, 16, 46, 0.4);
+            border-color: #C8102E;
+        }
+
+        .literacy-display {
+            background: rgba(0, 57, 166, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 32px;
+            border-radius: 24px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .display-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .display-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #ff8fa3;
+        }
+
+        .display-header h4 {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .display-desc {
+            color: #c8d4e8;
+            font-size: 16px;
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+
+        .display-tactic {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .display-tactic-label {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #ff8fa3;
+            letter-spacing: 0.12em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .display-tactic-text {
+            font-style: italic;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+
+        /* ===== Workforce ===== */
+        .workforce-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+
+        @media (min-width: 1024px) {
+            .workforce-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .workforce-card {
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workforce-card.declining {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .workforce-card.premium {
+            background: linear-gradient(135deg, #0039A6, #183856);
+            color: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 57, 166, 0.4);
+        }
+
+        .workforce-card h4 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .workforce-card.premium h4 { color: #ffffff; }
+
+        .workforce-card .arrow-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .declining .arrow-icon {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .premium .arrow-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .workforce-card ul {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .workforce-card li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 15px;
+        }
+
+        .declining li {
+            color: #4a5a73;
+        }
+
+        .declining li i {
+            color: #C8102E;
+        }
+
+        .premium li {
+            color: #d6e0f3;
+            font-weight: bold;
+        }
+
+        .premium li i {
+            color: #ff8fa3;
+        }
+
+        /* ===== Strategies ===== */
+        .strategies-section {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .strategies-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .strategy-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .strategy-btn {
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 14px;
+            background: #f4f7fc;
+            border: 1px solid #d8e0ec;
+            color: #183856;
+            transition: all 0.2s;
+        }
+
+        .strategy-btn:hover {
+            border-color: #0039A6;
+            background: #e0ecff;
+        }
+
+        .strategy-btn.active {
+            background: #0039A6;
+            color: #ffffff;
+            border-color: #0039A6;
+            box-shadow: 0 4px 8px rgba(0, 57, 166, 0.3);
+        }
+
+        .strategy-card {
+            background: #f4f7fc;
+            border: 1px solid #e2e8f0;
+            border-radius: 36px;
+            padding: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 57, 166, 0.06);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .strategy-empty {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 48px 0;
+        }
+
+        .strategy-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .strategy-content { flex-direction: row; align-items: flex-start; }
+        }
+
+        .strategy-icon {
+            width: 96px;
+            height: 96px;
+            background: #0039A6;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 36px;
+            box-shadow: 0 12px 20px rgba(0, 57, 166, 0.3);
+            flex-shrink: 0;
+        }
+
+        .strategy-tag {
+            display: inline-block;
+            padding: 4px 14px;
+            background: #fce0e6;
+            color: #C8102E;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .strategy-card h4 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #183856;
+            margin-bottom: 14px;
+        }
+
+        .strategy-text {
+            color: #4a5a73;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .strategy-impact {
+            background: #ffffff;
+            border-left: 4px solid #C8102E;
+            padding: 18px 22px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .strategy-impact h5 {
+            font-weight: bold;
+            font-size: 14px;
+            color: #183856;
+            margin-bottom: 4px;
+            font-family: Verdana, sans-serif;
+        }
+
+        .strategy-impact p {
+            color: #4a5a73;
+            font-style: italic;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        /* ===== Sources ===== */
+        .sources-note {
+            background: #f4f7fc;
+            border-left: 4px solid #C8102E;
+            padding: 18px 24px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #4a5a73;
+            line-height: 1.6;
+        }
+
+        .sources-note strong { color: #0039A6; }
+
+        /* ===== Footer ===== */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 56px 0;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
+            background: #0039A6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .footer-meta {
+            color: #4a5a73;
+            font-size: 13px;
+        }
+
+        .footer-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #4a5a73;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .footer-icon:hover {
+            background: #0039A6;
+            color: #ffffff;
+        }
+
+        /* ===== Animations ===== */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-slide {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="nav" aria-label="Main navigation">
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <div class="nav-logo" aria-hidden="true"><i class="fas fa-microchip"></i></div>
+                <span class="nav-title">AI Horizon <span class="nav-title-accent">2026</span></span>
+            </div>
+
+            <div class="nav-links">
+                <a href="#landscape" class="nav-link">Landscape</a>
+                <a href="#literacy" class="nav-link">4 C's Literacy</a>
+                <a href="#workforce" class="nav-link">Workforce</a>
+                <a href="#strategies" class="nav-link nav-cta">Practical Toolkit</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+        <!-- Hero -->
+        <header class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="animate-slide">
+                        <div class="hero-badge">
+                            <span class="pulse-dot" aria-hidden="true"></span>
+                            Faculty Professional Development
+                        </div>
+                        <h1>Beyond the <span class="hero-accent">Chatbot.</span></h1>
+                        <p>
+                            Master the pedagogical shift to education-specific AI. Empower students with 2030-ready literacy through critical co-creation and agentic synthesis.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" onclick="scrollToId('landscape')">
+                                Explore the Landscape
+                            </button>
+                            <button class="btn btn-secondary" onclick="scrollToId('strategies')">
+                                Get Strategies
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-mockup animate-slide" style="animation-delay: 0.15s;" aria-hidden="true">
+                        <div class="hero-mockup-glow"></div>
+                        <div class="hero-mockup-card">
+                            <div class="mockup-dots">
+                                <span style="background: #C8102E;"></span>
+                                <span style="background: #f59e0b;"></span>
+                                <span style="background: #10b981;"></span>
+                            </div>
+                            <div class="mockup-bar med"></div>
+                            <div class="mockup-bar short"></div>
+                            <div class="mockup-quote">
+                                "AI-Powered Scaffolding Active..."
+                            </div>
+                            <div class="mockup-pills">
+                                <span></span>
+                                <span class="highlight"></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Landscape -->
+        <section id="landscape">
+            <div class="container">
+                <div class="section-header-block">
+                    <p class="section-eyebrow">01. The Research</p>
+                    <h2 class="section-title">The 2026 Shift: From Experimentation to Integration</h2>
+                    <p class="section-lead">
+                        The "Wild West" era is over. Institution-wide AI adoption in higher education jumped from 49% in 2024 to 66% in 2025 — and 86% of students globally now use AI in their studies. This is the era of teacher-in-the-loop workflows, embedded ed-AI, and hyper-personalized scalability.
+                    </p>
+                </div>
+
+                <div class="card-grid three">
+                    <article class="card">
+                        <div class="card-icon navy" aria-hidden="true"><i class="fas fa-layer-group"></i></div>
+                        <h4>Equity &amp; Scalability</h4>
+                        <p>
+                            AI-powered adaptive engines identify student misconceptions in real time, providing 1-to-1 instructional support that was previously impossible at scale.
+                        </p>
+                        <span class="card-source">Ellucian State of AI in Higher Education, 2025</span>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-icon red" aria-hidden="true"><i class="fas fa-clock"></i></div>
+                        <h4>Teacher De-burdening</h4>
+                        <p>
+                            Teachers using AI weekly save an average of 5.9 hours per week — equivalent to six full weeks per school year — reclaimed for mentorship, feedback, and student relationships.
+                        </p>
+                        <span class="card-source">Gallup &amp; Walton Family Foundation, 2025</span>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-icon deep" aria-hidden="true"><i class="fas fa-robot"></i></div>
+                        <h4>Agentic Futures</h4>
+                        <p>
+                            We are moving from chat-based AI toward agentic AI — systems that execute multi-step projects, from organizing assignments to mapping long-term degree paths.
+                        </p>
+                        <span class="card-source">WEF Future of Jobs, 2025</span>
+                    </article>
+                </div>
+
+                <div class="sources-note">
+                    <strong>Why this matters:</strong> 92% of UK undergraduates now report using AI tools in their studies (HEPI 2025), up from 66% the year prior. Faculty cannot opt out; the question is whether to design intentionally or react after the fact.
+                </div>
+            </div>
+        </section>
+
+        <!-- Literacy -->
+        <section id="literacy" class="literacy-section">
+            <div class="literacy-grid">
+                <div>
+                    <p class="section-eyebrow">02. Student Literacy</p>
+                    <h3 class="section-title" style="color: #ffffff;">The 4 C's Framework</h3>
+                    <p class="section-lead">
+                        AI literacy is no longer about learning to use a tool — it is foundational competency for the 2030 workforce. Explore the four pillars adapted from the SchoolAI 4 C's framework for higher-ed contexts.
+                    </p>
+
+                    <div class="lit-tabs" role="tablist">
+                        <button onclick="updateLiteracy('conscientious')" class="lit-tab active-tab" id="tab-conscientious" role="tab" aria-selected="true">
+                            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                            <span class="tab-name">Conscientious Use</span>
+                        </button>
+                        <button onclick="updateLiteracy('collaborative')" class="lit-tab" id="tab-collaborative" role="tab" aria-selected="false">
+                            <i class="fas fa-handshake-angle" aria-hidden="true"></i>
+                            <span class="tab-name">Collaborative Interaction</span>
+                        </button>
+                        <button onclick="updateLiteracy('critical')" class="lit-tab" id="tab-critical" role="tab" aria-selected="false">
+                            <i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i>
+                            <span class="tab-name">Critical Evaluation</span>
+                        </button>
+                        <button onclick="updateLiteracy('creative')" class="lit-tab" id="tab-creative" role="tab" aria-selected="false">
+                            <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
+                            <span class="tab-name">Creative Innovation</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="literacy-display animate-slide" id="literacy-display" role="tabpanel" aria-live="polite">
+                        <div class="display-header">
+                            <div class="display-icon" aria-hidden="true">
+                                <i class="fas fa-shield-halved"></i>
+                            </div>
+                            <h4>Conscientious Use</h4>
+                        </div>
+                        <p class="display-desc">
+                            Empowering students to understand their digital footprint, the environmental impact of high-compute models, data privacy and ownership, and the ethical implications of AI-augmented work.
+                        </p>
+                        <div class="display-tactic">
+                            <span class="display-tactic-label">Classroom Application</span>
+                            <p class="display-tactic-text">"The Data Trail" — students map the likely origin of data behind a specific AI output to understand training bias, ownership, and limitations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workforce -->
+        <section id="workforce">
+            <div class="container">
+                <div class="section-header-block center">
+                    <p class="section-eyebrow">03. Future Outlook</p>
+                    <h2 class="section-title">The Workforce of 2030</h2>
+                    <p class="section-lead">
+                        The 2025 WEF Future of Jobs Report projects 39% of core worker skills will change by 2030, with 170 million new roles created and 92 million displaced — a net gain of 78 million jobs. We aren't training for jobs that exist today, but for a "human premium" economy.
+                    </p>
+                </div>
+
+                <div class="workforce-grid">
+                    <div class="workforce-card declining">
+                        <h4>
+                            <span class="arrow-icon" aria-hidden="true"><i class="fas fa-arrow-down-long"></i></span>
+                            Declining Relevance
+                        </h4>
+                        <ul>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Routine data entry and processing</li>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Basic syntax and code-writing tasks</li>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Standard data cleaning and formatting</li>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Initial content drafting from a brief</li>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Routine language translation</li>
+                            <li><i class="fas fa-circle-xmark" aria-hidden="true"></i> Administrative scheduling and intake</li>
+                        </ul>
+                        <span class="card-source">Source: WEF Future of Jobs Report, 2025</span>
+                    </div>
+
+                    <div class="workforce-card premium">
+                        <h4>
+                            <span class="arrow-icon" aria-hidden="true"><i class="fas fa-arrow-up-long"></i></span>
+                            The Human Premium
+                        </h4>
+                        <ul>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> AI &amp; big data fluency</li>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> Networks &amp; cybersecurity literacy</li>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> Complex ethical judgment</li>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> Creative thinking &amp; resilience</li>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> Cross-disciplinary synthesis</li>
+                            <li><i class="fas fa-circle-check" aria-hidden="true"></i> AI systems orchestration</li>
+                        </ul>
+                        <span class="card-source" style="color: #b0c0d8;">Top-growing skills: WEF 2025</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strategies -->
+        <section id="strategies" class="strategies-section">
+            <div class="strategies-inner">
+                <div class="section-header-block center">
+                    <p class="section-eyebrow">04. Implementation</p>
+                    <h2 class="section-title">Practical Strategies Lab</h2>
+                    <p class="section-lead">
+                        Click a strategy below to explore how to implement it in your classroom next week.
+                    </p>
+                </div>
+
+                <div class="strategy-buttons" role="tablist">
+                    <button onclick="showStrategy('socratic')" class="strategy-btn" id="btn-socratic" role="tab">Socratic Sandbox</button>
+                    <button onclick="showStrategy('scaffold')" class="strategy-btn" id="btn-scaffold" role="tab">Multi-modal Scaffolding</button>
+                    <button onclick="showStrategy('assessment')" class="strategy-btn" id="btn-assessment" role="tab">Process-Based Grading</button>
+                </div>
+
+                <div id="strategy-card" class="strategy-card" role="tabpanel" aria-live="polite">
+                    <div class="strategy-empty">Select a strategy above to see the implementation plan...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo" aria-hidden="true"><i class="fas fa-microchip"></i></div>
+                <div>
+                    <div style="font-family: Georgia, serif; font-weight: bold; font-size: 16px; color: #183856;">AI Horizon 2026</div>
+                    <div class="footer-meta">Faculty Professional Development</div>
+                </div>
+            </div>
+            <div class="footer-icons">
+                <a href="#" class="footer-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="#" class="footer-icon" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToId(id) {
+            var el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Literacy tabs
+        var literacyData = {
+            conscientious: {
+                icon: 'shield-halved',
+                title: 'Conscientious Use',
+                desc: 'Empowering students to understand their digital footprint, the environmental impact of high-compute models, data privacy and ownership, and the ethical implications of AI-augmented work.',
+                tactic: '"The Data Trail" \u2014 students map the likely origin of data behind a specific AI output to understand training bias, ownership, and limitations.'
+            },
+            collaborative: {
+                icon: 'handshake-angle',
+                title: 'Collaborative Interaction',
+                desc: 'Transitioning from using AI as an answer machine to a thought partner. Focus on iterative prompting, providing context and reference material, and refining through dialogue.',
+                tactic: '"Prompt Tennis" \u2014 students and AI trade turns developing portions of a project, with each side reacting to and building on the other\u2019s additions.'
+            },
+            critical: {
+                icon: 'magnifying-glass-chart',
+                title: 'Critical Evaluation',
+                desc: 'Developing the ability to detect algorithmic bias, recognize hallucinations, and verify AI-generated claims against primary sources \u2014 essential as 88% of students now use AI for assessments.',
+                tactic: '"The Fact-Check Challenge" \u2014 present an AI-generated essay containing hallucinated citations. Students must locate and verify (or refute) each claim against primary sources.'
+            },
+            creative: {
+                icon: 'wand-magic-sparkles',
+                title: 'Creative Innovation',
+                desc: 'Using AI as a bridge to tackle complex, multi-disciplinary problems that were previously technically out of reach \u2014 turning students into orchestrators of creative work.',
+                tactic: '"The Prototype Sprint" \u2014 use generative tools to visualize, code, and pitch a solution to a real local problem in a single class period.'
+            }
+        };
+
+        function updateLiteracy(key) {
+            var data = literacyData[key];
+            if (!data) return;
+
+            var display = document.getElementById('literacy-display');
+            var tabs = document.querySelectorAll('.lit-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active-tab');
+                tabs[i].setAttribute('aria-selected', 'false');
+            }
+            var activeTab = document.getElementById('tab-' + key);
+            if (activeTab) {
+                activeTab.classList.add('active-tab');
+                activeTab.setAttribute('aria-selected', 'true');
+            }
+
+            display.style.opacity = '0';
+            display.style.transform = 'translateY(10px)';
+
+            setTimeout(function() {
+                display.innerHTML =
+                    '<div class="display-header">' +
+                        '<div class="display-icon" aria-hidden="true">' +
+                            '<i class="fas fa-' + data.icon + '"></i>' +
+                        '</div>' +
+                        '<h4>' + data.title + '</h4>' +
+                    '</div>' +
+                    '<p class="display-desc">' + data.desc + '</p>' +
+                    '<div class="display-tactic">' +
+                        '<span class="display-tactic-label">Classroom Application</span>' +
+                        '<p class="display-tactic-text">' + data.tactic + '</p>' +
+                    '</div>';
+                display.style.opacity = '1';
+                display.style.transform = 'translateY(0)';
+            }, 200);
+        }
+
+        // Strategy tabs
+        var strategyData = {
+            socratic: {
+                title: 'The Socratic Sandbox',
+                tag: 'Critical Thinking',
+                text: 'Assign the AI to generate a deliberately flawed argument or solution. Students serve as the teacher \u2014 critiquing the AI\u2019s work, identifying errors, and providing corrections with citations.',
+                benefit: 'Develops deep subject mastery through peer-teaching, even when the "peer" is a machine. Students learn to spot weaknesses they would otherwise miss in their own work.'
+            },
+            scaffold: {
+                title: 'Multi-modal Scaffolding',
+                tag: 'Universal Design',
+                text: 'Use AI to translate an abstract lecture text into multiple formats: a visual flowchart, a simplified audio summary, a structured simulation, or a reading-level-adjusted version.',
+                benefit: 'Provides differentiated entry points for neuro-diverse students and ELL learners without increasing instructor workload \u2014 a core UDL principle made practical.'
+            },
+            assessment: {
+                title: 'Process-Based Assessment',
+                tag: 'Assessment Redesign',
+                text: 'Shift assessment weight away from the final product. Grade the student\u2019s prompt log, their critique of AI output, their documented revisions, and their reflection on what changed and why.',
+                benefit: 'Honors how students actually work in 2026 while preserving academic integrity. Highlights each student\u2019s unique editorial judgment and reasoning process.'
+            }
+        };
+
+        function showStrategy(key) {
+            var data = strategyData[key];
+            if (!data) return;
+
+            var card = document.getElementById('strategy-card');
+            var btns = document.querySelectorAll('.strategy-btn');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove('active');
+            }
+            var activeBtn = document.getElementById('btn-' + key);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+
+            setTimeout(function() {
+                card.innerHTML =
+                    '<div class="strategy-content">' +
+                        '<div class="strategy-icon" aria-hidden="true">' +
+                            '<i class="fas fa-lightbulb"></i>' +
+                        '</div>' +
+                        '<div>' +
+                            '<div class="strategy-tag">' + data.tag + '</div>' +
+                            '<h4>' + data.title + '</h4>' +
+                            '<p class="strategy-text">' + data.text + '</p>' +
+                            '<div class="strategy-impact">' +
+                                '<h5>Impact:</h5>' +
+                                '<p>' + data.benefit + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 200);
+        }
+    </script>
+</body>
+</html>

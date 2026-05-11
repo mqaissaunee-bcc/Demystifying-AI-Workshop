@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Education — Interactive Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #ffffff;
+            color: #183856;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: #183856;
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #C8102E;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-weight: bold;
+            text-decoration: none;
+            z-index: 2000;
+            border-radius: 0 0 8px 0;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Focus styles for keyboard navigation */
+        a:focus, button:focus, .quiz-option:focus, .interactive-card:focus {
+            outline: 3px solid #C8102E;
+            outline-offset: 2px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #0039A6, #183856);
+            padding: 20px 0;
+            z-index: 1000;
+            box-shadow: 3px 0 15px rgba(0, 57, 166, 0.15);
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 20px;
+        }
+
+        .logo h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #b8d0f0;
+            font-size: 13px;
+            font-family: Verdana, sans-serif;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 14px 25px;
+            color: #e0ecff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            font-size: 15px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(200, 16, 46, 0.22);
+            border-left-color: #ffffff;
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .nav-link span.icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            padding: 40px;
+            background: linear-gradient(45deg, #f4f7fc 0%, #ffffff 50%, #eaf0fa 100%);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #0039A6, #2d5fc7);
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 57, 166, 0.2);
+            border-bottom: 4px solid #C8102E;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .section-header p {
+            font-size: 17px;
+            opacity: 0.95;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .interactive-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 57, 166, 0.08);
+            border-left: 5px solid #0039A6;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 57, 166, 0.15);
+        }
+
+        .interactive-card.clickable {
+            cursor: pointer;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0039A6, #2d5fc7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #ffffff;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 19px;
+            font-weight: bold;
+            color: #0039A6;
+            font-family: Georgia, serif;
+        }
+
+        .card-content {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 14.5px;
+        }
+
+        .card-content strong {
+            color: #183856;
+        }
+
+        .expand-btn {
+            background: #0039A6;
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: Verdana, sans-serif;
+        }
+
+        .expand-btn:hover {
+            background: #183856;
+            transform: scale(1.05);
+        }
+
+        .expanded-content ul {
+            margin: 10px 0;
+            padding-left: 22px;
+        }
+
+        .expanded-content li {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #e0ecff;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(90deg, #0039A6, #C8102E);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0, 57, 166, 0.08);
+            border-top: 4px solid #C8102E;
+        }
+
+        .quiz-container h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #0039A6;
+        }
+
+        .quiz-question {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #183856;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            list-style: none;
+        }
+
+        .quiz-option {
+            background: #f4f7fc;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-size: 15px;
+        }
+
+        .quiz-option:hover {
+            background: #e0ecff;
+            border-color: #0039A6;
+        }
+
+        .quiz-option.correct {
+            background: #d4f5dc;
+            border-color: #1a7a3a;
+            color: #0e4d23;
+            font-weight: bold;
+        }
+
+        .quiz-option.incorrect {
+            background: #fce0e0;
+            border-color: #b32424;
+            color: #6b1414;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            min-height: 1px;
+        }
+
+        .quiz-feedback.correct {
+            background: #d4f5dc;
+            color: #0e4d23;
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fce0e0;
+            color: #6b1414;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 57, 166, 0.08);
+            border-top: 4px solid #C8102E;
+        }
+
+        .stat-number {
+            font-size: 38px;
+            font-weight: bold;
+            color: #0039A6;
+            margin-bottom: 8px;
+            font-family: Georgia, serif;
+        }
+
+        .stat-label {
+            color: #444;
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+
+        .stat-source {
+            color: #6b7a90;
+            font-size: 11px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #0039A6;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 30px 0;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 57, 166, 0.1);
+            width: 45%;
+            border-left: 4px solid #C8102E;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+
+        .timeline-item h4 {
+            font-size: 17px;
+            margin-bottom: 8px;
+            color: #0039A6;
+        }
+
+        .timeline-item p {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .timeline-year {
+            background: #C8102E;
+            color: #ffffff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-family: Verdana, sans-serif;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                overflow-y: visible;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 40px);
+                margin-left: 40px !important;
+            }
+
+            .section-header h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #C8102E, #8a0a20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(200, 16, 46, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: none;
+            font-weight: bold;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.4);
+        }
+
+        .citation-note {
+            background: #f4f7fc;
+            border-left: 4px solid #C8102E;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #444;
+        }
+
+        .citation-note strong {
+            color: #0039A6;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" aria-label="Main navigation">
+        <div class="logo">
+            <h1>AI in Education</h1>
+            <p>Interactive Learning Platform</p>
+        </div>
+        <ul class="nav-menu" role="list">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-section="overview" aria-current="page">
+                    <span class="icon" aria-hidden="true">&#9733;</span> Overview
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="rationale">
+                    <span class="icon" aria-hidden="true">&#9881;</span> Why Use AI in Education?
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="literacy">
+                    <span class="icon" aria-hidden="true">&#9776;</span> AI Literacy for Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="workforce">
+                    <span class="icon" aria-hidden="true">&#9788;</span> AI &amp; Future Workforce
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="current-future">
+                    <span class="icon" aria-hidden="true">&#9728;</span> Current &amp; Future AI
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="implementation">
+                    <span class="icon" aria-hidden="true">&#9874;</span> AI Implementation
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main" role="main">
+        <div role="status" aria-live="polite" aria-atomic="true" class="visually-hidden" id="section-announcer"></div>
+
+        <!-- Overview -->
+        <section id="overview" class="content-section active" aria-labelledby="overview-heading">
+            <div class="section-header">
+                <h2 id="overview-heading">Welcome to AI in Education</h2>
+                <p>Explore how Artificial Intelligence is reshaping teaching, learning, and the future of work — with the latest 2025 data.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">86%</div>
+                    <div class="stat-label">of students globally use AI tools in their studies</div>
+                    <div class="stat-source">Digital Education Council, 2025</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">66%</div>
+                    <div class="stat-label">institution-wide AI adoption in higher ed (up from 49% in 2024)</div>
+                    <div class="stat-source">Ellucian 2025 Survey</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">170M</div>
+                    <div class="stat-label">new jobs projected to be created by 2030</div>
+                    <div class="stat-source">WEF Future of Jobs Report 2025</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">39%</div>
+                    <div class="stat-label">of existing skills will be transformed or outdated by 2030</div>
+                    <div class="stat-source">WEF Future of Jobs Report 2025</div>
+                </div>
+            </div>
+
+            <div class="citation-note">
+                <strong>About this platform:</strong> All statistics on this page are sourced from 2025 industry reports including the World Economic Forum&apos;s Future of Jobs Report 2025, Ellucian&apos;s State of AI in Higher Education 2025, the Digital Education Council&apos;s Global AI Student Survey, and HEPI&apos;s Student Generative AI Survey 2025.
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card clickable" tabindex="0" role="button" data-target="rationale" aria-label="Navigate to: Why AI in Education">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9881;</div>
+                        <div class="card-title">Why AI in Education?</div>
+                    </div>
+                    <div class="card-content">
+                        Discover the evidence-backed reasons institutions worldwide are integrating AI into teaching and learning.
+                    </div>
+                </div>
+
+                <div class="interactive-card clickable" tabindex="0" role="button" data-target="literacy" aria-label="Navigate to: AI Literacy Skills">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9776;</div>
+                        <div class="card-title">AI Literacy Skills</div>
+                    </div>
+                    <div class="card-content">
+                        Learn the essential AI literacy competencies students need to thrive in an AI-saturated academic and professional world.
+                    </div>
+                </div>
+
+                <div class="interactive-card clickable" tabindex="0" role="button" data-target="workforce" aria-label="Navigate to: Future Workforce">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9788;</div>
+                        <div class="card-title">Future Workforce</div>
+                    </div>
+                    <div class="card-content">
+                        Explore how generative AI is reshaping job markets and which skills will hold the most value through 2030.
+                    </div>
+                </div>
+
+                <div class="interactive-card clickable" tabindex="0" role="button" data-target="implementation" aria-label="Navigate to: Implementation Strategies">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9874;</div>
+                        <div class="card-title">Implementation Strategies</div>
+                    </div>
+                    <div class="card-content">
+                        Practical, evidence-informed approaches for integrating AI tools and policies into educational settings.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rationale -->
+        <section id="rationale" class="content-section" aria-labelledby="rationale-heading">
+            <div class="section-header">
+                <h2 id="rationale-heading">Rationale for Using AI in Education</h2>
+                <p>Understanding the evidence-based benefits and transformative potential of AI in teaching and learning.</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9733;</div>
+                        <div class="card-title">Personalized Learning</div>
+                    </div>
+                    <div class="card-content">
+                        AI tailors content to each student&apos;s pace, prior knowledge, and learning patterns. According to a 2025 EdWeek survey, 59% of teachers report that AI has enabled more personalized instruction in their classrooms.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Key benefits:</strong>
+                            <ul>
+                                <li>Adaptive learning paths based on real-time performance</li>
+                                <li>Immediate, targeted feedback at scale</li>
+                                <li>Support for diverse learning styles and needs</li>
+                                <li>Higher reported engagement and time-on-task</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9881;</div>
+                        <div class="card-title">Enhanced Efficiency</div>
+                    </div>
+                    <div class="card-content">
+                        AI automates time-intensive tasks like grading, lesson planning, and feedback. Google reports that 83% of educators completing their Generative AI for Educators course expect to save 2+ hours weekly.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Efficiency gains:</strong>
+                            <ul>
+                                <li>Automated rubric-based grading and feedback drafts</li>
+                                <li>Lesson plan and assessment generation</li>
+                                <li>Differentiated material creation in minutes</li>
+                                <li>Time reclaimed for direct student interaction</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9794;</div>
+                        <div class="card-title">Improved Accessibility</div>
+                    </div>
+                    <div class="card-content">
+                        AI-powered assistive technology supports students with disabilities through advanced speech recognition, real-time captioning, text-to-speech, and visual description — making learning materials more inclusive than ever.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Accessibility features:</strong>
+                            <ul>
+                                <li>Real-time captioning and transcription (DHH support)</li>
+                                <li>Image alt-text and document description generation</li>
+                                <li>Reading-level adjustment for cognitive accessibility</li>
+                                <li>Multilingual translation for ELL students</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9783;</div>
+                        <div class="card-title">Data-Driven Insights</div>
+                    </div>
+                    <div class="card-content">
+                        AI analyzes patterns across student work to surface learning gaps, predict at-risk students, and inform instructional design — enabling earlier and more effective interventions.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Analytics capabilities:</strong>
+                            <ul>
+                                <li>Early-warning systems for struggling students</li>
+                                <li>Learning pattern and misconception detection</li>
+                                <li>Curriculum effectiveness measurement</li>
+                                <li>Course-level and program-level dashboards</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Quick Knowledge Check</h3>
+                <div class="quiz-question" id="q1-question">According to Ellucian&apos;s 2025 survey, what percentage of higher education institutions report institution-wide AI adoption?</div>
+                <ul class="quiz-options" role="radiogroup" aria-labelledby="q1-question">
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">A) 32%</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">B) 49%</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="true" data-correct="true">C) 66%</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">D) 89%</li>
+                </ul>
+                <div class="quiz-feedback" role="status" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <!-- AI Literacy -->
+        <section id="literacy" class="content-section" aria-labelledby="literacy-heading">
+            <div class="section-header">
+                <h2 id="literacy-heading">Teaching Students AI Literacy</h2>
+                <p>Essential skills and knowledge for navigating an AI-powered academic and professional world.</p>
+            </div>
+
+            <div class="citation-note">
+                <strong>Why this matters now:</strong> A 2025 HEPI survey found that 92% of UK undergraduates use AI tools in their studies, up from 66% the year prior. With 88% acknowledging using generative AI for assessments, AI literacy is no longer optional — it is foundational.
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9881;</div>
+                        <div class="card-title">Understanding AI Technologies</div>
+                    </div>
+                    <div class="card-content">
+                        Students need foundational knowledge of how generative AI works — including large language models, training data, tokens, and the difference between prediction and reasoning.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Core concepts:</strong>
+                            <ul>
+                                <li>How large language models (LLMs) generate text</li>
+                                <li>Training data, model weights, and the &quot;knowledge cutoff&quot;</li>
+                                <li>Multimodal AI: text, image, audio, and video</li>
+                                <li>System limitations: hallucination, bias, and context windows</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9878;</div>
+                        <div class="card-title">Ethics &amp; Critical Thinking</div>
+                    </div>
+                    <div class="card-content">
+                        AI literacy includes evaluating AI output critically, recognizing bias, protecting privacy, and understanding intellectual property — especially as 60% of educators worry AI may erode student critical thinking.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Ethical considerations:</strong>
+                            <ul>
+                                <li>Identifying bias and fairness gaps in AI output</li>
+                                <li>Privacy, FERPA, and student data protection</li>
+                                <li>Citation, attribution, and academic integrity</li>
+                                <li>Environmental and labor impacts of AI systems</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9998;</div>
+                        <div class="card-title">Prompt &amp; Context Engineering</div>
+                    </div>
+                    <div class="card-content">
+                        The skill of communicating effectively with AI systems — including providing context, defining role and audience, specifying format, and iterating on responses.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Prompting skills:</strong>
+                            <ul>
+                                <li>Clear task definition with role, audience, and format</li>
+                                <li>Providing reference materials and examples (few-shot)</li>
+                                <li>Iterative refinement and follow-up</li>
+                                <li>Recognizing when to verify, edit, or discard output</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9874;</div>
+                        <div class="card-title">Practical AI Applications</div>
+                    </div>
+                    <div class="card-content">
+                        Hands-on use of AI as a thinking partner — for research synthesis, drafting, code assistance, data analysis, and creative work — while maintaining academic integrity.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Practical skills:</strong>
+                            <ul>
+                                <li>Research synthesis and source comparison</li>
+                                <li>Drafting, revising, and feedback loops</li>
+                                <li>Code generation, debugging, and explanation</li>
+                                <li>Data analysis, charting, and interpretation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+            </div>
+
+            <div class="progress-container" role="progressbar" aria-label="AI Literacy exploration progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="literacy-progressbar">
+                <div class="progress-bar" id="literacy-progress"></div>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #444;">
+                <span id="progress-text">Click &quot;Learn More&quot; on each card above to explore AI literacy components.</span>
+            </p>
+        </section>
+
+        <!-- Workforce -->
+        <section id="workforce" class="content-section" aria-labelledby="workforce-heading">
+            <div class="section-header">
+                <h2 id="workforce-heading">AI &amp; the Future of Work</h2>
+                <p>How artificial intelligence is reshaping employment, skills, and career pathways through 2030.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">92M</div>
+                    <div class="stat-label">jobs displaced globally by 2030</div>
+                    <div class="stat-source">WEF Future of Jobs Report 2025</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">170M</div>
+                    <div class="stat-label">new jobs created — net gain of 78M</div>
+                    <div class="stat-source">WEF Future of Jobs Report 2025</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">22%</div>
+                    <div class="stat-label">of all jobs will be disrupted by 2030</div>
+                    <div class="stat-source">WEF, surveying 14M+ workers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">of employers prioritize workforce upskilling</div>
+                    <div class="stat-source">WEF Future of Jobs Report 2025</div>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9650;</div>
+                        <div class="card-title">Job Creation vs. Displacement</div>
+                    </div>
+                    <div class="card-content">
+                        The 2025 WEF Future of Jobs Report finds AI and information processing technologies will transform 86% of businesses by 2030 — displacing some roles while creating entirely new ones.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Fastest-declining roles (by absolute volume):</strong>
+                            <ul>
+                                <li>Cashiers and ticket clerks</li>
+                                <li>Administrative assistants and executive secretaries</li>
+                                <li>Postal service clerks and bank tellers</li>
+                                <li>Data entry clerks</li>
+                            </ul>
+                            <strong>Fastest-growing technology roles:</strong>
+                            <ul>
+                                <li>AI and machine learning specialists</li>
+                                <li>Big data specialists and fintech engineers</li>
+                                <li>Software developers and cybersecurity analysts</li>
+                                <li>Renewable energy and environmental engineers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9733;</div>
+                        <div class="card-title">Essential Future Skills</div>
+                    </div>
+                    <div class="card-content">
+                        WEF identifies the top three fastest-growing skills through 2030 as AI &amp; big data, networks &amp; cybersecurity, and technological literacy — followed closely by creative thinking, resilience, and lifelong learning.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Top 10 skills on the rise (WEF 2025):</strong>
+                            <ul>
+                                <li>AI and big data</li>
+                                <li>Networks and cybersecurity</li>
+                                <li>Technological literacy</li>
+                                <li>Creative thinking</li>
+                                <li>Resilience, flexibility, and agility</li>
+                                <li>Curiosity and lifelong learning</li>
+                                <li>Leadership and social influence</li>
+                                <li>Talent management</li>
+                                <li>Analytical thinking</li>
+                                <li>Environmental stewardship</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#8634;</div>
+                        <div class="card-title">Reskilling &amp; Adaptation</div>
+                    </div>
+                    <div class="card-content">
+                        On average, workers can expect 39% of their existing skill sets to be transformed or outdated between 2025 and 2030 — making continuous learning essential rather than optional.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Adaptation strategies:</strong>
+                            <ul>
+                                <li>Lifelong learning and micro-credentialing</li>
+                                <li>Cross-functional and adjacent skill development</li>
+                                <li>Industry partnerships for applied training</li>
+                                <li>Stackable credentials toward degrees</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9775;</div>
+                        <div class="card-title">Human–AI Collaboration</div>
+                    </div>
+                    <div class="card-content">
+                        The future of work centers on humans and AI working together — with AI handling routine cognitive tasks while humans focus on strategy, judgment, creativity, and relationships.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Collaboration models:</strong>
+                            <ul>
+                                <li>AI as productivity assistant and thinking partner</li>
+                                <li>Human-in-the-loop oversight on consequential decisions</li>
+                                <li>AI-augmented expert workflows</li>
+                                <li>Agentic AI handling multi-step tasks under supervision</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current & Future -->
+        <section id="current-future" class="content-section" aria-labelledby="current-future-heading">
+            <div class="section-header">
+                <h2 id="current-future-heading">Current &amp; Future State of AI</h2>
+                <p>Understanding where AI technology stands today, and where it is heading.</p>
+            </div>
+
+            <div class="timeline" aria-label="AI in education timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">2022–2023</span>
+                    <h4>Generative AI Goes Mainstream</h4>
+                    <p>ChatGPT&apos;s launch triggers global awareness, reaching 100 million users in 60 days. Large language models become widely accessible. Initial wave of policy panic in higher education.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-year">2024</span>
+                    <h4>Multimodal &amp; Reasoning Models</h4>
+                    <p>GPT-4o, Claude 3.5/3.7, and Gemini 1.5/2.0 introduce real-time multimodal interaction. Reasoning-focused models (o1, Claude with extended thinking) emerge. Institutional adoption climbs to 49%.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-year">2025</span>
+                    <h4>Agentic AI &amp; Strategic Integration</h4>
+                    <p>AI agents capable of multi-step task execution become production-ready. Institution-wide adoption reaches 66%. 86% of students globally use AI in their studies. Policy frameworks scramble to catch up.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-year">2026</span>
+                    <h4>Embedded &amp; Specialized AI</h4>
+                    <p>AI is increasingly embedded inside core platforms (LMS, productivity suites, browsers) rather than standalone tools. Domain-specific models for education, medicine, and law mature. Focus shifts from access to thoughtful integration.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="timeline-year">2027–2030</span>
+                    <h4>The Re-Skilling Decade</h4>
+                    <p>Per WEF projections: 22% labor-market churn, 39% of skills transformed or outdated, 78M net new jobs. Education systems pivot toward AI-native curricula and continuous credentialing.</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9787;</div>
+                        <div class="card-title">Current AI Capabilities</div>
+                    </div>
+                    <div class="card-content">
+                        Today&apos;s frontier models excel at language understanding, code generation, multimodal reasoning, and structured analysis — but still require human oversight for high-stakes decisions.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Current strengths:</strong>
+                            <ul>
+                                <li>Natural language understanding and generation</li>
+                                <li>Multimodal input: text, images, audio, video, code</li>
+                                <li>Tool use and basic agentic workflows</li>
+                                <li>Extended reasoning and step-by-step problem solving</li>
+                            </ul>
+                            <strong>Current limitations:</strong>
+                            <ul>
+                                <li>Hallucinations and confident factual errors</li>
+                                <li>Inconsistent reliability across domains</li>
+                                <li>Bias inherited from training data</li>
+                                <li>Limited true understanding vs. pattern matching</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9650;</div>
+                        <div class="card-title">Emerging Trends 2025–2026</div>
+                    </div>
+                    <div class="card-content">
+                        Agentic AI, larger context windows, native multimodal pipelines, and on-device/edge models are reshaping what is possible — and changing the AI literacy curriculum.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Key trends:</strong>
+                            <ul>
+                                <li>Autonomous agents executing multi-step workflows</li>
+                                <li>Computer-use and browser automation</li>
+                                <li>Long-context models (200K+ tokens) handling whole books and codebases</li>
+                                <li>Edge AI: capable models running locally on phones and laptops</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9881;</div>
+                        <div class="card-title">Future Possibilities</div>
+                    </div>
+                    <div class="card-content">
+                        The next several years may bring continued capability gains, deeper scientific applications, and ongoing debate about progress toward more general AI systems — alongside major questions about safety and governance.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Areas of active development:</strong>
+                            <ul>
+                                <li>Scientific discovery: drug design, materials, climate modeling</li>
+                                <li>Personalized AI tutors for every student</li>
+                                <li>Robotics and physical AI integrating sensors and reasoning</li>
+                                <li>AI safety, alignment, and governance research</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9888;</div>
+                        <div class="card-title">Challenges &amp; Considerations</div>
+                    </div>
+                    <div class="card-content">
+                        Rapid AI development brings real challenges: academic integrity (AI cheating incidents rose ~400% from 2022–23 to 2024–25), data privacy, equity gaps, and the need for thoughtful policy.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Key challenges:</strong>
+                            <ul>
+                                <li>Academic integrity policies that fit reality, not fantasy</li>
+                                <li>Student data privacy, FERPA, and vendor contracts</li>
+                                <li>Equitable access across institutions and student demographics</li>
+                                <li>Faculty professional development at scale (71% of K–12 teachers report no AI training)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation -->
+        <section id="implementation" class="content-section" aria-labelledby="implementation-heading">
+            <div class="section-header">
+                <h2 id="implementation-heading">Leveraging AI to Improve Education</h2>
+                <p>Practical strategies and tools for implementing AI in educational settings.</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9783;</div>
+                        <div class="card-title">Adaptive Learning Systems</div>
+                    </div>
+                    <div class="card-content">
+                        AI-powered platforms that adjust difficulty, pacing, and learning paths in real time based on student performance and engagement.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Established platforms:</strong>
+                            <ul>
+                                <li>ALEKS (mathematics, McGraw Hill)</li>
+                                <li>Khan Academy with Khanmigo</li>
+                                <li>Carnegie Learning (cognitive tutoring)</li>
+                                <li>Coursera Coach and edX Xpert</li>
+                            </ul>
+                            <strong>Benefits:</strong>
+                            <ul>
+                                <li>Individualized learning pace</li>
+                                <li>Real-time mastery tracking</li>
+                                <li>Automatic content adjustment</li>
+                                <li>Scalable formative assessment</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9776;</div>
+                        <div class="card-title">AI Tutors &amp; Assistants</div>
+                    </div>
+                    <div class="card-content">
+                        AI tutors provide personalized explanations, instant feedback, and 24/7 availability. Modern systems use Socratic prompting to guide rather than simply answer.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Capabilities:</strong>
+                            <ul>
+                                <li>Natural conversation in dozens of languages</li>
+                                <li>Step-by-step problem walkthrough</li>
+                                <li>Customized explanations by reading level</li>
+                                <li>Course-specific tutors built on instructor materials</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9783;</div>
+                        <div class="card-title">Learning Analytics</div>
+                    </div>
+                    <div class="card-content">
+                        AI surfaces patterns across student work to identify learning gaps, predict at-risk students, and inform instructional design — fueling earlier and more effective intervention.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Analytics applications:</strong>
+                            <ul>
+                                <li>Early-warning dashboards for at-risk students</li>
+                                <li>Misconception detection across class submissions</li>
+                                <li>Course-level effectiveness analysis</li>
+                                <li>Equity-focused outcome monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#10003;</div>
+                        <div class="card-title">AI-Resistant Assignment Design</div>
+                    </div>
+                    <div class="card-content">
+                        Rather than fighting AI use, design assessments that integrate AI thoughtfully or focus on process, reflection, in-class work, and skills AI cannot easily replicate.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Design strategies:</strong>
+                            <ul>
+                                <li>Process-based assessment with drafts and reflection</li>
+                                <li>Local context, recent events, and personal experience</li>
+                                <li>Oral defense, in-class writing, and presentations</li>
+                                <li>Required AI-disclosure and use documentation</li>
+                                <li>Authentic, multi-modal performance tasks</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9881;</div>
+                        <div class="card-title">Faculty AI Policies</div>
+                    </div>
+                    <div class="card-content">
+                        Clear, course-level AI policies — communicated as syllabus statements, assignment-level guidance, and visual badges — give students predictable expectations and reduce integrity disputes.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Policy approaches:</strong>
+                            <ul>
+                                <li>Traffic Light system: green/yellow/red AI use per assignment</li>
+                                <li>Approval Stamp framework with disclosure requirements</li>
+                                <li>AI Meter showing degree of permitted AI involvement</li>
+                                <li>Course-wide statements aligned with department policy</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">&#9788;</div>
+                        <div class="card-title">Language &amp; Accessibility AI</div>
+                    </div>
+                    <div class="card-content">
+                        AI-powered language tools provide pronunciation feedback, real-time captioning, translation, and reading-level adjustment — supporting English language learners and students with disabilities.
+                        <div class="expanded-content" style="display: none; margin-top: 15px;">
+                            <strong>Language &amp; accessibility tools:</strong>
+                            <ul>
+                                <li>Real-time speech-to-text captioning (DHH support)</li>
+                                <li>Live translation and interpretation</li>
+                                <li>Conversational practice partners for ELL students</li>
+                                <li>Reading-level adjustment and complexity matching</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="expand-btn" aria-expanded="false">Learn More</button>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>Implementation Challenge</h3>
+                <div class="quiz-question" id="q2-question">According to the WEF Future of Jobs Report 2025, which three skills are projected to grow fastest in importance through 2030?</div>
+                <ul class="quiz-options" role="radiogroup" aria-labelledby="q2-question">
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">A) Public speaking, writing, and project management</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="true" data-correct="true">B) AI &amp; big data, networks &amp; cybersecurity, and technological literacy</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">C) Foreign languages, accounting, and graphic design</li>
+                    <li class="quiz-option" role="radio" tabindex="0" aria-checked="false" data-correct="false">D) Data entry, customer service, and bookkeeping</li>
+                </ul>
+                <div class="quiz-feedback" role="status" aria-live="polite"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="back-to-top" title="Back to top" aria-label="Scroll back to top">&#8593;</button>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // Quiz feedback messages
+            var quizMessages = {
+                q1: {
+                    correct: 'Correct. Ellucian\u2019s 2025 survey reports institution-wide AI adoption surged from 49% in 2024 to 66% in 2025 \u2014 a 17-point jump signaling AI has moved beyond experimentation.',
+                    incorrect: 'Not quite. The correct answer is 66% \u2014 up from 49% the previous year, per Ellucian\u2019s 2025 State of AI in Higher Education survey.'
+                },
+                q2: {
+                    correct: 'Correct. Per the WEF Future of Jobs Report 2025, the top three fastest-growing skills are AI & big data, networks & cybersecurity, and technological literacy.',
+                    incorrect: 'Not quite. The WEF 2025 report identifies AI & big data, networks & cybersecurity, and technological literacy as the three fastest-growing skills.'
+                }
+            };
+
+            // Section navigation
+            function navigateToSection(sectionId) {
+                var sections = document.querySelectorAll('.content-section');
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].classList.remove('active');
+                }
+
+                var target = document.getElementById(sectionId);
+                if (target) {
+                    target.classList.add('active');
+                }
+
+                var navLinks = document.querySelectorAll('.nav-link');
+                for (var j = 0; j < navLinks.length; j++) {
+                    navLinks[j].classList.remove('active');
+                    navLinks[j].removeAttribute('aria-current');
+                }
+
+                var activeLink = document.querySelector('[data-section="' + sectionId + '"]');
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                    activeLink.setAttribute('aria-current', 'page');
+                }
+
+                // Announce to screen readers
+                var announcer = document.getElementById('section-announcer');
+                if (announcer && target) {
+                    var heading = target.querySelector('h2');
+                    if (heading) {
+                        announcer.textContent = 'Now viewing: ' + heading.textContent;
+                    }
+                }
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Nav link clicks
+            var navLinks = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var sectionId = this.getAttribute('data-section');
+                    navigateToSection(sectionId);
+                });
+            }
+
+            // Clickable overview cards
+            var clickableCards = document.querySelectorAll('.interactive-card.clickable');
+            for (var k = 0; k < clickableCards.length; k++) {
+                (function(card) {
+                    card.addEventListener('click', function() {
+                        navigateToSection(card.getAttribute('data-target'));
+                    });
+                    card.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            navigateToSection(card.getAttribute('data-target'));
+                        }
+                    });
+                })(clickableCards[k]);
+            }
+
+            // Expand buttons
+            var expandButtons = document.querySelectorAll('.expand-btn');
+            for (var b = 0; b < expandButtons.length; b++) {
+                expandButtons[b].addEventListener('click', function() {
+                    var card = this.closest('.interactive-card');
+                    var content = card.querySelector('.expanded-content');
+                    if (!content) return;
+
+                    var isExpanded = content.style.display === 'block';
+
+                    if (isExpanded) {
+                        content.style.display = 'none';
+                        this.textContent = 'Learn More';
+                        this.setAttribute('aria-expanded', 'false');
+                    } else {
+                        content.style.display = 'block';
+                        this.textContent = 'Show Less';
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+
+                    // Update literacy progress if applicable
+                    if (card.closest('#literacy')) {
+                        updateLiteracyProgress();
+                    }
+                });
+            }
+
+            // Literacy progress
+            function updateLiteracyProgress() {
+                var literacySection = document.getElementById('literacy');
+                if (!literacySection) return;
+                var cards = literacySection.querySelectorAll('.interactive-card');
+                var expandedCount = 0;
+                for (var c = 0; c < cards.length; c++) {
+                    var ec = cards[c].querySelector('.expanded-content');
+                    if (ec && ec.style.display === 'block') {
+                        expandedCount++;
+                    }
+                }
+
+                var progress = cards.length > 0 ? (expandedCount / cards.length) * 100 : 0;
+                var bar = document.getElementById('literacy-progress');
+                var text = document.getElementById('progress-text');
+                var pbar = document.getElementById('literacy-progressbar');
+
+                if (bar) bar.style.width = progress + '%';
+                if (pbar) pbar.setAttribute('aria-valuenow', Math.round(progress));
+                if (text) {
+                    text.textContent = 'AI Literacy Progress: ' + Math.round(progress) + '% Complete (' + expandedCount + ' of ' + cards.length + ' cards explored)';
+                }
+            }
+
+            // Quiz handling
+            var quizContainers = document.querySelectorAll('.quiz-container');
+            for (var qc = 0; qc < quizContainers.length; qc++) {
+                (function(container, index) {
+                    var options = container.querySelectorAll('.quiz-option');
+                    var feedback = container.querySelector('.quiz-feedback');
+                    var quizKey = 'q' + (index + 1);
+
+                    function selectOption(opt) {
+                        for (var o = 0; o < options.length; o++) {
+                            options[o].classList.remove('correct', 'incorrect');
+                            options[o].setAttribute('aria-checked', 'false');
+                        }
+
+                        var isCorrect = opt.getAttribute('data-correct') === 'true';
+                        opt.setAttribute('aria-checked', 'true');
+
+                        if (isCorrect) {
+                            opt.classList.add('correct');
+                            if (feedback) {
+                                feedback.textContent = quizMessages[quizKey].correct;
+                                feedback.className = 'quiz-feedback correct';
+                            }
+                        } else {
+                            opt.classList.add('incorrect');
+                            if (feedback) {
+                                feedback.textContent = quizMessages[quizKey].incorrect;
+                                feedback.className = 'quiz-feedback incorrect';
+                            }
+                        }
+                    }
+
+                    for (var oo = 0; oo < options.length; oo++) {
+                        (function(option) {
+                            option.addEventListener('click', function() { selectOption(option); });
+                            option.addEventListener('keydown', function(e) {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    selectOption(option);
+                                }
+                            });
+                        })(options[oo]);
+                    }
+                })(quizContainers[qc], qc);
+            }
+
+            // Back to top
+            var fab = document.getElementById('back-to-top');
+            if (fab) {
+                fab.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // Animate stat numbers on load (preserves units like M, %)
+            window.addEventListener('load', function() {
+                var statNumbers = document.querySelectorAll('.stat-number');
+                statNumbers.forEach(function(stat) {
+                    var finalText = stat.textContent;
+                    var match = finalText.match(/(\d+)/);
+                    if (!match) return;
+
+                    var finalValue = parseInt(match[1], 10);
+                    var suffix = finalText.replace(match[1], '');
+                    var current = 0;
+                    var increment = Math.max(1, Math.ceil(finalValue / 40));
+                    var duration = 1200;
+                    var stepTime = duration / Math.ceil(finalValue / increment);
+
+                    stat.textContent = '0' + suffix;
+                    var timer = setInterval(function() {
+                        current += increment;
+                        if (current >= finalValue) {
+                            stat.textContent = finalText;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = current + suffix;
+                        }
+                    }, stepTime);
+                });
+            });
+
+            // Keyboard arrow navigation between sections
+            document.addEventListener('keydown', function(e) {
+                // Only respond if no input/textarea has focus
+                var tag = (document.activeElement && document.activeElement.tagName) || '';
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+                if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+
+                // Don't hijack arrow keys when alt/ctrl/meta combos are used
+                if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+
+                var sections = Array.prototype.slice.call(document.querySelectorAll('.content-section'));
+                var current = document.querySelector('.content-section.active');
+                var idx = sections.indexOf(current);
+
+                if (e.key === 'ArrowLeft' && idx > 0) {
+                    e.preventDefault();
+                    navigateToSection(sections[idx - 1].id);
+                } else if (e.key === 'ArrowRight' && idx < sections.length - 1) {
+                    e.preventDefault();
+                    navigateToSection(sections[idx + 1].id);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
